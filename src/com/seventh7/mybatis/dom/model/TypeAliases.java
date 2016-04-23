@@ -12,12 +12,12 @@ import java.util.List;
  */
 public interface TypeAliases extends DomElement {
 
-  @NotNull
-  @SubTagList("typeAlias")
-  public List<TypeAlias> getTypeAlias();
+    @NotNull
+    @SubTagList("typeAlias")
+    public List<TypeAlias> getTypeAlias();
 
-  @NotNull
-  @SubTagList("package")
-  public List<Package> getPackages();
+    @NotNull
+    @SubTagList("package")
+    public List<Package> getPackages();
 
 }

@@ -5,6 +5,6 @@ package com.seventh7.mybatis.ui;
  */
 public interface ExecutableListener {
 
-  public boolean isWriteAction();
+    public boolean isWriteAction();
 
 }

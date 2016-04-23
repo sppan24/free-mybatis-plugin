@@ -13,8 +13,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface Association extends GroupFour, ResultMapGroup, PropertyGroup {
 
-  @NotNull
-  @Attribute("javaType")
-  @Convert(AliasConverter.class)
-  public GenericAttributeValue<PsiClass> getJavaType();
+    @NotNull
+    @Attribute("javaType")
+    @Convert(AliasConverter.class)
+    public GenericAttributeValue<PsiClass> getJavaType();
 }

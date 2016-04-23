@@ -17,23 +17,24 @@ import java.util.Collection;
 /**
  * @author yanglin
  */
-public class ConfigPackageAliasResolver extends PackageAliasResolver{
+public class ConfigPackageAliasResolver extends PackageAliasResolver {
 
-  public ConfigPackageAliasResolver(Project project) {
-    super(project);
-  }
+    public ConfigPackageAliasResolver(Project project) {
+        super(project);
+    }
 
-  @NotNull @Override
-  public Collection<String> getPackages(@Nullable PsiElement element) {
-    final ArrayList<String> result = Lists.newArrayList();
-    MapperUtils.processConfiguredPackage(project, new Processor<com.seventh7.mybatis.dom.model.Package>() {
-      @Override
-      public boolean process(Package pkg) {
-        result.add(pkg.getName().getStringValue());
-        return true;
-      }
-    });
-    return result;
-  }
+    @NotNull
+    @Override
+    public Collection<String> getPackages(@Nullable PsiElement element) {
+        final ArrayList<String> result = Lists.newArrayList();
+        MapperUtils.processConfiguredPackage(project, new Processor<com.seventh7.mybatis.dom.model.Package>() {
+            @Override
+            public boolean process(Package pkg) {
+                result.add(pkg.getName().getStringValue());
+                return true;
+            }
+        });
+        return result;
+    }
 
 }

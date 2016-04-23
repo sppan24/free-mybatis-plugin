@@ -11,10 +11,10 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author yanglin
  */
-public interface Select extends GroupTwo, ResultMapGroup{
+public interface Select extends GroupTwo, ResultMapGroup {
 
-  @NotNull
-  @Attribute("resultType")
-  @Convert(AliasConverter.class)
-  public GenericAttributeValue<PsiClass> getResultType();
+    @NotNull
+    @Attribute("resultType")
+    @Convert(AliasConverter.class)
+    public GenericAttributeValue<PsiClass> getResultType();
 }

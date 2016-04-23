@@ -11,8 +11,8 @@ import java.util.List;
  */
 public interface Discriminator extends DomElement {
 
-  @Required
-  @SubTagList("case")
-  public List<Case> getCases();
+    @Required
+    @SubTagList("case")
+    public List<Case> getCases();
 
 }

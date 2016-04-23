@@ -14,13 +14,13 @@ import org.jetbrains.annotations.Nullable;
  */
 public class MapperDescription extends DomFileDescription<Mapper> {
 
-  public MapperDescription() {
-    super(Mapper.class, "mapper");
-  }
+    public MapperDescription() {
+        super(Mapper.class, "mapper");
+    }
 
-  @Override
-  public boolean isMyFile(@NotNull XmlFile file, @Nullable Module module) {
-    return DomUtils.isMybatisFile(file);
-  }
+    @Override
+    public boolean isMyFile(@NotNull XmlFile file, @Nullable Module module) {
+        return DomUtils.isMybatisFile(file);
+    }
 
 }

@@ -12,11 +12,12 @@ import java.util.Collection;
 /**
  * @author yanglin
  */
-public class SqlConverter extends IdBasedTagConverter{
+public class SqlConverter extends IdBasedTagConverter {
 
-  @NotNull @Override
-  public Collection<? extends IdDomElement> getComparisons(@Nullable Mapper mapper, ConvertContext context) {
-    return mapper.getSqls();
-  }
+    @NotNull
+    @Override
+    public Collection<? extends IdDomElement> getComparisons(@Nullable Mapper mapper, ConvertContext context) {
+        return mapper.getSqls();
+    }
 
 }

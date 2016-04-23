@@ -12,7 +12,7 @@ import com.seventh7.mybatis.dom.converter.PropertyConverter;
  */
 public interface PropertyGroup extends DomElement {
 
-  @Attribute("property")
-  @Convert(PropertyConverter.class)
-  GenericAttributeValue<XmlAttributeValue> getProperty();
+    @Attribute("property")
+    @Convert(PropertyConverter.class)
+    GenericAttributeValue<XmlAttributeValue> getProperty();
 }

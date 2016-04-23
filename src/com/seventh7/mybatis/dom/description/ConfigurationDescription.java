@@ -12,15 +12,15 @@ import org.jetbrains.annotations.Nullable;
 /**
  * @author yanglin
  */
-public class ConfigurationDescription extends DomFileDescription<Configuration>{
+public class ConfigurationDescription extends DomFileDescription<Configuration> {
 
-  public ConfigurationDescription() {
-    super(Configuration.class, "configuration");
-  }
+    public ConfigurationDescription() {
+        super(Configuration.class, "configuration");
+    }
 
-  @Override
-  public boolean isMyFile(@NotNull XmlFile file, @Nullable Module module) {
-    return DomUtils.isMybatisConfigurationFile(file);
-  }
+    @Override
+    public boolean isMyFile(@NotNull XmlFile file, @Nullable Module module) {
+        return DomUtils.isMybatisConfigurationFile(file);
+    }
 
 }

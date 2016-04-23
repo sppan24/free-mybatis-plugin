@@ -13,16 +13,16 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author yanglin
  */
-public interface ResultMap extends GroupFour, IdDomElement{
+public interface ResultMap extends GroupFour, IdDomElement {
 
-  @NotNull
-  @Attribute("extends")
-  @Convert(ResultMapConverter.class)
-  public GenericAttributeValue<XmlAttributeValue> getExtends();
+    @NotNull
+    @Attribute("extends")
+    @Convert(ResultMapConverter.class)
+    public GenericAttributeValue<XmlAttributeValue> getExtends();
 
-  @NotNull
-  @Attribute("type")
-  @Convert(AliasConverter.class)
-  public GenericAttributeValue<PsiClass> getType();
+    @NotNull
+    @Attribute("type")
+    @Convert(AliasConverter.class)
+    public GenericAttributeValue<PsiClass> getType();
 
 }

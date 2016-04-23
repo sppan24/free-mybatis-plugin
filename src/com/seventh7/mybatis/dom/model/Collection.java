@@ -13,9 +13,9 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface Collection extends GroupFour, ResultMapGroup, PropertyGroup {
 
-  @NotNull
-  @Attribute("ofType")
-  @Convert(AliasConverter.class)
-  public GenericAttributeValue<PsiClass> getOfType();
+    @NotNull
+    @Attribute("ofType")
+    @Convert(AliasConverter.class)
+    public GenericAttributeValue<PsiClass> getOfType();
 
 }

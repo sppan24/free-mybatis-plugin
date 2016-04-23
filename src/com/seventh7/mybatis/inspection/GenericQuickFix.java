@@ -9,9 +9,10 @@ import org.jetbrains.annotations.NotNull;
  */
 public abstract class GenericQuickFix implements LocalQuickFix {
 
-  @NotNull @Override
-  public String getFamilyName() {
-    return getName();
-  }
+    @NotNull
+    @Override
+    public String getFamilyName() {
+        return getName();
+    }
 
 }

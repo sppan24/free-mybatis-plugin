@@ -9,19 +9,19 @@ import org.jetbrains.annotations.NotNull;
 /**
  * @author yanglin
  */
-public class GenerateMapperChooser extends JavaFileIntentionChooser{
+public class GenerateMapperChooser extends JavaFileIntentionChooser {
 
-  public static final JavaFileIntentionChooser INSTANCE = new GenerateMapperChooser();
+    public static final JavaFileIntentionChooser INSTANCE = new GenerateMapperChooser();
 
-  @Override
-  public boolean isAvailable(@NotNull PsiElement element) {
-    if (isPositionOfInterfaceDeclaration(element)) {
-      PsiClass clazz = PsiTreeUtil.getParentOfType(element, PsiClass.class);
-      if (null != clazz) {
-        return !isTargetPresentInXml(clazz);
-      }
+    @Override
+    public boolean isAvailable(@NotNull PsiElement element) {
+        if (isPositionOfInterfaceDeclaration(element)) {
+            PsiClass clazz = PsiTreeUtil.getParentOfType(element, PsiClass.class);
+            if (null != clazz) {
+                return !isTargetPresentInXml(clazz);
+            }
+        }
+        return false;
     }
-    return false;
-  }
 
 }

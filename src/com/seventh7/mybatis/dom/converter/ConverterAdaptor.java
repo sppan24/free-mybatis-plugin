@@ -15,19 +15,22 @@ import java.util.Collections;
  */
 public abstract class ConverterAdaptor<T> extends ResolvingConverter<T> {
 
-  @NotNull @Override
-  public Collection<? extends T> getVariants(ConvertContext context) {
-    return Collections.emptyList();
-  }
+    @NotNull
+    @Override
+    public Collection<? extends T> getVariants(ConvertContext context) {
+        return Collections.emptyList();
+    }
 
-  @Nullable @Override
-  public String toString(@Nullable T t, ConvertContext context) {
+    @Nullable
+    @Override
+    public String toString(@Nullable T t, ConvertContext context) {
 //    throw new UnsupportedOperationException();
-    return null;
-  }
+        return null;
+    }
 
-  @Nullable @Override
-  public T fromString(@Nullable @NonNls String s, ConvertContext context) {
-    return null;
-  }
+    @Nullable
+    @Override
+    public T fromString(@Nullable @NonNls String s, ConvertContext context) {
+        return null;
+    }
 }

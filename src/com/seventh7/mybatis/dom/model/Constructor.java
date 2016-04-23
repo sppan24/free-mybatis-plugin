@@ -10,9 +10,9 @@ import java.util.List;
  */
 public interface Constructor extends DomElement {
 
-  @SubTagList("arg")
-  public List<Arg> getArgs();
+    @SubTagList("arg")
+    public List<Arg> getArgs();
 
-  @SubTagList("idArg")
-  public List<IdArg> getIdArgs();
+    @SubTagList("idArg")
+    public List<IdArg> getIdArgs();
 }

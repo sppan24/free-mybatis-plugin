@@ -15,13 +15,14 @@ import java.util.List;
  */
 public abstract class MarkerProviderAdaptor implements LineMarkerProvider {
 
-  @Override
-  public void collectSlowLineMarkers(@NotNull List<PsiElement> elements, @NotNull Collection<LineMarkerInfo> result) {
-  }
+    @Override
+    public void collectSlowLineMarkers(@NotNull List<PsiElement> elements, @NotNull Collection<LineMarkerInfo> result) {
+    }
 
-  @Nullable @Override
-  public LineMarkerInfo getLineMarkerInfo(@NotNull PsiElement element) {
-    return null;
-  }
+    @Nullable
+    @Override
+    public LineMarkerInfo getLineMarkerInfo(@NotNull PsiElement element) {
+        return null;
+    }
 
 }

@@ -26,28 +26,28 @@ import java.util.Collection;
  */
 public class MapperLineMarkerProvider extends RelatedItemLineMarkerProvider {
 
-  private static final Function<DomElement, XmlTag> FUN = new Function<DomElement, XmlTag>() {
-    @Override
-    public XmlTag apply(DomElement domElement) {
-      return domElement.getXmlTag();
-    }
-  };
+    private static final Function<DomElement, XmlTag> FUN = new Function<DomElement, XmlTag>() {
+        @Override
+        public XmlTag apply(DomElement domElement) {
+            return domElement.getXmlTag();
+        }
+    };
 
-  @Override
-  protected void collectNavigationMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
-    if (element instanceof PsiNameIdentifierOwner && JavaUtils.isElementWithinInterface(element)) {
-      CommonProcessors.CollectProcessor<IdDomElement> processor = new CommonProcessors.CollectProcessor<IdDomElement>();
-      JavaService.getInstance(element.getProject()).process(element, processor);
-      Collection<IdDomElement> results = processor.getResults();
-      if (!results.isEmpty()) {
-        NavigationGutterIconBuilder<PsiElement> builder  =
-            NavigationGutterIconBuilder.create(Icons.MAPPER_LINE_MARKER_ICON)
-                .setAlignment(GutterIconRenderer.Alignment.CENTER)
-                .setTargets(Collections2.transform(results, FUN))
-                .setTooltipTitle("Navigation to target in mapper xml");
-        result.add(builder.createLineMarkerInfo(((PsiNameIdentifierOwner) element).getNameIdentifier()));
-      }
+    @Override
+    protected void collectNavigationMarkers(@NotNull PsiElement element, Collection<? super RelatedItemLineMarkerInfo> result) {
+        if (element instanceof PsiNameIdentifierOwner && JavaUtils.isElementWithinInterface(element)) {
+            CommonProcessors.CollectProcessor<IdDomElement> processor = new CommonProcessors.CollectProcessor<IdDomElement>();
+            JavaService.getInstance(element.getProject()).process(element, processor);
+            Collection<IdDomElement> results = processor.getResults();
+            if (!results.isEmpty()) {
+                NavigationGutterIconBuilder<PsiElement> builder =
+                        NavigationGutterIconBuilder.create(Icons.MAPPER_LINE_MARKER_ICON)
+                                .setAlignment(GutterIconRenderer.Alignment.CENTER)
+                                .setTargets(Collections2.transform(results, FUN))
+                                .setTooltipTitle("Navigation to target in mapper xml");
+                result.add(builder.createLineMarkerInfo(((PsiNameIdentifierOwner) element).getNameIdentifier()));
+            }
+        }
     }
-  }
 
 }

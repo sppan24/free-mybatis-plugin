@@ -18,22 +18,22 @@ import java.util.List;
 /**
  * @author yanglin
  */
-public interface GroupTwo extends GroupOne, IdDomElement{
+public interface GroupTwo extends GroupOne, IdDomElement {
 
-  @SubTagList("bind")
-  public List<Bind> getBinds();
+    @SubTagList("bind")
+    public List<Bind> getBinds();
 
-  @NotNull
-  @Attribute("parameterMap")
-  @Convert(ParameterMapConverter.class)
-  public GenericAttributeValue<XmlTag> getParameterMap();
+    @NotNull
+    @Attribute("parameterMap")
+    @Convert(ParameterMapConverter.class)
+    public GenericAttributeValue<XmlTag> getParameterMap();
 
-  @Attribute("id")
-  @Convert(DaoMethodConverter.class)
-  public GenericAttributeValue<String> getId();
+    @Attribute("id")
+    @Convert(DaoMethodConverter.class)
+    public GenericAttributeValue<String> getId();
 
-  @NotNull
-  @Attribute("parameterType")
-  @Convert(AliasConverter.class)
-  public GenericAttributeValue<PsiClass> getParameterType();
+    @NotNull
+    @Attribute("parameterType")
+    @Convert(AliasConverter.class)
+    public GenericAttributeValue<PsiClass> getParameterType();
 }

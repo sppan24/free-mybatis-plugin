@@ -11,8 +11,8 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface Package extends DomElement {
 
-  @NotNull
-  @Attribute("name")
-  public GenericAttributeValue<String> getName();
+    @NotNull
+    @Attribute("name")
+    public GenericAttributeValue<String> getName();
 
 }

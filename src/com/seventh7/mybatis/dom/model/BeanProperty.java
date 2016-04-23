@@ -11,11 +11,11 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface BeanProperty extends DomElement {
 
-  @NotNull
-  @Attribute("name")
-  public GenericAttributeValue<String> getName();
+    @NotNull
+    @Attribute("name")
+    public GenericAttributeValue<String> getName();
 
-  @NotNull
-  @Attribute("value")
-  public GenericAttributeValue<String> getValue();
+    @NotNull
+    @Attribute("value")
+    public GenericAttributeValue<String> getValue();
 }

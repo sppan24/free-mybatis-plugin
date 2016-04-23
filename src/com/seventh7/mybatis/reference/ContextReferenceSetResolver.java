@@ -19,65 +19,65 @@ import java.util.List;
  */
 public abstract class ContextReferenceSetResolver<F extends PsiElement, K extends PsiElement> {
 
-  private static final Splitter SPLITTER = Splitter.on(MybatisConstants.DOT_SEPARATOR);
+    private static final Splitter SPLITTER = Splitter.on(MybatisConstants.DOT_SEPARATOR);
 
-  protected Project project;
+    protected Project project;
 
-  protected F element;
+    protected F element;
 
-  protected List<String> texts;
+    protected List<String> texts;
 
-  protected ContextReferenceSetResolver(@NotNull F element) {
-    this.element = element;
-    this.project = element.getProject();
-    this.texts = Lists.newArrayList(SPLITTER.split(getText()));
-  }
-
-  @NotNull
-  public final Optional<? extends PsiElement> resolve(int index) {
-    Optional<K>  startElement = getStartElement();
-    return startElement.isPresent() ? (texts.size() > 1 ? parseNext(startElement, texts, index) : startElement) : Optional.<PsiElement>absent();
-  }
-
-  private Optional<K> parseNext(Optional<K> current, List<String> texts, int index) {
-    int ind = 1;
-    while (current.isPresent() && ind <= index) {
-      String text = texts.get(ind);
-      if (text.contains(" ")) {
-        return Optional.absent();
-      }
-      current = resolve(current.get(), text);
-      ind++;
+    protected ContextReferenceSetResolver(@NotNull F element) {
+        this.element = element;
+        this.project = element.getProject();
+        this.texts = Lists.newArrayList(SPLITTER.split(getText()));
     }
-    return current;
-  }
 
-  public Optional<K> getStartElement() {
-    return getStartElement(Iterables.getFirst(texts, null));
-  }
+    @NotNull
+    public final Optional<? extends PsiElement> resolve(int index) {
+        Optional<K> startElement = getStartElement();
+        return startElement.isPresent() ? (texts.size() > 1 ? parseNext(startElement, texts, index) : startElement) : Optional.<PsiElement>absent();
+    }
 
-  @NotNull
-  public abstract Optional<K> getStartElement(@Nullable String firstText);
+    private Optional<K> parseNext(Optional<K> current, List<String> texts, int index) {
+        int ind = 1;
+        while (current.isPresent() && ind <= index) {
+            String text = texts.get(ind);
+            if (text.contains(" ")) {
+                return Optional.absent();
+            }
+            current = resolve(current.get(), text);
+            ind++;
+        }
+        return current;
+    }
 
-  @NotNull
-  public abstract String getText();
+    public Optional<K> getStartElement() {
+        return getStartElement(Iterables.getFirst(texts, null));
+    }
 
-  @NotNull
-  public abstract Optional<K> resolve(@NotNull K current, @NotNull String text);
+    @NotNull
+    public abstract Optional<K> getStartElement(@Nullable String firstText);
 
-  public F getElement() {
-    return element;
-  }
+    @NotNull
+    public abstract String getText();
 
-  public void setElement(F element) {
-    this.element = element;
-  }
+    @NotNull
+    public abstract Optional<K> resolve(@NotNull K current, @NotNull String text);
 
-  public Project getProject() {
-    return project;
-  }
+    public F getElement() {
+        return element;
+    }
 
-  public void setProject(Project project) {
-    this.project = project;
-  }
+    public void setElement(F element) {
+        this.element = element;
+    }
+
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
 }

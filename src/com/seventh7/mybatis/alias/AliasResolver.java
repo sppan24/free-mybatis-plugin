@@ -17,32 +17,32 @@ import java.util.Set;
  */
 public abstract class AliasResolver {
 
-  protected Project project;
+    protected Project project;
 
-  public AliasResolver(Project project) {
-    this.project = project;
-  }
-
-  @NotNull
-  protected Optional<AliasDesc> addAliasDesc(@NotNull Set<AliasDesc> descs, @Nullable PsiClass clazz, @Nullable String alias) {
-    if (null == alias || !JavaUtils.isModelClazz(clazz)) {
-      return Optional.absent();
+    public AliasResolver(Project project) {
+        this.project = project;
     }
-    AliasDesc desc = new AliasDesc();
-    descs.add(desc);
-    desc.setClazz(clazz);
-    desc.setAlias(alias);
-    return Optional.of(desc);
-  }
 
-  @NotNull
-  public abstract Set<AliasDesc> getClassAliasDescriptions(@Nullable PsiElement element);
+    @NotNull
+    protected Optional<AliasDesc> addAliasDesc(@NotNull Set<AliasDesc> descs, @Nullable PsiClass clazz, @Nullable String alias) {
+        if (null == alias || !JavaUtils.isModelClazz(clazz)) {
+            return Optional.absent();
+        }
+        AliasDesc desc = new AliasDesc();
+        descs.add(desc);
+        desc.setClazz(clazz);
+        desc.setAlias(alias);
+        return Optional.of(desc);
+    }
 
-  public Project getProject() {
-    return project;
-  }
+    @NotNull
+    public abstract Set<AliasDesc> getClassAliasDescriptions(@Nullable PsiElement element);
 
-  public void setProject(Project project) {
-    this.project = project;
-  }
+    public Project getProject() {
+        return project;
+    }
+
+    public void setProject(Project project) {
+        this.project = project;
+    }
 }

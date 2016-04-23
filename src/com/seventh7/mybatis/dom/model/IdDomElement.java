@@ -9,12 +9,12 @@ import com.intellij.util.xml.Required;
 /**
  * @author yanglin
  */
-public interface IdDomElement extends DomElement{
+public interface IdDomElement extends DomElement {
 
-  @Required
-  @NameValue
-  @Attribute("id")
-  public GenericAttributeValue<String> getId();
+    @Required
+    @NameValue
+    @Attribute("id")
+    public GenericAttributeValue<String> getId();
 
-  public void setValue(String content);
+    public void setValue(String content);
 }

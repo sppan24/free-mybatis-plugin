@@ -12,12 +12,12 @@ import org.jetbrains.annotations.NotNull;
  */
 public interface TypeAlias extends DomElement {
 
-  @NotNull
-  @Attribute("type")
-  public GenericAttributeValue<PsiClass> getType();
+    @NotNull
+    @Attribute("type")
+    public GenericAttributeValue<PsiClass> getType();
 
-  @NotNull
-  @Attribute("alias")
-  public GenericAttributeValue<String> getAlias();
+    @NotNull
+    @Attribute("alias")
+    public GenericAttributeValue<String> getAlias();
 
 }

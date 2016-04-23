@@ -9,15 +9,16 @@ import org.jetbrains.annotations.Nullable;
  */
 public class SqlLiveTemplateProvider implements DefaultLiveTemplatesProvider {
 
-  public static final String[] TEMPLATE_FILES = { "liveTemplates/sql" };
+    public static final String[] TEMPLATE_FILES = {"liveTemplates/sql"};
 
-  @Override
-  public String[] getDefaultLiveTemplateFiles() {
-    return TEMPLATE_FILES;
-  }
+    @Override
+    public String[] getDefaultLiveTemplateFiles() {
+        return TEMPLATE_FILES;
+    }
 
-  @Nullable @Override
-  public String[] getHiddenLiveTemplateFiles() {
-    return null;
-  }
+    @Nullable
+    @Override
+    public String[] getHiddenLiveTemplateFiles() {
+        return null;
+    }
 }

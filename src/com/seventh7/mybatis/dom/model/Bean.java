@@ -12,8 +12,8 @@ import java.util.List;
  */
 public interface Bean extends DomElement {
 
-  @NotNull
-  @SubTagList("property")
-  public List<BeanProperty> getBeanProperties();
+    @NotNull
+    @SubTagList("property")
+    public List<BeanProperty> getBeanProperties();
 
 }

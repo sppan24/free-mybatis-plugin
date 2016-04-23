@@ -12,12 +12,13 @@ import java.util.Collection;
 /**
  * @author yanglin
  */
-public class ParameterMapConverter extends IdBasedTagConverter{
+public class ParameterMapConverter extends IdBasedTagConverter {
 
-  @NotNull @Override
-  public Collection<? extends IdDomElement> getComparisons(@Nullable Mapper mapper,
-                                                           ConvertContext context) {
-    return mapper.getParameterMaps();
-  }
+    @NotNull
+    @Override
+    public Collection<? extends IdDomElement> getComparisons(@Nullable Mapper mapper,
+                                                             ConvertContext context) {
+        return mapper.getParameterMaps();
+    }
 
 }
