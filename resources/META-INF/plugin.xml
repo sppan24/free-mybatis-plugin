@@ -5,12 +5,15 @@
     <vendor email="wuzhizhan@wuzhizhan.cn" url="https://github.com/wuzhizhan">wuzhizhan</vendor>
 
     <description><![CDATA[
-          Plugin for mybatis <br/>
-          Feel free to feedback<br/
-          This Plugin is fork from https://github.com/rockjava/intellij-mybatis-plugin
+          Mybatis plugins <br/>
+          This Plugin is fork from https://github.com/rockjava/intellij-mybatis-plugin<br/>
       ]]></description>
 
     <change-notes><![CDATA[
+      <h4>2016.1.2</h4>
+      <ul>
+        <li>fix some bugs</li>
+      </ul>
       <h4>2016.1.1</h4>
       <ul>
           <li>Adapt for for intellij 2016.1.1</li>
