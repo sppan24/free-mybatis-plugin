@@ -12,6 +12,7 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.patterns.XmlPatterns;
 import com.intellij.psi.PsiElement;
+import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
 import com.intellij.util.ProcessingContext;
 import com.seventh7.mybatis.annotation.Annotation;
@@ -23,13 +24,15 @@ import com.seventh7.mybatis.util.MybatisConstants;
 
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * @author yanglin
  */
 public class TestParamContributor extends CompletionContributor {
 
-    @SuppressWarnings("unchecked")
+    private static final Logger logger = LoggerFactory.getLogger(TestParamContributor.class);
     public TestParamContributor() {
         extend(CompletionType.BASIC,
                 XmlPatterns.psiElement().inside(XmlPatterns.xmlAttributeValue().inside(XmlPatterns.xmlAttribute().withName("test"))),
@@ -46,7 +49,15 @@ public class TestParamContributor extends CompletionContributor {
         if (null == element) {
             return;
         }
-        for (PsiParameter parameter : JavaUtils.findMethod(project, element).get().getParameterList().getParameters()) {
+        PsiMethod psiMethod= JavaUtils.findMethod(project, element).orNull();
+        if(null == psiMethod ) {
+            logger.info("psiMethod null");
+            return;
+
+        }
+        PsiParameter[] psiParameters = psiMethod.getParameterList().getParameters();
+
+        for (PsiParameter parameter : psiParameters ) {
             Optional<String> valueText = JavaUtils.getAnnotationValueText(parameter, Annotation.PARAM);
             if (valueText.isPresent()) {
                 LookupElementBuilder builder = LookupElementBuilder.create(valueText.get()).withIcon(Icons.PARAM_COMPLETION_ICON);

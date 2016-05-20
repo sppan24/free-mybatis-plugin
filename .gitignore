@@ -1,5 +1,5 @@
 *.iml
-mybatis-plus.jar
+*.jar
 log.roo
 .idea/
 out/
