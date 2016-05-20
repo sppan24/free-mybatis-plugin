@@ -1,18 +1,18 @@
 <idea-plugin version="2" url="https://github.com/wuzhizhan/intellij-mybatis-plugin.git">
     <id>cn.wuzhizhan.plugin.mybatis</id>
     <name>Free MyBatis plugin</name>
-    <version>2016.1.1</version>
+    <version>2016.1.2</version>
     <vendor email="wuzhizhan@wuzhizhan.cn" url="https://github.com/wuzhizhan">wuzhizhan</vendor>
 
     <description><![CDATA[
           Free Mybatis plugin <br/>
-          This Plugin is fork from https://github.com/rockjava/intellij-mybatis-plugin<br/>
+          This Plugin is fork from https://github.com/rockjava/intellij-mybatis-plugin
       ]]></description>
 
     <change-notes><![CDATA[
-      <h4>2016.1.2</h4>
+       <h4>2016.1.2</h4>
       <ul>
-        <li>fix some bugs</li>
+          <li>fix some bugs</li>
       </ul>
       <h4>2016.1.1</h4>
       <ul>
