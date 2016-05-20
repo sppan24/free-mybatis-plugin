@@ -174,7 +174,13 @@ public final class MapperUtils {
     @NonNls
     public static <T extends IdDomElement> String getIdSignature(@NotNull T domElement, @NotNull Mapper mapper) {
         Mapper contextMapper = getMapper(domElement);
-        return isMapperWithSameNamespace(contextMapper, mapper) ? getId(domElement) : getIdSignature(domElement);
+        String id = getId(domElement);
+        if(id == null) {
+            id = "";
+        }
+        String idsignature= getIdSignature(domElement);
+        //getIdSignature(domElement)
+        return isMapperWithSameNamespace(contextMapper, mapper) ?id :idsignature ;
     }
 
     public static void processConfiguredTypeAliases(@NotNull Project project, @NotNull Processor<TypeAlias> processor) {
