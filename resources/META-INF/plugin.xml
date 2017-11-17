@@ -1,7 +1,7 @@
 <idea-plugin version="2" url="https://github.com/wuzhizhan/intellij-mybatis-plugin.git">
     <id>cn.wuzhizhan.plugin.mybatis</id>
     <name>Free MyBatis plugin</name>
-    <version>2016.1.2</version>
+    <version>2017.11.17</version>
     <vendor email="wuzhizhan@wuzhizhan.cn" url="https://github.com/wuzhizhan">wuzhizhan</vendor>
 
     <description><![CDATA[
@@ -10,14 +10,11 @@
       ]]></description>
 
     <change-notes><![CDATA[
-       <h4>2016.1.2</h4>
+      <h4>2017.11.17</h4>
       <ul>
-          <li>fix some bugs</li>
-      </ul>
-      <h4>2016.1.1</h4>
-      <ul>
-          <li>Adapt for for intellij 2016.1.1</li>
-      </ul>
+        <li>修正mapper 文件 #{参数}弹出错误</li>
+       </ul>
+
       ]]>
     </change-notes>
 

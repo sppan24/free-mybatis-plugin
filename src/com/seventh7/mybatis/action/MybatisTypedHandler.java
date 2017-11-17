@@ -22,7 +22,7 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
     @Override
     public Result checkAutoPopup(char charTyped, final Project project, final Editor editor, PsiFile file) {
         if (charTyped == '.' && DomUtils.isMybatisFile(file)) {
-            autoPopupParameter(project, editor);
+//            autoPopupParameter(project, editor);
             return Result.STOP;
         }
         return super.checkAutoPopup(charTyped, project, editor, file);
@@ -38,21 +38,10 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
                 file instanceof SqlFile &&
                 DomUtils.isMybatisFile(topLevelFile);
         if (parameterCase) {
-            autoPopupParameter(project, editor);
+//            autoPopupParameter(project, editor);
             return Result.STOP;
         }
         return super.charTyped(c, project, editor, file);
-    }
-
-    private static void autoPopupParameter(final Project project, final Editor editor) {
-        CompletionAutoPopupHandler.runLaterWithCommitted(project, editor.getDocument(), new Runnable() {
-            @Override
-            public void run() {
-                if (PsiDocumentManager.getInstance(project).isCommitted(editor.getDocument())) {
-                    new CodeCompletionHandlerBase(CompletionType.BASIC).invokeCompletion(project, editor, 1);
-                }
-            }
-        });
     }
 
 }
