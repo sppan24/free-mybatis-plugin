@@ -24,6 +24,6 @@ http://www.jetbrains.org/intellij/sdk/docs/basics/getting_started/setting_up_env
     - alter+enter弹出
 ![](https://raw.githubusercontent.com/wuzhizhan/free-idea-mybatis/master/doc/img/create_statement.jpg)
 - dao跳转到mapper（也可以ctrl+B跳入）
-![](https://raw.githubusercontent.com/wuzhizhan/free-idea-mybatis/master/doc/img/to_mapper.jpg)
+- ![](https://raw.githubusercontent.com/wuzhizhan/free-idea-mybatis/master/doc/img/to_mapper.jpg)
 - mapper跳转回dao（也可以ctrl+b跳入)
 - ![](https://raw.githubusercontent.com/wuzhizhan/free-idea-mybatis/master/doc/img/to_code.jpg)
