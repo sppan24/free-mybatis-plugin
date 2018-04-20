@@ -1,4 +1,4 @@
-<idea-plugin version="2" url="https://github.com/wuzhizhan/intellij-mybatis-plugin.git">
+<idea-plugin >
     <id>cn.wuzhizhan.plugin.mybatis</id>
     <name>Free MyBatis plugin</name>
     <version>2017.11.17</version>
@@ -9,18 +9,9 @@
           This Plugin is fork from https://github.com/rockjava/intellij-mybatis-plugin
       ]]></description>
 
-    <change-notes><![CDATA[
-      <h4>2017.11.17</h4>
-      <ul>
-        <li>修正mapper 文件 #{参数}弹出错误</li>
-       </ul>
-
-      ]]>
-    </change-notes>
-
-    <idea-version since-build="132.947"/>
-    <depends optional="true">com.intellij.sql</depends>
-    <depends optional="true">com.intellij.spring</depends>
+    <idea-version since-build="145"/>
+    <!--<depends optional="true">com.intellij.sql</depends>-->
+    <!--<depends optional="true">com.intellij.spring</depends>-->
     <extensions defaultExtensionNs="com.intellij">
         <dom.fileDescription implementation="com.seventh7.mybatis.dom.description.MapperDescription"/>
         <dom.fileDescription implementation="com.seventh7.mybatis.dom.description.ConfigurationDescription"/>

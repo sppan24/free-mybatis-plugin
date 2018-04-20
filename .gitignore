@@ -4,3 +4,7 @@ log.roo
 .idea/
 out/
 .DS_Store
+.gradle/
+gradle/
+build/
+out/
