@@ -22,9 +22,13 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
+    <h4>2018.03.23</h4>
+      <ul>
+        <li>Fix: replace equals to equalsIgnoreCase when alias string match</li>
+      </ul>
      <h4>2017.11.17</h4>
      <ul>
-       <li>修正mapper 文件 #{参数}弹出错误</li>
+       <li>修正mapper 文件 参数 弹出错误</li>
      </ul> 
      """
 }

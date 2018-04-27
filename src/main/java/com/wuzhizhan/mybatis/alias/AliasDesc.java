@@ -52,7 +52,7 @@ public class AliasDesc {
 
         AliasDesc aliasDesc = (AliasDesc) o;
 
-        if (alias != null ? !alias.equals(aliasDesc.alias) : aliasDesc.alias != null) {
+        if (alias != null ? !alias.equalsIgnoreCase(aliasDesc.alias) : aliasDesc.alias != null) {
             return false;
         }
         if (clazz != null ? !clazz.equals(aliasDesc.clazz) : aliasDesc.clazz != null) {
