@@ -1,7 +1,6 @@
 <idea-plugin >
     <id>cn.wuzhizhan.plugin.mybatis</id>
     <name>Free MyBatis plugin</name>
-    <version>2017.11.17</version>
     <vendor email="wuzhizhan@wuzhizhan.cn" url="https://github.com/wuzhizhan">wuzhizhan</vendor>
 
     <description><![CDATA[

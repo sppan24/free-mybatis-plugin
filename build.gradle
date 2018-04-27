@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'cn.wuzhizhan.idea.mybatis'
-version = '1.0-SNAPSHOT'
+version = '2018.04.27.1'
 
 apply plugin: 'java'
 sourceCompatibility = 1.8
@@ -18,17 +18,21 @@ dependencies {
 intellij {
     version = 'IU-2016.1'
     pluginName = 'free-idea-mybatis'
-    plugins = ['Spring','DatabaseTools']
+    plugins = ['coverage','Spring','DatabaseTools']
+    intellij.updateSinceUntilBuild false
 }
 patchPluginXml {
     changeNotes """
-    <h4>2018.03.23</h4>
+    <h4>2018.04.27</h4>
       <ul>
         <li>Fix: replace equals to equalsIgnoreCase when alias string match</li>
+        <li>change: use new icons</li>
+        <li>change:min support from 2016.1</li>
       </ul>
+
      <h4>2017.11.17</h4>
      <ul>
-       <li>修正mapper 文件 参数 弹出错误</li>
+       <li>fix:mapper xml error </li>
      </ul> 
      """
 }
