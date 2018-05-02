@@ -46,8 +46,14 @@ public final class JavaUtils {
 
     @NotNull
     public static Optional<PsiField> findSettablePsiField(@NotNull PsiClass clazz, @Nullable String propertyName) {
-        PsiMethod propertySetter = PropertyUtil.findPropertySetter(clazz, propertyName, false, true);
-        return null == propertySetter ? Optional.<PsiField>absent() : Optional.fromNullable(PropertyUtil.findPropertyFieldByMember(propertySetter));
+        final PsiMethod propertySetter = PropertyUtil.findPropertySetter(clazz, propertyName, false, true);
+
+        if (propertySetter == null) {
+            final PsiField field = PropertyUtil.findPropertyField(clazz, propertyName, false);
+            return field != null ? Optional.of(field) : Optional.absent();
+        }
+
+        return Optional.fromNullable(PropertyUtil.findPropertyFieldByMember(propertySetter));
     }
 
     @NotNull
