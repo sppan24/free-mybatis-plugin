@@ -7,7 +7,6 @@ import com.intellij.codeInsight.lookup.LookupElementBuilder;
 import com.intellij.openapi.project.Project;
 import com.intellij.patterns.XmlPatterns;
 import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiIdentifier;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.PsiParameter;
 import com.intellij.util.ProcessingContext;
@@ -69,22 +68,28 @@ public class TestParamContributor extends CompletionContributor {
         // named as param1, param2, etc. I'll check if the @Param annotation [value] is present
         // and eventually I'll use its text.
         if (parameters.length == 1) {
-            final PsiIdentifier identifier = parameters[0].getNameIdentifier();
-
-            if (identifier != null) {
-                result.addElement(buildLookupElementWithIcon(identifier.getText()));
-            }
+            final PsiParameter parameter = parameters[0];
+            result.addElement(buildLookupElementWithIcon(
+                    parameter.getName(),
+                    parameter.getType().getPresentableText()));
         } else {
             for (int i = 0; i < parameters.length; i++) {
-                final Optional<String> value = JavaUtils.getAnnotationValueText(parameters[i], Annotation.PARAM);
-                result.addElement(buildLookupElementWithIcon(value.isPresent() ? value.get() : "param" + (i + 1)));
+                final PsiParameter parameter = parameters[i];
+                final Optional<String> value = JavaUtils.getAnnotationValueText(parameter, Annotation.PARAM);
+                result.addElement(buildLookupElementWithIcon(
+                        value.isPresent() ? value.get() : "param" + (i + 1),
+                        parameter.getType().getPresentableText()));
             }
         }
     }
 
-    private static LookupElement buildLookupElementWithIcon(final String text) {
+    private static LookupElement buildLookupElementWithIcon(
+            final String parameterName,
+            final String parameterType) {
         return PrioritizedLookupElement.withPriority(
-                LookupElementBuilder.create(text).withIcon(Icons.PARAM_COMPLETION_ICON),
+                LookupElementBuilder.create(parameterName)
+                                    .withTypeText(parameterType)
+                                    .withIcon(Icons.PARAM_COMPLETION_ICON),
                 MybatisConstants.PRIORITY);
     }
 }
