@@ -30,8 +30,8 @@ public class TestParamContributor extends CompletionContributor {
     public TestParamContributor() {
         extend(CompletionType.BASIC,
                 XmlPatterns.psiElement()
-                           .inside(XmlPatterns.xmlAttributeValue()
-                                              .inside(XmlPatterns.xmlAttribute().withName("test"))),
+                        .inside(XmlPatterns.xmlAttributeValue()
+                                .inside(XmlPatterns.xmlAttribute().withName("test"))),
                 new CompletionProvider<CompletionParameters>() {
                     @Override
                     protected void addCompletions(
@@ -88,8 +88,8 @@ public class TestParamContributor extends CompletionContributor {
             final String parameterType) {
         return PrioritizedLookupElement.withPriority(
                 LookupElementBuilder.create(parameterName)
-                                    .withTypeText(parameterType)
-                                    .withIcon(Icons.PARAM_COMPLETION_ICON),
+                        .withTypeText(parameterType)
+                        .withIcon(Icons.PARAM_COMPLETION_ICON),
                 MybatisConstants.PRIORITY);
     }
 }
