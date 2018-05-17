@@ -9,8 +9,8 @@
       ]]></description>
 
     <idea-version since-build="145"/>
-    <!--<depends optional="true">com.intellij.sql</depends>-->
-    <!--<depends optional="true">com.intellij.spring</depends>-->
+    <depends optional="true">com.intellij.database</depends>
+    <depends optional="true">com.intellij.spring</depends>
     <extensions defaultExtensionNs="com.intellij">
         <dom.fileDescription implementation="com.wuzhizhan.mybatis.dom.description.MapperDescription"/>
         <dom.fileDescription implementation="com.wuzhizhan.mybatis.dom.description.ConfigurationDescription"/>

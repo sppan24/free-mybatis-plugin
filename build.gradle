@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'cn.wuzhizhan.idea.mybatis'
-version = '2018.04.27.1'
+version = '2018.05.17'
 
 apply plugin: 'java'
 sourceCompatibility = 1.8
@@ -23,17 +23,10 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-    <h4>2018.04.27</h4>
+    <h4>2018.05.17</h4>
       <ul>
-        <li>Fix: replace equals to equalsIgnoreCase when alias string match</li>
-        <li>change: use new icons</li>
-        <li>change:min support from 2016.1</li>
+        <li>fix some bugs</li>
       </ul>
-
-     <h4>2017.11.17</h4>
-     <ul>
-       <li>fix:mapper xml error </li>
-     </ul> 
      """
 }
 
