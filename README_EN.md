@@ -1,4 +1,7 @@
-[中文](README.md) [ENGLISH](README_EN.md)
+[中文](README.md) | 
+[ENGLISH](README_EN.md)
+
+
 ##Description
 A idea plugin for mybatis .
 free-idea-mybatis is an enchange plugin for idea to supoort mybatis,here is the main functions: 
