@@ -1,7 +1,7 @@
 [中文](README.md) | 
 [ENGLISH](README_EN.md)
 
-##Description
+## Description
 A idea plugin for mybatis .
 free-idea-mybatis是一款增强idea对mybatis支持的插件，主要功能如下：
 - 生成mapper xml文件
@@ -9,7 +9,7 @@ free-idea-mybatis是一款增强idea对mybatis支持的插件，主要功能如�
 - mybatis自动补全及语法错误提示
 
 ## 使用方法
-###free-idea-mybatis是一个提高mybatis编码的插件。实现了dao代码跳转到mapper，mapper跳转回dao，mapper文件、statement查询自动生成功能。
+free-idea-mybatis是一个提高mybatis编码的插件。实现了dao代码跳转到mapper，mapper跳转回dao，mapper文件、statement查询自动生成功能。
 ### 灵活使用alt+enter和ctrl+B实现提示和跳转
 - 生成mapper文件
     - alter+enter弹出
