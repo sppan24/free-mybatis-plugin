@@ -27,3 +27,7 @@ free-idea-mybatis是一个提高mybatis编码的插件。实现了dao代码跳�
 ## TODO
 - 根据数据库字段生产bean
 - 快捷生成CURD操作
+
+## 我的微信公众号 - it新技术
+更多内容，欢迎关注公众号 【it新技术】
+- ![](https://raw.githubusercontent.com/wuzhizhan/free-idea-mybatis/master/doc/img/gzh_logo.jpg)
