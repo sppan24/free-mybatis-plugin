@@ -16,7 +16,7 @@ dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
 intellij {
-    version = 'IU-2016.1'
+    version = 'IU-2018.1'
     pluginName = 'free-idea-mybatis'
     plugins = ['coverage','Spring','DatabaseTools']
     intellij.updateSinceUntilBuild false

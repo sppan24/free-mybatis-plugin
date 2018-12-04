@@ -1,4 +1,4 @@
-<idea-plugin >
+<idea-plugin>
     <id>cn.wuzhizhan.plugin.mybatis</id>
     <name>Free MyBatis plugin</name>
     <vendor email="wuzhizhan@wuzhizhan.cn" url="https://github.com/wuzhizhan">wuzhizhan</vendor>
@@ -9,8 +9,21 @@
       ]]></description>
 
     <idea-version since-build="145"/>
-    <depends optional="true">com.intellij.database</depends>
-    <depends optional="true">com.intellij.spring</depends>
+    <depends>com.intellij.database</depends>
+    <depends>com.intellij.spring</depends>
+    <actions>
+        <group id="com.wuzhizhan.mybatis.dbtools.action" class="com.wuzhizhan.mybatis.action.DbToolsMainActionGroup"
+               text="FreeMyBatis"
+               popup="true">
+            <!--生成代码菜单-->
+            <add-to-group group-id="DatabaseViewPopupMenu" anchor="first"/>
+        </group>
+
+        <action class="com.wuzhizhan.mybatis.action.DemoAction" id="com.wuzhizhan.mybatis.action.demoAction" text="demoAction">
+            <add-to-group group-id="GenerateGroup" anchor="last"/>
+            <keyboard-shortcut keymap="$default" first-keystroke="alt s"/>
+        </action>
+    </actions>
     <extensions defaultExtensionNs="com.intellij">
         <dom.fileDescription implementation="com.wuzhizhan.mybatis.dom.description.MapperDescription"/>
         <dom.fileDescription implementation="com.wuzhizhan.mybatis.dom.description.ConfigurationDescription"/>
@@ -20,6 +33,7 @@
         <projectService serviceImplementation="com.wuzhizhan.mybatis.service.EditorService"/>
         <projectService serviceImplementation="com.wuzhizhan.mybatis.alias.AliasFacade"/>
         <projectService serviceImplementation="com.wuzhizhan.mybatis.locator.MapperLocator"/>
+        <projectService serviceImplementation="com.wuzhizhan.mybatis.service.TableInfoService"/>
         <codeInsight.lineMarkerProvider language="JAVA"
                                         implementationClass="com.wuzhizhan.mybatis.provider.MapperLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="XML"
