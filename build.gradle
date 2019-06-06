@@ -3,7 +3,7 @@ plugins {
 }
 
 group = 'cn.wuzhizhan.idea.mybatis'
-version = '2018.05.17'
+version = '2018.06.06'
 
 apply plugin: 'java'
 sourceCompatibility = 1.8
@@ -23,9 +23,9 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-    <h4>2018.05.17</h4>
+    <h4>2019.06.06</h4>
       <ul>
-        <li>fix some bugs</li>
+        <li>Fix NPE in AliasFacade.findPsiClass(..)</li>
       </ul>
      """
 }
