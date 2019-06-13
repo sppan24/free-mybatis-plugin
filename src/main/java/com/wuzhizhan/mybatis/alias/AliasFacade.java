@@ -59,7 +59,7 @@ public class AliasFacade {
         }
         for (AliasResolver resolver : resolvers) {
             for (AliasDesc desc : resolver.getClassAliasDescriptions(element)) {
-                if (desc.getAlias().equalsIgnoreCase(shortName)) {
+                if (shortName.equalsIgnoreCase(desc.getAlias())) {
                     return Optional.of(desc.getClazz());
                 }
             }
@@ -77,12 +77,12 @@ public class AliasFacade {
     }
 
     public Optional<AliasDesc> findAliasDesc(@Nullable PsiClass clazz) {
-        if (null == clazz) {
+        if (clazz == null) {
             return Optional.absent();
         }
         for (AliasResolver resolver : resolvers) {
             for (AliasDesc desc : resolver.getClassAliasDescriptions(clazz)) {
-                if (desc.getClazz().equals(clazz)) {
+                if (clazz.equals(desc.getClazz())) {
                     return Optional.of(desc);
                 }
             }
