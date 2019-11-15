@@ -1,5 +1,5 @@
 *.iml
-*.jar
+
 log.roo
 .idea/
 out/

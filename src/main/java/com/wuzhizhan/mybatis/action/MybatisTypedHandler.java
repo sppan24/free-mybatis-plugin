@@ -5,9 +5,7 @@ import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
-import com.intellij.sql.psi.SqlFile;
 import com.wuzhizhan.mybatis.util.DomUtils;
-
 import org.jetbrains.annotations.NotNull;
 
 /**
@@ -31,7 +29,7 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
         boolean parameterCase = c == '{' &&
                 index >= 0 &&
                 editor.getDocument().getText().charAt(index) == '#' &&
-                file instanceof SqlFile &&
+//                file instanceof SqlFile &&
                 DomUtils.isMybatisFile(topLevelFile);
         if (parameterCase) {
 //            autoPopupParameter(project, editor);
