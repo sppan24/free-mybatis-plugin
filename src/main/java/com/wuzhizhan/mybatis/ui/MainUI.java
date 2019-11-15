@@ -23,16 +23,9 @@ import com.wuzhizhan.mybatis.model.TableInfo;
 import com.wuzhizhan.mybatis.setting.PersistentConfig;
 import com.wuzhizhan.mybatis.util.JTextFieldHintListener;
 import com.wuzhizhan.mybatis.util.StringUtils;
-import java.awt.BorderLayout;
-import java.awt.Dimension;
-import java.awt.FlowLayout;
-import java.awt.GridLayout;
-import java.awt.HeadlessException;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+
+import java.awt.*;
+import java.awt.event.*;
 import java.util.HashMap;
 import java.util.Map;
 import javax.swing.BorderFactory;
@@ -70,8 +63,8 @@ public class MainUI extends JFrame {
 
     private JPanel contentPane = new JBPanel<>();
     private JButton buttonOK = new JButton("ok");
-    private JButton buttonCancel = new JButton("cancle");
-    private JButton selectConfigBtn = new JButton("SELECT");
+    private JButton buttonCancel = new JButton("cancel");
+//    private JButton selectConfigBtn = new JButton("SELECT");
     private JButton deleteConfigBtn = new JButton("DELETE");
 
 
@@ -79,7 +72,7 @@ public class MainUI extends JFrame {
     private JBTextField modelPackageField = new JBTextField(12);
     private JBTextField daoPackageField = new JBTextField(12);
     private JBTextField xmlPackageField = new JBTextField(12);
-    private JTextField mapperNameField = new JTextField(10);
+    private JTextField daoNameField = new JTextField(10);
     private JTextField modelNameField = new JTextField(10);
     private JTextField keyField = new JTextField(10);
 
@@ -153,21 +146,14 @@ public class MainUI extends JFrame {
         }
 
 
-        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
-        contentPane.setLayout(new BorderLayout());
-
-        JPanel paneMain = new JPanel(new GridLayout(2, 1, 3, 3));//主要设置显示在这里
-        JPanel paneMainTop = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        paneMainTop.setBorder(new EmptyBorder(10, 30, 5, 40));
-
-        JPanel paneMainTop1 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JPanel paneMainTop2 = new JPanel(new FlowLayout(FlowLayout.LEFT));
-        JPanel paneMainTop3 = new JPanel(new GridLayout(4, 1, 3, 3));
-        paneMainTop.add(paneMainTop1);
-        paneMainTop.add(paneMainTop2);
-        paneMainTop.add(paneMainTop3);
 
 
+
+
+
+        /**
+         * table setting
+         */
         JPanel tableNameFieldPanel = new JPanel();
         tableNameFieldPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
         JLabel tablejLabel = new JLabel("table  name:");
@@ -190,35 +176,16 @@ public class MainUI extends JFrame {
         }
         keyFieldPanel.add(keyField);
 
-        JPanel modelNameFieldPanel = new JPanel();
-        modelNameFieldPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        modelNameFieldPanel.add(new JLabel("model   :"));
-        if (psiElements.length > 1) {
-            modelNameField.addFocusListener(new JTextFieldHintListener(modelNameField, "eg:DbTable"));
-        } else {
-            modelNameField.setText(modelName);
-        }
-        modelNameFieldPanel.add(modelNameField);
-
-        JPanel mapperNameFieldPanel = new JPanel();
-        mapperNameFieldPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        mapperNameFieldPanel.add(new JLabel("dao name:"));
-        if (psiElements.length > 1) {
-            if (config != null && !StringUtils.isEmpty(config.getDaoPostfix())) {
-                mapperNameField.addFocusListener(new JTextFieldHintListener(mapperNameField, "eg:DbTable" + config.getDaoPostfix()));
-            } else {
-                mapperNameField.addFocusListener(new JTextFieldHintListener(mapperNameField, "eg:DbTable" + "Dao"));
-            }
-        } else {
-            if (config != null && !StringUtils.isEmpty(config.getDaoPostfix())) {
-                mapperNameField.setText(modelName + config.getDaoPostfix());
-            } else {
-                mapperNameField.setText(modelName + "Dao");
-            }
-        }
-        mapperNameFieldPanel.add(mapperNameField);
+        JPanel tablePanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        tablePanel.setBorder(BorderFactory.createTitledBorder("table setting"));
+        tablePanel.add(tableNameFieldPanel);
+        tablePanel.add(keyFieldPanel);
 
 
+
+        /**
+         * project panel
+         */
         JPanel projectFolderPanel = new JPanel();
         projectFolderPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         JLabel projectLabel = new JLabel("project folder:");
@@ -238,33 +205,37 @@ public class MainUI extends JFrame {
             }
         });
         projectFolderPanel.add(projectFolderBtn);
-        paneMainTop1.add(tableNameFieldPanel);
-        paneMainTop1.add(keyFieldPanel);
-        paneMainTop1.add(modelNameFieldPanel);
-        paneMainTop1.add(mapperNameFieldPanel);
-        paneMainTop1.add(projectFolderPanel);
 
 
 
-        JPanel modelPackagePanel = new JPanel();
-        modelPackagePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        JBLabel labelLeft4 = new JBLabel("model package:");
-        modelPackagePanel.add(labelLeft4);
+        /**
+         * model setting
+         */
+        JPanel modelPanel = new JPanel();
+        modelPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        modelPanel.setBorder(BorderFactory.createTitledBorder("model setting"));
+
+        JPanel modelNameFieldPanel = new JPanel();
+        modelNameFieldPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        modelNameFieldPanel.add(new JLabel("file:"));
+        if (psiElements.length > 1) {
+            modelNameField.addFocusListener(new JTextFieldHintListener(modelNameField, "eg:DbTable"));
+        } else {
+            modelNameField.setText(modelName);
+        }
+        modelNameFieldPanel.add(modelNameField);
+        modelPanel.add(modelNameFieldPanel);
+
+        JBLabel labelLeft4 = new JBLabel("package:");
+        modelPanel.add(labelLeft4);
         if (config != null && !StringUtils.isEmpty(config.getModelPackage())) {
             modelPackageField.setText(config.getModelPackage());
         } else {
             modelPackageField.setText("generator");
         }
-        modelPackagePanel.add(modelPackageField);
-
-
-        modelPackagePanel.add(new JLabel("mvn path:"));
-        modelMvnField.setText("src/main/java");
-        modelPackagePanel.add(modelMvnField);
-
-
-        JButton packageBtn1 = new JButton("...");
-        packageBtn1.addActionListener(actionEvent -> {
+        modelPanel.add(modelPackageField);
+        JButton modelPackageFieldBtn = new JButton("...");
+        modelPackageFieldBtn.addActionListener(actionEvent -> {
             final PackageChooserDialog chooser = new PackageChooserDialog("chooser model package", project);
             chooser.selectPackage(modelPackageField.getText());
             chooser.show();
@@ -273,22 +244,44 @@ public class MainUI extends JFrame {
             modelPackageField.setText(packageName);
             MainUI.this.toFront();
         });
-        modelPackagePanel.add(packageBtn1);
+        modelPanel.add(modelPackageFieldBtn);
+        modelPanel.add(new JLabel("path:"));
+        modelMvnField.setText("src/main/java");
+        modelPanel.add(modelMvnField);
 
 
-        JPanel daoPackagePanel = new JPanel();
-        daoPackagePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        JLabel labelLeft5 = new JLabel("dao package:");
-        daoPackagePanel.add(labelLeft5);
 
+        /**
+         * dao setting
+         */
+        JPanel daoPanel = new JPanel();
+        daoPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        daoPanel.setBorder(BorderFactory.createTitledBorder("dao setting"));
 
+        daoPanel.add(new JLabel("name:"));
+        if (psiElements.length > 1) {
+            if (config != null && !StringUtils.isEmpty(config.getDaoPostfix())) {
+                daoNameField.addFocusListener(new JTextFieldHintListener(daoNameField, "eg:DbTable" + config.getDaoPostfix()));
+            } else {
+                daoNameField.addFocusListener(new JTextFieldHintListener(daoNameField, "eg:DbTable" + "Dao"));
+            }
+        } else {
+            if (config != null && !StringUtils.isEmpty(config.getDaoPostfix())) {
+                daoNameField.setText(modelName + config.getDaoPostfix());
+            } else {
+                daoNameField.setText(modelName + "Dao");
+            }
+        }
+        daoPanel.add(daoNameField);
+
+        JLabel labelLeft5 = new JLabel("package:");
+        daoPanel.add(labelLeft5);
         if (config != null && !StringUtils.isEmpty(config.getDaoPackage())) {
             daoPackageField.setText(config.getDaoPackage());
         } else {
             daoPackageField.setText("generator");
         }
-        daoPackagePanel.add(daoPackageField);
-
+        daoPanel.add(daoPackageField);
         JButton packageBtn2 = new JButton("...");
         packageBtn2.addActionListener(actionEvent -> {
             final PackageChooserDialog chooser = new PackageChooserDialog("choose dao package", project);
@@ -299,58 +292,35 @@ public class MainUI extends JFrame {
             daoPackageField.setText(packageName);
             MainUI.this.toFront();
         });
-        daoPackagePanel.add(packageBtn2);
+        daoPanel.add(packageBtn2);
+        daoPanel.add(new JLabel("path:"));
+        daoMvnField.setText("src/main/java");
+        daoPanel.add(daoMvnField);
 
-        JPanel xmlPackagePanel = new JPanel();
-        xmlPackagePanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        JLabel labelLeft6 = new JLabel("xml package:");
-        xmlPackagePanel.add(labelLeft6);
+
+        /**
+         * xml mapper setting
+         */
+        JPanel xmlMapperPanel = new JPanel();
+        xmlMapperPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
+        xmlMapperPanel.setBorder(BorderFactory.createTitledBorder("xml mapper setting"));
+        JLabel labelLeft6 = new JLabel("package:");
+        xmlMapperPanel.add(labelLeft6);
         if (config != null && !StringUtils.isEmpty(config.getXmlPackage())) {
             xmlPackageField.setText(config.getXmlPackage());
         } else {
             xmlPackageField.setText("generator");
         }
-        xmlPackagePanel.add(xmlPackageField);
-
-        paneMainTop2.add(modelPackagePanel);
-        paneMainTop2.add(daoPackagePanel);
-        paneMainTop2.add(xmlPackagePanel);
-
-/*
-
-
-        JPanel modelFolderPanel = new JPanel();
-        modelFolderPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-
-        modelFolderPanel.add(new JLabel("mvn path:"));
-        modelMvnField.setText("src/main/java");
-        modelFolderPanel.add(modelMvnField);
-*/
-
-        JPanel daoFolderPanel = new JPanel();
-        daoFolderPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        daoFolderPanel.add(new JLabel("dao     folder:"));
-
-
-        daoFolderPanel.add(new JLabel("mvn path:"));
-        daoMvnField.setText("src/main/java");
-        daoFolderPanel.add(daoMvnField);
-
-
-        JPanel xmlFolderPanel = new JPanel();
-        xmlFolderPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
-        xmlFolderPanel.add(new JLabel("xml     folder:"));
-
-
-        xmlFolderPanel.add(new JLabel("mvn path:"));
+        xmlMapperPanel.add(xmlPackageField);
+        xmlMapperPanel.add(new JLabel("path:"));
         xmlMvnField.setText("src/main/resources");
-        xmlFolderPanel.add(xmlMvnField);
+        xmlMapperPanel.add(xmlMvnField);
 
-        paneMainTop3.add(projectFolderPanel);
-//        paneMainTop3.add(modelFolderPanel);
-        paneMainTop3.add(daoFolderPanel);
-        paneMainTop3.add(xmlFolderPanel);
-
+        /**
+         * options
+         */
+        JBPanel optionsPanel = new JBPanel(new GridLayout(5, 5, 5, 5));
+        optionsPanel.setBorder(BorderFactory.createTitledBorder("options"));
         if (config == null) {
             offsetLimitBox.setSelected(true);
             commentBox.setSelected(true);
@@ -404,28 +374,30 @@ public class MainUI extends JFrame {
                 mysql_8Box.setSelected(true);
             }
         }
+        optionsPanel.add(offsetLimitBox);
+        optionsPanel.add(commentBox);
+        optionsPanel.add(overrideXMLBox);
+        optionsPanel.add(needToStringHashcodeEqualsBox);
+        optionsPanel.add(useSchemaPrefixBox);
+        optionsPanel.add(needForUpdateBox);
+        optionsPanel.add(annotationDAOBox);
+        optionsPanel.add(useDAOExtendStyleBox);
+        optionsPanel.add(jsr310SupportBox);
+        optionsPanel.add(annotationBox);
+        optionsPanel.add(useActualColumnNamesBox);
+        optionsPanel.add(useTableNameAliasBox);
+        optionsPanel.add(useExampleBox);
+        optionsPanel.add(mysql_8Box);
 
 
-        JBPanel paneMainDown = new JBPanel(new GridLayout(5, 5, 5, 5));
-        paneMainDown.setBorder(new EmptyBorder(2, 80, 100, 40));
-
-        paneMainDown.add(offsetLimitBox);
-        paneMainDown.add(commentBox);
-        paneMainDown.add(overrideXMLBox);
-        paneMainDown.add(needToStringHashcodeEqualsBox);
-        paneMainDown.add(useSchemaPrefixBox);
-        paneMainDown.add(needForUpdateBox);
-        paneMainDown.add(annotationDAOBox);
-        paneMainDown.add(useDAOExtendStyleBox);
-        paneMainDown.add(jsr310SupportBox);
-        paneMainDown.add(annotationBox);
-        paneMainDown.add(useActualColumnNamesBox);
-        paneMainDown.add(useTableNameAliasBox);
-        paneMainDown.add(useExampleBox);
-        paneMainDown.add(mysql_8Box);
-
-        paneMain.add(paneMainTop);
-        paneMain.add(paneMainDown);
+        JPanel mainPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
+        mainPanel.setBorder(new EmptyBorder(10, 30, 5, 40));
+        mainPanel.add(tablePanel);
+        mainPanel.add(projectFolderPanel);
+        mainPanel.add(modelPanel);
+        mainPanel.add(daoPanel);
+        mainPanel.add(xmlMapperPanel);
+        mainPanel.add(optionsPanel);
 
 
         JPanel paneBottom = new JPanel();//确认和取消按钮
@@ -434,14 +406,12 @@ public class MainUI extends JFrame {
         paneBottom.add(buttonCancel);
 
 
-        JPanel panelLeft = new JPanel();
-        panelLeft.setLayout(new BoxLayout(panelLeft, BoxLayout.Y_AXIS));
+        /**
+         * historyConfig panel
+         */
+
         this.getContentPane().add(Box.createVerticalStrut(10)); //采用x布局时，添加固定宽度组件隔开
         final DefaultListModel defaultListModel = new DefaultListModel();
-
-        Border historyBorder = BorderFactory.createTitledBorder("history config:");
-        panelLeft.setBorder(historyBorder);
-
 
         if (historyConfigList == null) {
             historyConfigList = new HashMap<>();
@@ -451,65 +421,70 @@ public class MainUI extends JFrame {
         }
         Map<String, Config> finalHistoryConfigList = historyConfigList;
 
-        final JBList fruitList = new JBList(defaultListModel);
-        fruitList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
-        fruitList.setSelectedIndex(0);
-        fruitList.setVisibleRowCount(25);
-        JBScrollPane ScrollPane = new JBScrollPane(fruitList);
-        panelLeft.add(ScrollPane);
+        final JBList configJBList = new JBList(defaultListModel);
+        configJBList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
+        configJBList.setSelectedIndex(0);
+        configJBList.setVisibleRowCount(25);
+        JBScrollPane ScrollPane = new JBScrollPane(configJBList);
+
 
         JPanel btnPanel = new JPanel();
         btnPanel.setLayout(new BoxLayout(btnPanel, BoxLayout.X_AXIS));
-
-        btnPanel.add(selectConfigBtn);
+        btnPanel.add(new JLabel("      "));//用来占位置
         btnPanel.add(deleteConfigBtn);
-        selectConfigBtn.addActionListener(new ActionListener() {
+        configJBList.addMouseListener(new MouseAdapter() {
             @Override
-            public void actionPerformed(ActionEvent e) {
-                String configName = (String) fruitList.getSelectedValue();
-                Config selectedConfig = finalHistoryConfigList.get(configName);
-                modelPackageField.setText(selectedConfig.getModelPackage());
-                daoPackageField.setText(selectedConfig.getDaoPackage());
-                xmlPackageField.setText(selectedConfig.getXmlPackage());
-                projectFolderBtn.setText(selectedConfig.getProjectFolder());
-              /*  modelFolderBtn.setText(selectedConfig.getModelTargetFolder());
-                daoFolderBtn.setText(selectedConfig.getDaoTargetFolder());
-                xmlFolderBtn.setText(selectedConfig.getXmlTargetFolder());
-*/
-                offsetLimitBox.setSelected(selectedConfig.isOffsetLimit());
-                commentBox.setSelected(selectedConfig.isComment());
-                overrideXMLBox.setSelected(selectedConfig.isOverrideXML());
-                needToStringHashcodeEqualsBox.setSelected(selectedConfig.isNeedToStringHashcodeEquals());
-                useSchemaPrefixBox.setSelected(selectedConfig.isUseSchemaPrefix());
-                needForUpdateBox.setSelected(selectedConfig.isNeedForUpdate());
-                annotationDAOBox.setSelected(selectedConfig.isAnnotationDAO());
-                useDAOExtendStyleBox.setSelected(selectedConfig.isUseDAOExtendStyle());
-                jsr310SupportBox.setSelected(selectedConfig.isJsr310Support());
-                annotationBox.setSelected(selectedConfig.isAnnotation());
-                useActualColumnNamesBox.setSelected(selectedConfig.isUseActualColumnNames());
-                useTableNameAliasBox.setSelected(selectedConfig.isUseTableNameAlias());
-                useExampleBox.setSelected(selectedConfig.isUseExample());
-                mysql_8Box.setSelected(selectedConfig.isMysql_8());
-
+            public void mouseClicked(MouseEvent e) {
+                if (configJBList.getSelectedIndex() != -1) {
+                    if (e.getClickCount() == 2) { //双击事件
+                        String configName = (String) configJBList.getSelectedValue();
+                        Config selectedConfig = finalHistoryConfigList.get(configName);
+                        modelPackageField.setText(selectedConfig.getModelPackage());
+                        daoPackageField.setText(selectedConfig.getDaoPackage());
+                        xmlPackageField.setText(selectedConfig.getXmlPackage());
+                        projectFolderBtn.setText(selectedConfig.getProjectFolder());
+                        offsetLimitBox.setSelected(selectedConfig.isOffsetLimit());
+                        commentBox.setSelected(selectedConfig.isComment());
+                        overrideXMLBox.setSelected(selectedConfig.isOverrideXML());
+                        needToStringHashcodeEqualsBox.setSelected(selectedConfig.isNeedToStringHashcodeEquals());
+                        useSchemaPrefixBox.setSelected(selectedConfig.isUseSchemaPrefix());
+                        needForUpdateBox.setSelected(selectedConfig.isNeedForUpdate());
+                        annotationDAOBox.setSelected(selectedConfig.isAnnotationDAO());
+                        useDAOExtendStyleBox.setSelected(selectedConfig.isUseDAOExtendStyle());
+                        jsr310SupportBox.setSelected(selectedConfig.isJsr310Support());
+                        annotationBox.setSelected(selectedConfig.isAnnotation());
+                        useActualColumnNamesBox.setSelected(selectedConfig.isUseActualColumnNames());
+                        useTableNameAliasBox.setSelected(selectedConfig.isUseTableNameAlias());
+                        useExampleBox.setSelected(selectedConfig.isUseExample());
+                        mysql_8Box.setSelected(selectedConfig.isMysql_8());
+                    }
+                }
             }
         });
+
         deleteConfigBtn.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                finalHistoryConfigList.remove(fruitList.getSelectedValue());
+                finalHistoryConfigList.remove(configJBList.getSelectedValue());
                 defaultListModel.removeAllElements();
                 for (String historyConfigName : finalHistoryConfigList.keySet()) {
                     defaultListModel.addElement(historyConfigName);
                 }
             }
         });
-        panelLeft.add(btnPanel);
+
+        JPanel historyConfigPanel = new JPanel();
+        historyConfigPanel.setLayout(new BoxLayout(historyConfigPanel, BoxLayout.Y_AXIS));
+        historyConfigPanel.setBorder(BorderFactory.createTitledBorder("config history"));
+        historyConfigPanel.add(ScrollPane);
+        historyConfigPanel.add(btnPanel);
 
 
-        contentPane.add(paneMain, BorderLayout.CENTER);
+        contentPane.setBorder(new EmptyBorder(5, 5, 5, 5));
+        contentPane.setLayout(new BorderLayout());
+        contentPane.add(mainPanel, BorderLayout.CENTER);
         contentPane.add(paneBottom, BorderLayout.SOUTH);
-        contentPane.add(panelLeft, BorderLayout.WEST);
-
+        contentPane.add(historyConfigPanel, BorderLayout.WEST);
         setContentPane(contentPane);
 
         buttonOK.addActionListener(new ActionListener() {
@@ -517,8 +492,6 @@ public class MainUI extends JFrame {
                 onOK();
             }
         });
-
-
         buttonCancel.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent e) {
                 onCancel();
@@ -554,7 +527,7 @@ public class MainUI extends JFrame {
 //                generator_config.setDaoTargetFolder(daoFolderBtn.getText());
                 generator_config.setXmlPackage(xmlPackageField.getText());
 //                generator_config.setXmlTargetFolder(xmlFolderBtn.getText());
-                generator_config.setDaoName(mapperNameField.getText());
+                generator_config.setDaoName(daoNameField.getText());
                 generator_config.setModelName(modelNameField.getText());
                 generator_config.setPrimaryKey(keyField.getText());
 
