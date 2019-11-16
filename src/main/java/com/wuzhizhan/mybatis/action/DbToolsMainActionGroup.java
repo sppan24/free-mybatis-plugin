@@ -97,7 +97,7 @@ public class DbToolsMainActionGroup extends ActionGroup {
         // 代码生成菜单
         AnAction mainAction = actionManager.getAction(mainActionId);
         if (mainAction == null) {
-            mainAction = new DbToolsMainAction("Generate Code");
+            mainAction = new DbToolsMainAction("MybatisGenerator Code");
             actionManager.registerAction(mainActionId, mainAction);
         }
         // 表配置菜单

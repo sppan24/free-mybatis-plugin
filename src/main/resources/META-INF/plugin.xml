@@ -23,8 +23,8 @@
             <add-to-group group-id="GenerateGroup" anchor="last"/>
             <keyboard-shortcut keymap="$default" first-keystroke="alt s"/>
         </action>
-        <action id="mabatis-generate-action" class="com.wuzhizhan.mybatis.action.MainAction" text="mabatis-generate"
-          description="mybatis generator idea plugin">
+        <action id="mabatis-generate-action" class="com.wuzhizhan.mybatis.action.MybatisGeneratorMainAction" text="mabatis-generate"
+                description="mybatis generator idea plugin">
             <add-to-group group-id="DatabaseViewPopupMenu" anchor="last"/>
         </action>
     </actions>
@@ -76,7 +76,7 @@
         </intentionAction>
         <projectService serviceInterface="com.wuzhizhan.mybatis.setting.PersistentConfig"
           serviceImplementation="com.wuzhizhan.mybatis.setting.PersistentConfig"/>
-        <projectConfigurable groupId="tools" displayName="Mybatis generator plugin" id="gene.id"
-          instance="com.wuzhizhan.mybatis.setting.SettingConfigurable"/>
+        <projectConfigurable groupId="tools" displayName="Mybatis generator setting" id="gene.id"
+          instance="com.wuzhizhan.mybatis.setting.MybatisGeneratorConfigurable"/>
     </extensions>
 </idea-plugin>

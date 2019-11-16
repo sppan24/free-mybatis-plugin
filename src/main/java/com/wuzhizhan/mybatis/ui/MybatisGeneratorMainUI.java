@@ -17,7 +17,7 @@ import com.intellij.ui.components.JBList;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.JBScrollPane;
 import com.intellij.ui.components.JBTextField;
-import com.wuzhizhan.mybatis.generate.Generate;
+import com.wuzhizhan.mybatis.generate.MybatisGenerator;
 import com.wuzhizhan.mybatis.model.Config;
 import com.wuzhizhan.mybatis.model.TableInfo;
 import com.wuzhizhan.mybatis.setting.PersistentConfig;
@@ -42,14 +42,13 @@ import javax.swing.JPanel;
 import javax.swing.JTextField;
 import javax.swing.KeyStroke;
 import javax.swing.ListSelectionModel;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 
 /**
  * 插件主界面
  * Created by kangtian on 2018/8/1.
  */
-public class MainUI extends JFrame {
+public class MybatisGeneratorMainUI extends JFrame {
 
 
     private AnActionEvent anActionEvent;
@@ -64,13 +63,14 @@ public class MainUI extends JFrame {
     private JPanel contentPane = new JBPanel<>();
     private JButton buttonOK = new JButton("ok");
     private JButton buttonCancel = new JButton("cancel");
-//    private JButton selectConfigBtn = new JButton("SELECT");
+    //    private JButton selectConfigBtn = new JButton("SELECT");
     private JButton deleteConfigBtn = new JButton("DELETE");
 
 
     private JTextField tableNameField = new JTextField(10);
     private JBTextField modelPackageField = new JBTextField(12);
     private JBTextField daoPackageField = new JBTextField(12);
+    private JTextField daoPostfixField = new JTextField(10);
     private JBTextField xmlPackageField = new JBTextField(12);
     private JTextField daoNameField = new JTextField(10);
     private JTextField modelNameField = new JTextField(10);
@@ -97,8 +97,7 @@ public class MainUI extends JFrame {
     private JCheckBox mysql_8Box = new JCheckBox("mysql_8");
 
 
-
-    public MainUI(AnActionEvent anActionEvent) throws HeadlessException {
+    public MybatisGeneratorMainUI(AnActionEvent anActionEvent) throws HeadlessException {
         this.anActionEvent = anActionEvent;
         this.project = anActionEvent.getData(PlatformDataKeys.PROJECT);
         this.persistentConfig = PersistentConfig.getInstance(project);
@@ -106,7 +105,6 @@ public class MainUI extends JFrame {
 
         initConfigMap = persistentConfig.getInitConfig();
         historyConfigList = persistentConfig.getHistoryConfigList();
-
 
 
         setTitle("mybatis generate tool");
@@ -122,17 +120,19 @@ public class MainUI extends JFrame {
         String tableName = tableInfo.getTableName();
         String modelName = StringUtils.dbStringToCamelStyle(tableName);
         String primaryKey = "";
-        if(tableInfo.getPrimaryKeys().size()>0){
+        if (tableInfo.getPrimaryKeys().size() > 0) {
             primaryKey = tableInfo.getPrimaryKeys().get(0);
         }
         String projectFolder = project.getBasePath();
 
-
+        boolean multiTable;
         if (psiElements.length > 1) {//多表时，只使用默认配置
+            multiTable = true;
             if (initConfigMap != null) {
                 config = initConfigMap.get("initConfig");
             }
         } else {
+            multiTable = false;
             if (initConfigMap != null) {//单表时，优先使用已经存在的配置
                 config = initConfigMap.get("initConfig");
             }
@@ -144,11 +144,6 @@ public class MainUI extends JFrame {
                 }
             }
         }
-
-
-
-
-
 
 
         /**
@@ -182,7 +177,6 @@ public class MainUI extends JFrame {
         tablePanel.add(keyFieldPanel);
 
 
-
         /**
          * project panel
          */
@@ -207,31 +201,26 @@ public class MainUI extends JFrame {
         projectFolderPanel.add(projectFolderBtn);
 
 
-
         /**
          * model setting
          */
         JPanel modelPanel = new JPanel();
         modelPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         modelPanel.setBorder(BorderFactory.createTitledBorder("model setting"));
-
-        JPanel modelNameFieldPanel = new JPanel();
-        modelNameFieldPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
-        modelNameFieldPanel.add(new JLabel("file:"));
-        if (psiElements.length > 1) {
-            modelNameField.addFocusListener(new JTextFieldHintListener(modelNameField, "eg:DbTable"));
-        } else {
+        if (!multiTable) {
+            JPanel modelNameFieldPanel = new JPanel();
+            modelNameFieldPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+            modelNameFieldPanel.add(new JLabel("file:"));
             modelNameField.setText(modelName);
+            modelNameFieldPanel.add(modelNameField);
+            modelPanel.add(modelNameFieldPanel);
         }
-        modelNameFieldPanel.add(modelNameField);
-        modelPanel.add(modelNameFieldPanel);
-
         JBLabel labelLeft4 = new JBLabel("package:");
         modelPanel.add(labelLeft4);
         if (config != null && !StringUtils.isEmpty(config.getModelPackage())) {
             modelPackageField.setText(config.getModelPackage());
         } else {
-            modelPackageField.setText("generator");
+            modelPackageField.setText("generate");
         }
         modelPanel.add(modelPackageField);
         JButton modelPackageFieldBtn = new JButton("...");
@@ -242,13 +231,12 @@ public class MainUI extends JFrame {
             final PsiPackage psiPackage = chooser.getSelectedPackage();
             String packageName = psiPackage == null ? null : psiPackage.getQualifiedName();
             modelPackageField.setText(packageName);
-            MainUI.this.toFront();
+            MybatisGeneratorMainUI.this.toFront();
         });
         modelPanel.add(modelPackageFieldBtn);
         modelPanel.add(new JLabel("path:"));
         modelMvnField.setText("src/main/java");
         modelPanel.add(modelMvnField);
-
 
 
         /**
@@ -258,28 +246,31 @@ public class MainUI extends JFrame {
         daoPanel.setLayout(new FlowLayout(FlowLayout.LEFT));
         daoPanel.setBorder(BorderFactory.createTitledBorder("dao setting"));
 
-        daoPanel.add(new JLabel("name:"));
-        if (psiElements.length > 1) {
+
+        if (multiTable) { //多表
+
             if (config != null && !StringUtils.isEmpty(config.getDaoPostfix())) {
-                daoNameField.addFocusListener(new JTextFieldHintListener(daoNameField, "eg:DbTable" + config.getDaoPostfix()));
-            } else {
-                daoNameField.addFocusListener(new JTextFieldHintListener(daoNameField, "eg:DbTable" + "Dao"));
+                daoPostfixField.setText(config.getDaoPostfix());
             }
-        } else {
+            daoPanel.add(new JLabel("dao postfix:"));
+            daoPanel.add(daoPostfixField);
+        } else {//单表
             if (config != null && !StringUtils.isEmpty(config.getDaoPostfix())) {
                 daoNameField.setText(modelName + config.getDaoPostfix());
             } else {
                 daoNameField.setText(modelName + "Dao");
             }
+            daoPanel.add(new JLabel("name:"));
+            daoPanel.add(daoNameField);
         }
-        daoPanel.add(daoNameField);
+
 
         JLabel labelLeft5 = new JLabel("package:");
         daoPanel.add(labelLeft5);
         if (config != null && !StringUtils.isEmpty(config.getDaoPackage())) {
             daoPackageField.setText(config.getDaoPackage());
         } else {
-            daoPackageField.setText("generator");
+            daoPackageField.setText("generate");
         }
         daoPanel.add(daoPackageField);
         JButton packageBtn2 = new JButton("...");
@@ -290,7 +281,7 @@ public class MainUI extends JFrame {
             final PsiPackage psiPackage = chooser.getSelectedPackage();
             String packageName = psiPackage == null ? null : psiPackage.getQualifiedName();
             daoPackageField.setText(packageName);
-            MainUI.this.toFront();
+            MybatisGeneratorMainUI.this.toFront();
         });
         daoPanel.add(packageBtn2);
         daoPanel.add(new JLabel("path:"));
@@ -392,7 +383,9 @@ public class MainUI extends JFrame {
 
         JPanel mainPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
         mainPanel.setBorder(new EmptyBorder(10, 30, 5, 40));
-        mainPanel.add(tablePanel);
+        if (!multiTable) {
+            mainPanel.add(tablePanel);
+        }
         mainPanel.add(projectFolderPanel);
         mainPanel.add(modelPanel);
         mainPanel.add(daoPanel);
@@ -522,11 +515,8 @@ public class MainUI extends JFrame {
                 generator_config.setProjectFolder(projectFolderBtn.getText());
 
                 generator_config.setModelPackage(modelPackageField.getText());
-//                generator_config.setModelTargetFolder(modelFolderBtn.getText());
                 generator_config.setDaoPackage(daoPackageField.getText());
-//                generator_config.setDaoTargetFolder(daoFolderBtn.getText());
                 generator_config.setXmlPackage(xmlPackageField.getText());
-//                generator_config.setXmlTargetFolder(xmlFolderBtn.getText());
                 generator_config.setDaoName(daoNameField.getText());
                 generator_config.setModelName(modelNameField.getText());
                 generator_config.setPrimaryKey(keyField.getText());
@@ -551,7 +541,7 @@ public class MainUI extends JFrame {
                 generator_config.setXmlMvnPath(xmlMvnField.getText());
 
 
-                new Generate(generator_config).execute(anActionEvent);
+                new MybatisGenerator(generator_config).execute(anActionEvent, true);
             } else {
                 for (PsiElement psiElement : psiElements) {
                     TableInfo tableInfo = new TableInfo((DbTable) psiElement);
@@ -567,11 +557,8 @@ public class MainUI extends JFrame {
                     generator_config.setProjectFolder(projectFolderBtn.getText());
 
                     generator_config.setModelPackage(modelPackageField.getText());
-//                    generator_config.setModelTargetFolder(modelFolderBtn.getText());
                     generator_config.setDaoPackage(daoPackageField.getText());
-//                    generator_config.setDaoTargetFolder(daoFolderBtn.getText());
                     generator_config.setXmlPackage(xmlPackageField.getText());
-//                    generator_config.setXmlTargetFolder(xmlFolderBtn.getText());
 
                     if (this.config != null) {
                         generator_config.setDaoName(modelName + this.config.getDaoPostfix());
@@ -600,8 +587,7 @@ public class MainUI extends JFrame {
                     generator_config.setDaoMvnPath(daoMvnField.getText());
                     generator_config.setXmlMvnPath(xmlMvnField.getText());
 
-
-                    new Generate(generator_config).execute(anActionEvent);
+                    new MybatisGenerator(generator_config).execute(anActionEvent, false);
                 }
 
             }

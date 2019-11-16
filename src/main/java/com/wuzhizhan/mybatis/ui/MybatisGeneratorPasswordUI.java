@@ -41,7 +41,7 @@ import javax.swing.border.EmptyBorder;
  * 账号密码输入界面
  * Created by kangtian on 2018/8/3.
  */
-public class UserUI extends JFrame {
+public class MybatisGeneratorPasswordUI extends JFrame {
 
     private AnActionEvent anActionEvent;
     private Project project;
@@ -57,7 +57,7 @@ public class UserUI extends JFrame {
     public JTextField passwordField = new JBTextField(20);
 
 
-    public UserUI(String driverClass, String address, AnActionEvent anActionEvent, Config config) throws HeadlessException {
+    public MybatisGeneratorPasswordUI(String driverClass, String address, AnActionEvent anActionEvent, Config config) throws HeadlessException {
         this.anActionEvent = anActionEvent;
         this.project = anActionEvent.getData(PlatformDataKeys.PROJECT);
         this.persistentConfig = PersistentConfig.getInstance(project);
@@ -157,7 +157,7 @@ public class UserUI extends JFrame {
             } catch (Exception ex) {
                 Messages.showMessageDialog(project, "Failed to connect to " + DbTypeName + " database,please check username and password,or mysql is version 8?" + isMySQL_8, "Test connection", Messages
                     .getInformationIcon());
-//                new UserUI(driverClass, address, anActionEvent, config);
+//                new MybatisGeneratorPasswordUI(driverClass, address, anActionEvent, config);
                 return;
             } finally {
                 if (conn != null) {
@@ -180,7 +180,7 @@ public class UserUI extends JFrame {
 
             VirtualFile baseDir = project.getBaseDir();
             baseDir.refresh(false, true);
-            new MainUI(anActionEvent);
+            new MybatisGeneratorMainUI(anActionEvent);
 
         } catch (Exception e1) {
             e1.printStackTrace();

@@ -20,9 +20,10 @@ import com.wuzhizhan.mybatis.model.Config;
 import com.wuzhizhan.mybatis.model.DbType;
 import com.wuzhizhan.mybatis.model.User;
 import com.wuzhizhan.mybatis.setting.PersistentConfig;
-import com.wuzhizhan.mybatis.ui.UserUI;
+import com.wuzhizhan.mybatis.ui.MybatisGeneratorPasswordUI;
 import com.wuzhizhan.mybatis.util.GeneratorCallback;
 import com.wuzhizhan.mybatis.util.StringUtils;
+
 import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -30,6 +31,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+
 import org.jetbrains.annotations.NotNull;
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.api.ShellCallback;
@@ -38,9 +40,8 @@ import org.mybatis.generator.internal.DefaultShellCallback;
 
 /**
  * 生成mybatis相关代码
- * Created by kangtian on 2018/7/28.
  */
-public class Generate {
+public class MybatisGenerator {
 
     private AnActionEvent anActionEvent;
     private Project project;
@@ -51,7 +52,7 @@ public class Generate {
     private String driverClass;//数据库驱动
     private String url;//数据库连接url
 
-    public Generate(Config config) {
+    public MybatisGenerator(Config config) {
         this.config = config;
     }
 
@@ -61,19 +62,19 @@ public class Generate {
      * @param anActionEvent
      * @throws Exception
      */
-    public void execute(AnActionEvent anActionEvent) throws Exception {
+    public void execute(AnActionEvent anActionEvent, boolean saveConfig) throws Exception {
         this.anActionEvent = anActionEvent;
         this.project = anActionEvent.getData(PlatformDataKeys.PROJECT);
         this.persistentConfig = PersistentConfig.getInstance(project);
 
-        saveConfig();//执行前 先保存一份当前配置
-
+        if (saveConfig) {
+            saveConfig();//执行前 先保存一份当前配置
+        }
         PsiElement[] psiElements = anActionEvent.getData(LangDataKeys.PSI_ELEMENT_ARRAY);
 
         if (psiElements == null || psiElements.length == 0) {
             return;
         }
-
         RawConnectionConfig connectionConfig = ((DbDataSource) psiElements[0].getParent().getParent()).getConnectionConfig();
         driverClass = connectionConfig.getDriverClass();
         url = connectionConfig.getUrl();
@@ -97,7 +98,7 @@ public class Generate {
             @Override
             public void run() {
                 ProgressManager
-                    .getInstance().run(new Task.Backgroundable(project, "mybatis generating...") {
+                        .getInstance().run(new Task.Backgroundable(project, "mybatis generating...") {
                     @Override
                     public void run(@NotNull ProgressIndicator indicator) {
 
@@ -144,7 +145,7 @@ public class Generate {
                                 MyBatisGenerator myBatisGenerator = new MyBatisGenerator(configuration, shellCallback, warnings);
                                 myBatisGenerator.generate(new GeneratorCallback(), contexts, fullyqualifiedTables);
                             } catch (Exception e) {
-                                //                                Messages.showMessageDialog(e.getMessage() + " if use mysql,check version8?", "Generate failure", Messages.getInformationIcon());
+                                //                                Messages.showMessageDialog(e.getMessage() + " if use mysql,check version8?", "MybatisGenerator failure", Messages.getInformationIcon());
                                 System.out.println("代码生成报错");
 
                             }
@@ -164,17 +165,14 @@ public class Generate {
      * @param config
      */
     private void createFolderForNeed(Config config) {
-        String modelTargetFolder = config.getModelTargetFolder();
-        String daoTargetFolder = config.getDaoTargetFolder();
-        String xmlTargetFolder = config.getXmlTargetFolder();
 
         String modelMvnPath = config.getModelMvnPath();
         String daoMvnPath = config.getDaoMvnPath();
         String xmlMvnPath = config.getXmlMvnPath();
 
-        String modelPath = modelTargetFolder + "/" + modelMvnPath + "/";
-        String daoPath = daoTargetFolder + "/" + daoMvnPath + "/";
-        String xmlPath = xmlTargetFolder + "/" + xmlMvnPath + "/";
+        String modelPath = config.getProjectFolder() + "/" + modelMvnPath + "/";
+        String daoPath = config.getProjectFolder() + "/" + daoMvnPath + "/";
+        String xmlPath = config.getProjectFolder() + "/" + xmlMvnPath + "/";
 
         File modelFile = new File(modelPath);
         if (!modelFile.exists() && !modelFile.isDirectory()) {
@@ -234,7 +232,7 @@ public class Generate {
             CredentialAttributes attributes_get = new CredentialAttributes("better-mybatis-generator-" + url, username, this.getClass(), false);
             String password = PasswordSafe.getInstance().getPassword(attributes_get);
             if (StringUtils.isEmpty(password)) {
-                new UserUI(driverClass, url, anActionEvent, config);
+                new MybatisGeneratorPasswordUI(driverClass, url, anActionEvent, config);
                 return null;
             }
 
@@ -250,7 +248,7 @@ public class Generate {
             jdbcConfig.setConnectionURL(url);
             return jdbcConfig;
         } else {
-            new UserUI(driverClass, url, anActionEvent, config);
+            new MybatisGeneratorPasswordUI(driverClass, url, anActionEvent, config);
             return null;
         }
 

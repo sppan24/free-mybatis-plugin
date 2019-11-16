@@ -3,31 +3,27 @@ package com.wuzhizhan.mybatis.setting;
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
 import com.intellij.openapi.project.Project;
-import com.wuzhizhan.mybatis.ui.SettingUI;
+import com.wuzhizhan.mybatis.ui.MybatisGeneratorSettingUI;
 import javax.swing.JComponent;
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-/**
- *配置设置界面
- * Created by kangtian on 2018/7/18.
- */
-public class SettingConfigurable implements SearchableConfigurable {
-    private SettingUI mainPanel;
+public class MybatisGeneratorConfigurable implements SearchableConfigurable {
+    private MybatisGeneratorSettingUI mainPanel;
 
     @SuppressWarnings("FieldCanBeLocal")
     private final Project project;
 
 
-    public SettingConfigurable(@NotNull Project project) {
+    public MybatisGeneratorConfigurable(@NotNull Project project) {
         this.project = project;
     }
 
     @Nls
     @Override
     public String getDisplayName() {
-        return "Mybatis gene plugin";
+        return "Mybatis generator setting";
     }
 
     @Nullable
@@ -51,7 +47,7 @@ public class SettingConfigurable implements SearchableConfigurable {
     @Nullable
     @Override
     public JComponent createComponent() {
-        mainPanel = new SettingUI();
+        mainPanel = new MybatisGeneratorSettingUI();
         mainPanel.createUI(project);
         return mainPanel.getContentPane();
     }

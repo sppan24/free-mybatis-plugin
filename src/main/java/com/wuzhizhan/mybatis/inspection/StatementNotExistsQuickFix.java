@@ -21,7 +21,7 @@ public class StatementNotExistsQuickFix extends GenericQuickFix {
     @NotNull
     @Override
     public String getName() {
-        return "Generate statement";
+        return "MybatisGenerator statement";
     }
 
     @Override

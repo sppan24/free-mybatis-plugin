@@ -49,7 +49,7 @@ public class GenerateMapperIntention extends GenericIntention {
     @NotNull
     @Override
     public String getText() {
-        return "[Mybatis] Generate mapper of xml";
+        return "[Mybatis] MybatisGenerator mapper of xml";
     }
 
     @Override

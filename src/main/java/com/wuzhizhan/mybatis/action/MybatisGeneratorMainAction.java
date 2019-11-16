@@ -7,13 +7,9 @@ import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.PsiElement;
-import com.wuzhizhan.mybatis.ui.MainUI;
+import com.wuzhizhan.mybatis.ui.MybatisGeneratorMainUI;
 
-/**
- * mybatis generator工具生成类
- * Created by kangtian on 2018/7/17.
- */
-public class MainAction extends AnAction {
+public class MybatisGeneratorMainAction extends AnAction {
 
 
     /**
@@ -33,7 +29,7 @@ public class MainAction extends AnAction {
                 return;
             }
         }
-        new MainUI(e);
+        new MybatisGeneratorMainUI(e);
     }
 
 }
