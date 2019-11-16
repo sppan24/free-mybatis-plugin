@@ -12,20 +12,10 @@
     <depends>com.intellij.database</depends>
     <depends>com.intellij.spring</depends>
     <actions>
-        <group id="com.wuzhizhan.mybatis.dbtools.action" class="com.wuzhizhan.mybatis.action.DbToolsMainActionGroup"
-               text="FreeMyBatis"
-               popup="true">
-            <!--生成代码菜单-->
-            <add-to-group group-id="DatabaseViewPopupMenu" anchor="first"/>
-        </group>
 
-        <action class="com.wuzhizhan.mybatis.action.DemoAction" id="com.wuzhizhan.mybatis.action.demoAction" text="demoAction">
-            <add-to-group group-id="GenerateGroup" anchor="last"/>
-            <keyboard-shortcut keymap="$default" first-keystroke="alt s"/>
-        </action>
-        <action id="mabatis-generate-action" class="com.wuzhizhan.mybatis.action.MybatisGeneratorMainAction" text="mabatis-generate"
+        <action id="mabatis-generate-action" class="com.wuzhizhan.mybatis.action.MybatisGeneratorMainAction" text="mabatis-generator"
                 description="mybatis generator idea plugin">
-            <add-to-group group-id="DatabaseViewPopupMenu" anchor="last"/>
+            <add-to-group group-id="DatabaseViewPopupMenu" anchor="first"/>
         </action>
     </actions>
     <extensions defaultExtensionNs="com.intellij">

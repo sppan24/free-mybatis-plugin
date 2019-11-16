@@ -1,5 +1,8 @@
 package com.wuzhizhan.mybatis.action;
 
+import com.intellij.codeInsight.AutoPopupController;
+import com.intellij.codeInsight.completion.CodeCompletionHandlerBase;
+import com.intellij.codeInsight.completion.CompletionType;
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
@@ -16,7 +19,7 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
     @Override
     public Result checkAutoPopup(char charTyped, final Project project, final Editor editor, PsiFile file) {
         if (charTyped == '.' && DomUtils.isMybatisFile(file)) {
-//            autoPopupParameter(project, editor);
+            autoPopupParameter(project, editor);
             return Result.STOP;
         }
         return super.checkAutoPopup(charTyped, project, editor, file);
@@ -29,13 +32,24 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
         boolean parameterCase = c == '{' &&
                 index >= 0 &&
                 editor.getDocument().getText().charAt(index) == '#' &&
+                file.getClass().getCanonicalName().equals("com.intellij.sql.psi.impl.SqlFileImpl") &&
 //                file instanceof SqlFile &&
                 DomUtils.isMybatisFile(topLevelFile);
         if (parameterCase) {
-//            autoPopupParameter(project, editor);
+            autoPopupParameter(project, editor);
             return Result.STOP;
         }
         return super.charTyped(c, project, editor, file);
+    }
+
+    private static void autoPopupParameter(final Project project, final Editor editor) {
+        AutoPopupController.runTransactionWithEverythingCommitted(project, new Runnable() {
+            @Override
+            public void run() {
+                new CodeCompletionHandlerBase(CompletionType.BASIC).invokeCompletion(project, editor, 1);
+            }
+        });
+
     }
 
 }
