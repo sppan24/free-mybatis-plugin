@@ -1,7 +1,7 @@
 buildscript {
     repositories {
         maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
-        maven{ url 'http://maven.aliyun.com/nexus/content/repositories/jcenter'}
+        maven { url 'http://maven.aliyun.com/nexus/content/repositories/jcenter' }
     }
 
 }
@@ -10,7 +10,7 @@ plugins {
 }
 
 group = 'cn.wuzhizhan.idea.mybatis'
-version = '2018.06.06'
+version = '2019.11.16'
 
 apply plugin: 'java'
 sourceCompatibility = 1.8
@@ -20,7 +20,7 @@ repositories {
 }
 
 dependencies {
-    compile fileTree(dir:'lib',includes:['*jar'])
+    compile fileTree(dir: 'lib', includes: ['*jar'])
     compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.5.1'
     compile group: 'org.mybatis.generator', name: 'mybatis-generator-core', version: '1.3.7'
     compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.18'
@@ -33,14 +33,15 @@ dependencies {
 intellij {
     version = 'IU-2018.1'
     pluginName = 'free-idea-mybatis'
-    plugins = ['coverage','Spring','DatabaseTools']
+    plugins = ['coverage', 'Spring', 'DatabaseTools']
     intellij.updateSinceUntilBuild false
 }
 patchPluginXml {
     changeNotes """
-    <h4>2019.06.06</h4>
+    <h4>2019.11.16</h4>
       <ul>
-        <li>Fix NPE in AliasFacade.findPsiClass(..)</li>
+        <li>add mybatis generator gui，create model,dao and mapper become more simple</li>
+        <li>fix some bugs</li>
       </ul>
      """
 }
