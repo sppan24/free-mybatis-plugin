@@ -157,12 +157,12 @@ public class MybatisGeneratorSettingUI extends JDialog {
         JBPanel optionsPanel = new JBPanel(new GridLayout(5, 5, 5, 5));
         optionsPanel.setBorder(BorderFactory.createTitledBorder("options panel"));
 
-        offsetLimitBox.setSelected(true);
+        offsetLimitBox.setSelected(false);
         commentBox.setSelected(true);
         overrideXMLBox.setSelected(true);
-        needToStringHashcodeEqualsBox.setSelected(true);
+        needToStringHashcodeEqualsBox.setSelected(false);
         useSchemaPrefixBox.setSelected(true);
-        useExampleBox.setSelected(true);
+        useExampleBox.setSelected(false);
 
         optionsPanel.add(offsetLimitBox);
         optionsPanel.add(commentBox);

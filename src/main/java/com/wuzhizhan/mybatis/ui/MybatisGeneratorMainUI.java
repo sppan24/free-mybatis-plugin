@@ -251,6 +251,8 @@ public class MybatisGeneratorMainUI extends JFrame {
 
             if (config != null && !StringUtils.isEmpty(config.getDaoPostfix())) {
                 daoPostfixField.setText(config.getDaoPostfix());
+            }else {
+                daoPostfixField.setText("Dao");
             }
             daoPanel.add(new JLabel("dao postfix:"));
             daoPanel.add(daoPostfixField);
@@ -313,12 +315,12 @@ public class MybatisGeneratorMainUI extends JFrame {
         JBPanel optionsPanel = new JBPanel(new GridLayout(5, 5, 5, 5));
         optionsPanel.setBorder(BorderFactory.createTitledBorder("options"));
         if (config == null) {
-            offsetLimitBox.setSelected(true);
+            offsetLimitBox.setSelected(false);
             commentBox.setSelected(true);
             overrideXMLBox.setSelected(true);
-            needToStringHashcodeEqualsBox.setSelected(true);
+            needToStringHashcodeEqualsBox.setSelected(false);
             useSchemaPrefixBox.setSelected(true);
-            useExampleBox.setSelected(true);
+            useExampleBox.setSelected(false);
 
         } else {
             if (config.isOffsetLimit()) {
@@ -559,12 +561,7 @@ public class MybatisGeneratorMainUI extends JFrame {
                     generator_config.setModelPackage(modelPackageField.getText());
                     generator_config.setDaoPackage(daoPackageField.getText());
                     generator_config.setXmlPackage(xmlPackageField.getText());
-
-                    if (this.config != null) {
-                        generator_config.setDaoName(modelName + this.config.getDaoPostfix());
-                    } else {
-                        generator_config.setDaoName(modelName + "Dao");
-                    }
+                    generator_config.setDaoName(modelName + daoPostfixField.getText());
                     generator_config.setModelName(modelName);
                     generator_config.setPrimaryKey(primaryKey);
 
