@@ -24,14 +24,14 @@ free-idea-mybatis is an enchange plugin for idea to supoort mybatis,here is the 
 
 
 ## mybatis generator gui usage
-- database configuration
+- database configuration<br>
 ![](https://github.com/wuzhizhan/free-idea-mybatis/blob/master/doc/img/mgu_1.png)
 ![](https://github.com/wuzhizhan/free-idea-mybatis/blob/master/doc/img/mgu_2.png)
-- elect one or more tables,right click and select mybatis generator to open generatoe main UI.
+- elect one or more tables,right click and select mybatis generator to open generatoe main UI.<br>
 ![](https://github.com/wuzhizhan/free-idea-mybatis/blob/master/doc/img/mgu_3.png)
-- mybatis generator configuration
+- mybatis generator configuration<br>
 ![](https://github.com/wuzhizhan/free-idea-mybatis/blob/master/doc/img/mgu_4.png)
-- notice：If your database is mysql8，please add '?serverTimezone=GMT' and select mysql8 option
+- notice：If your database is mysql8，please add '?serverTimezone=GMT' and select mysql8 option<br>
    
 ## TODO
 - generate bean accourding to database field

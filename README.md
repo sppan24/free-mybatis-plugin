@@ -22,16 +22,16 @@ free-idea-mybatis是一个提高mybatis编码的插件。实现了dao代码跳�
 - ![](https://raw.githubusercontent.com/wuzhizhan/free-idea-mybatis/master/doc/img/to_mapper.jpg)
 - mapper跳转回dao（也可以ctrl+b跳入)
 - ![](https://raw.githubusercontent.com/wuzhizhan/free-idea-mybatis/master/doc/img/to_code.jpg)
-
+<br><br><br>
 ## mybatis generator gui使用方法
-- 配置数据库
+- 配置数据库<br>
 ![](https://github.com/wuzhizhan/free-idea-mybatis/blob/master/doc/img/mgu_1.png)
 ![](https://github.com/wuzhizhan/free-idea-mybatis/blob/master/doc/img/mgu_2.png)
-- 在需要生成代码的表上右键，选择mybatis generator，打开预览界面。 
+- 在需要生成代码的表上右键，选择mybatis generator，打开预览界面。 <br>
 ![](https://github.com/wuzhizhan/free-idea-mybatis/blob/master/doc/img/mgu_3.png)
-- 配置生成参数
+- 配置生成参数<br>
 ![](https://github.com/wuzhizhan/free-idea-mybatis/blob/master/doc/img/mgu_4.png)
-- 注意：当数据库用mysql8，在URL上定义时区，推荐使用'?serverTimezone=GMT'，配置中勾选上mysql8选项。
+- 注意：当数据库用mysql8，在URL上定义时区，推荐使用'?serverTimezone=GMT'，配置中勾选上mysql8选项。<br>
    
 ## TODO
 - 根据数据库字段生产bean
