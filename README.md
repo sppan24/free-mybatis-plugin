@@ -23,7 +23,13 @@ free-idea-mybatis是一个提高mybatis编码的插件。实现了dao代码跳�
 - mapper跳转回dao（也可以ctrl+b跳入)
 - ![](https://raw.githubusercontent.com/wuzhizhan/free-idea-mybatis/master/doc/img/to_code.jpg)
 
-
+- mybatis generator gui使用方法
+- ![](https://github.com/wuzhizhan/free-idea-mybatis/blob/master/doc/img/mgu_1.png)
+- ![](https://github.com/wuzhizhan/free-idea-mybatis/blob/master/doc/img/mgu_2.png)
+- ![](https://github.com/wuzhizhan/free-idea-mybatis/blob/master/doc/img/mgu_3.png)
+- ![](https://github.com/wuzhizhan/free-idea-mybatis/blob/master/doc/img/mgu_4.png)
+   - 注意：当数据库用mysql8，在URL上定义时区，推荐使用'?serverTimezone=GMT'，配置中勾选上mysql8选项。
+   
 ## TODO
 - 根据数据库字段生产bean
 - 快捷生成CURD操作
