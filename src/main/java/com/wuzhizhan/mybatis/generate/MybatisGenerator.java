@@ -37,12 +37,14 @@ import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.api.ShellCallback;
 import org.mybatis.generator.config.*;
 import org.mybatis.generator.internal.DefaultShellCallback;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 /**
  * 生成mybatis相关代码
  */
 public class MybatisGenerator {
-
+    private static Logger logger = LoggerFactory.getLogger(MybatisGenerator.class);
     private AnActionEvent anActionEvent;
     private Project project;
     private PersistentConfig persistentConfig;//持久化的配置
@@ -146,7 +148,7 @@ public class MybatisGenerator {
                                 myBatisGenerator.generate(new GeneratorCallback(), contexts, fullyqualifiedTables);
                             } catch (Exception e) {
                                 //                                Messages.showMessageDialog(e.getMessage() + " if use mysql,check version8?", "MybatisGenerator failure", Messages.getInformationIcon());
-                                System.out.println("代码生成报错");
+                                logger.error("生成错误",e);
 
                             }
                             project.getBaseDir().refresh(false, true);
