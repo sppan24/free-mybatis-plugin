@@ -28,7 +28,7 @@
     <depends>com.intellij.spring</depends>
     <actions>
 
-        <action id="mabatis-generate-action" class="com.wuzhizhan.mybatis.action.MybatisGeneratorMainAction" text="mabatis-generator"
+        <action id="mabatis-generate-action" class="com.wuzhizhan.mybatis.action.MybatisGeneratorMainAction" text="mybatis-generator"
                 description="mybatis generator idea plugin">
             <add-to-group group-id="DatabaseViewPopupMenu" anchor="first"/>
         </action>
