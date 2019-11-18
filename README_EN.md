@@ -18,16 +18,20 @@ free-idea-mybatis is an enchange plugin for idea to supoort mybatis,here is the 
     - alter+enter
 ![](https://raw.githubusercontent.com/wuzhizhan/free-idea-mybatis/master/doc/img/create_statement.jpg)
 - from dao to  mapper（can also use ctrl+B）
-- ![](https://raw.githubusercontent.com/wuzhizhan/free-idea-mybatis/master/doc/img/to_mapper.jpg)
+![](https://raw.githubusercontent.com/wuzhizhan/free-idea-mybatis/master/doc/img/to_mapper.jpg)
 - from mapper to dao（can also use ctrl+b)
-- ![](https://raw.githubusercontent.com/wuzhizhan/free-idea-mybatis/master/doc/img/to_code.jpg)
+![](https://raw.githubusercontent.com/wuzhizhan/free-idea-mybatis/master/doc/img/to_code.jpg)
 
-- mybatis generator gui usage
-- ![](https://github.com/wuzhizhan/free-idea-mybatis/blob/master/doc/img/mgu_1.png)
-- ![](https://github.com/wuzhizhan/free-idea-mybatis/blob/master/doc/img/mgu_2.png)
-- ![](https://github.com/wuzhizhan/free-idea-mybatis/blob/master/doc/img/mgu_3.png)
-- ![](https://github.com/wuzhizhan/free-idea-mybatis/blob/master/doc/img/mgu_4.png)
-   - notice：If your database is mysql8，please add '?serverTimezone=GMT' and select mysql8 option
+
+## mybatis generator gui usage
+- database configuration
+![](https://github.com/wuzhizhan/free-idea-mybatis/blob/master/doc/img/mgu_1.png)
+![](https://github.com/wuzhizhan/free-idea-mybatis/blob/master/doc/img/mgu_2.png)
+- elect one or more tables,right click and select mybatis generator to open generatoe main UI.
+![](https://github.com/wuzhizhan/free-idea-mybatis/blob/master/doc/img/mgu_3.png)
+- mybatis generator configuration
+![](https://github.com/wuzhizhan/free-idea-mybatis/blob/master/doc/img/mgu_4.png)
+- notice：If your database is mysql8，please add '?serverTimezone=GMT' and select mysql8 option
    
 ## TODO
 - generate bean accourding to database field
