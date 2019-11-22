@@ -1,6 +1,7 @@
 package com.wuzhizhan.mybatis.ui;
 
 
+import com.google.common.base.Joiner;
 import com.intellij.database.psi.DbTable;
 import com.intellij.ide.util.PackageChooserDialog;
 import com.intellij.openapi.actionSystem.AnActionEvent;
@@ -8,8 +9,10 @@ import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
 import com.intellij.openapi.fileChooser.FileChooserDescriptorFactory;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.openapi.ui.TextBrowseFolderListener;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
+import com.intellij.openapi.ui.ex.MessagesEx;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPackage;
 import com.intellij.ui.components.JBLabel;
@@ -26,22 +29,11 @@ import com.wuzhizhan.mybatis.util.StringUtils;
 
 import java.awt.*;
 import java.awt.event.*;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
-import javax.swing.BorderFactory;
-import javax.swing.Box;
-import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JCheckBox;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.ListSelectionModel;
+import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 
 /**
@@ -84,6 +76,7 @@ public class MybatisGeneratorMainUI extends JFrame {
     private JCheckBox offsetLimitBox = new JCheckBox("Page(分页)");
     private JCheckBox commentBox = new JCheckBox("comment(实体注释)");
     private JCheckBox overrideXMLBox = new JCheckBox("Overwrite-Xml");
+    private JCheckBox overrideJavaBox = new JCheckBox("Overwrite-Java");
     private JCheckBox needToStringHashcodeEqualsBox = new JCheckBox("toString/hashCode/equals");
     private JCheckBox useSchemaPrefixBox = new JCheckBox("Use-Schema(使用Schema前缀)");
     private JCheckBox needForUpdateBox = new JCheckBox("Add-ForUpdate(select增加ForUpdate)");
@@ -251,7 +244,7 @@ public class MybatisGeneratorMainUI extends JFrame {
 
             if (config != null && !StringUtils.isEmpty(config.getDaoPostfix())) {
                 daoPostfixField.setText(config.getDaoPostfix());
-            }else {
+            } else {
                 daoPostfixField.setText("Dao");
             }
             daoPanel.add(new JLabel("dao postfix:"));
@@ -318,6 +311,7 @@ public class MybatisGeneratorMainUI extends JFrame {
             offsetLimitBox.setSelected(false);
             commentBox.setSelected(true);
             overrideXMLBox.setSelected(true);
+            overrideJavaBox.setSelected(false);
             needToStringHashcodeEqualsBox.setSelected(false);
             useSchemaPrefixBox.setSelected(true);
             useExampleBox.setSelected(false);
@@ -332,6 +326,9 @@ public class MybatisGeneratorMainUI extends JFrame {
 
             if (config.isOverrideXML()) {
                 overrideXMLBox.setSelected(true);
+            }
+            if(config.isOverrideJava()) {
+                overrideJavaBox.setSelected(true);
             }
             if (config.isNeedToStringHashcodeEquals()) {
                 needToStringHashcodeEqualsBox.setSelected(true);
@@ -367,6 +364,7 @@ public class MybatisGeneratorMainUI extends JFrame {
         optionsPanel.add(offsetLimitBox);
         optionsPanel.add(commentBox);
         optionsPanel.add(overrideXMLBox);
+        optionsPanel.add(overrideJavaBox);
         optionsPanel.add(needToStringHashcodeEqualsBox);
         optionsPanel.add(useSchemaPrefixBox);
         optionsPanel.add(needForUpdateBox);
@@ -437,6 +435,7 @@ public class MybatisGeneratorMainUI extends JFrame {
                         offsetLimitBox.setSelected(selectedConfig.isOffsetLimit());
                         commentBox.setSelected(selectedConfig.isComment());
                         overrideXMLBox.setSelected(selectedConfig.isOverrideXML());
+                        overrideJavaBox.setSelected(selectedConfig.isOverrideJava());
                         needToStringHashcodeEqualsBox.setSelected(selectedConfig.isNeedToStringHashcodeEquals());
                         useSchemaPrefixBox.setSelected(selectedConfig.isUseSchemaPrefix());
                         needForUpdateBox.setSelected(selectedConfig.isNeedForUpdate());
@@ -504,7 +503,7 @@ public class MybatisGeneratorMainUI extends JFrame {
     private void onOK() {
         try {
             dispose();
-
+            List<String> result = new ArrayList<>();
             if (psiElements.length == 1) {
                 Config generator_config = new Config();
                 generator_config.setName(tableNameField.getText());
@@ -521,6 +520,7 @@ public class MybatisGeneratorMainUI extends JFrame {
                 generator_config.setOffsetLimit(offsetLimitBox.getSelectedObjects() != null);
                 generator_config.setComment(commentBox.getSelectedObjects() != null);
                 generator_config.setOverrideXML(overrideXMLBox.getSelectedObjects() != null);
+                generator_config.setOverrideJava(overrideJavaBox.getSelectedObjects() != null);
                 generator_config.setNeedToStringHashcodeEquals(needToStringHashcodeEqualsBox.getSelectedObjects() != null);
                 generator_config.setUseSchemaPrefix(useSchemaPrefixBox.getSelectedObjects() != null);
                 generator_config.setNeedForUpdate(needForUpdateBox.getSelectedObjects() != null);
@@ -537,7 +537,7 @@ public class MybatisGeneratorMainUI extends JFrame {
                 generator_config.setXmlMvnPath(xmlMvnField.getText());
 
 
-                new MybatisGenerator(generator_config).execute(anActionEvent, true);
+                result = new MybatisGenerator(generator_config).execute(anActionEvent, true);
             } else {
                 for (PsiElement psiElement : psiElements) {
                     TableInfo tableInfo = new TableInfo((DbTable) psiElement);
@@ -562,6 +562,7 @@ public class MybatisGeneratorMainUI extends JFrame {
                     generator_config.setOffsetLimit(offsetLimitBox.getSelectedObjects() != null);
                     generator_config.setComment(commentBox.getSelectedObjects() != null);
                     generator_config.setOverrideXML(overrideXMLBox.getSelectedObjects() != null);
+                    generator_config.setOverrideJava(overrideJavaBox.getSelectedObjects() != null);
                     generator_config.setNeedToStringHashcodeEquals(needToStringHashcodeEqualsBox.getSelectedObjects() != null);
                     generator_config.setUseSchemaPrefix(useSchemaPrefixBox.getSelectedObjects() != null);
                     generator_config.setNeedForUpdate(needForUpdateBox.getSelectedObjects() != null);
@@ -577,14 +578,16 @@ public class MybatisGeneratorMainUI extends JFrame {
                     generator_config.setDaoMvnPath(daoMvnField.getText());
                     generator_config.setXmlMvnPath(xmlMvnField.getText());
 
-                    new MybatisGenerator(generator_config).execute(anActionEvent, false);
+                    result = new MybatisGenerator(generator_config).execute(anActionEvent, false);
                 }
 
             }
-
+            if (!result.isEmpty()) {
+                Messages.showMessageDialog(Joiner.on("\n").join(result),"warnning",  Messages.getWarningIcon());
+            }
 
         } catch (Exception e1) {
-            e1.printStackTrace();
+            Messages.showMessageDialog(e1.getMessage(), "error", Messages.getErrorIcon());
         } finally {
             dispose();
         }

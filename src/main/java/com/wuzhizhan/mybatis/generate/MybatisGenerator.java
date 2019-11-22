@@ -14,6 +14,9 @@ import com.intellij.ide.passwordSafe.PasswordSafe;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
+import com.intellij.openapi.application.Application;
+import com.intellij.openapi.application.ApplicationAdapter;
+import com.intellij.openapi.application.ApplicationListener;
 import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
@@ -53,6 +56,7 @@ public class MybatisGenerator {
     private String driverClass;//数据库驱动
     private String url;//数据库连接url
     private String urlKey;
+
     public MybatisGenerator(Config config) {
         this.config = config;
     }
@@ -63,7 +67,8 @@ public class MybatisGenerator {
      * @param anActionEvent
      * @throws Exception
      */
-    public void execute(final AnActionEvent anActionEvent, boolean saveConfig) throws Exception {
+    public List<String> execute(final AnActionEvent anActionEvent, boolean saveConfig) throws Exception {
+        List<String> result = new ArrayList<>();
         this.anActionEvent = anActionEvent;
         this.project = anActionEvent.getData(PlatformDataKeys.PROJECT);
         this.persistentConfig = PersistentConfig.getInstance(project);
@@ -74,7 +79,8 @@ public class MybatisGenerator {
         final PsiElement[] psiElements = anActionEvent.getData(LangDataKeys.PSI_ELEMENT_ARRAY);
 
         if (psiElements == null || psiElements.length == 0) {
-            return;
+            result.add("can not generate! \nplease select table");
+            return result;
         }
         RawConnectionConfig connectionConfig = ((DbDataSource) psiElements[0].getParent().getParent()).getConnectionConfig();
         String currentDbName = ((DbTableImpl) psiElements[0]).getParent().getName();
@@ -86,9 +92,9 @@ public class MybatisGenerator {
             ConnectionUrlParser parser = ConnectionUrlParser.parseConnectionString(url);
             //schema名不同，则替换
             if (!currentDbName.equals(parser.getPath())) {
-                url = parser.getScheme()+"//"+parser.getAuthority()+"/"+currentDbName;
+                url = parser.getScheme() + "//" + parser.getAuthority() + "/" + currentDbName;
                 if (!Strings.isNullOrEmpty(parser.getQuery())) {
-                    url += "?"+parser.getQuery();
+                    url += "?" + parser.getQuery();
 
                 }
             }
@@ -99,13 +105,13 @@ public class MybatisGenerator {
         } else if (driverClass.contains("sqlserver")) {
             dbType = DbType.SqlServer;
         } else if (driverClass.contains("mariadb")) {
-            url= url.replaceFirst("mariadb","mysql");
+            url = url.replaceFirst("mariadb", "mysql");
             ConnectionUrlParser parser = ConnectionUrlParser.parseConnectionString(url);
             //schema名不同，则替换
             if (!currentDbName.equals(parser.getPath())) {
-                url = "jdbc:mariadb://"+parser.getAuthority()+"/"+currentDbName;
+                url = "jdbc:mariadb://" + parser.getAuthority() + "/" + currentDbName;
                 if (!Strings.isNullOrEmpty(parser.getQuery())) {
-                    url += "?"+parser.getQuery();
+                    url += "?" + parser.getQuery();
 
                 }
             }
@@ -117,74 +123,66 @@ public class MybatisGenerator {
                     driverClass);
             Messages.showMessageDialog(project, failMessage,
                     "Test Connection Error", Messages.getInformationIcon());
-            return;
+            return result;
         }
 
-        //用后台任务执行代码生成
-        ApplicationManager.getApplication().invokeLater(new Runnable() {
+        ApplicationManager.getApplication().runWriteAction(new Runnable() {
             @Override
             public void run() {
-                ProgressManager
-                        .getInstance().run(new Task.Backgroundable(project, "mybatis generating...") {
-                    @Override
-                    public void run(@NotNull ProgressIndicator indicator) {
-
-                        for (PsiElement psiElement : psiElements) {
-                            if (!(psiElement instanceof DbTable)) {
-                                continue;
-                            }
-                            Configuration configuration = new Configuration();
-                            Context context = new Context(ModelType.CONDITIONAL);
-                            configuration.addContext(context);
-
-                            context.setId("myid");
-                            context.addProperty("autoDelimitKeywords", "true");
-                            context.addProperty("beginningDelimiter", "`");
-                            context.addProperty("endingDelimiter", "`");
-                            context.addProperty("javaFileEncoding", "UTF-8");
-                            context.addProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING, "UTF-8");
-                            context.setTargetRuntime("MyBatis3");
-
-                            JDBCConnectionConfiguration jdbcConfig = buildJdbcConfig(psiElement);
-                            if (jdbcConfig == null) {
-                                return;
-                            }
-                            TableConfiguration tableConfig = buildTableConfig(psiElement, context);
-                            JavaModelGeneratorConfiguration modelConfig = buildModelConfig();
-                            SqlMapGeneratorConfiguration mapperConfig = buildMapperXmlConfig();
-                            JavaClientGeneratorConfiguration daoConfig = buildDaoConfig();
-                            CommentGeneratorConfiguration commentConfig = buildCommentConfig();
-
-                            context.addTableConfiguration(tableConfig);
-                            context.setJdbcConnectionConfiguration(jdbcConfig);
-                            context.setJavaModelGeneratorConfiguration(modelConfig);
-                            context.setSqlMapGeneratorConfiguration(mapperConfig);
-                            context.setJavaClientGeneratorConfiguration(daoConfig);
-                            context.setCommentGeneratorConfiguration(commentConfig);
-                            addPluginConfiguration(psiElement, context);
-
-                            createFolderForNeed(config);
-                            List<String> warnings = new ArrayList<>();
-                            ShellCallback shellCallback = new DefaultShellCallback(true); // override=true
-                            Set<String> fullyqualifiedTables = new HashSet<>();
-                            Set<String> contexts = new HashSet<>();
-                            try {
-                                MyBatisGenerator myBatisGenerator = new MyBatisGenerator(configuration, shellCallback, warnings);
-                                myBatisGenerator.generate(new GeneratorCallback(), contexts, fullyqualifiedTables);
-                                if (!warnings.isEmpty()) {
-                                    logger.error("generator has some warnnings", Joiner.on("\n").join(warnings));
-                                }
-                            } catch (Exception e) {
-                                //                                Messages.showMessageDialog(e.getMessage() + " if use mysql,check version8?", "MybatisGenerator failure", Messages.getInformationIcon());
-                                logger.error("生成错误", e);
-
-                            }
-                            project.getBaseDir().refresh(false, true);
-                        }
+                for (PsiElement psiElement : psiElements) {
+                    if (!(psiElement instanceof DbTable)) {
+                        continue;
                     }
-                });
+                    Configuration configuration = new Configuration();
+                    Context context = new Context(ModelType.CONDITIONAL);
+                    configuration.addContext(context);
+
+                    context.setId("myid");
+                    context.addProperty("autoDelimitKeywords", "true");
+                    context.addProperty("beginningDelimiter", "`");
+                    context.addProperty("endingDelimiter", "`");
+                    context.addProperty("javaFileEncoding", "UTF-8");
+                    context.addProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING, "UTF-8");
+                    context.setTargetRuntime("MyBatis3");
+
+                    JDBCConnectionConfiguration jdbcConfig = buildJdbcConfig(psiElement);
+                    if (jdbcConfig == null) {
+                        return;
+                    }
+                    TableConfiguration tableConfig = buildTableConfig(psiElement, context);
+                    JavaModelGeneratorConfiguration modelConfig = buildModelConfig();
+                    SqlMapGeneratorConfiguration mapperConfig = buildMapperXmlConfig();
+                    JavaClientGeneratorConfiguration daoConfig = buildDaoConfig();
+                    CommentGeneratorConfiguration commentConfig = buildCommentConfig();
+
+                    context.addTableConfiguration(tableConfig);
+                    context.setJdbcConnectionConfiguration(jdbcConfig);
+                    context.setJavaModelGeneratorConfiguration(modelConfig);
+                    context.setSqlMapGeneratorConfiguration(mapperConfig);
+                    context.setJavaClientGeneratorConfiguration(daoConfig);
+                    context.setCommentGeneratorConfiguration(commentConfig);
+                    addPluginConfiguration(psiElement, context);
+
+                    createFolderForNeed(config);
+                    List<String> warnings = new ArrayList<>();
+                    ShellCallback shellCallback = new DefaultShellCallback(config.isOverrideJava());
+                    Set<String> fullyqualifiedTables = new HashSet<>();
+                    Set<String> contexts = new HashSet<>();
+                    try {
+                        MyBatisGenerator myBatisGenerator = new MyBatisGenerator(configuration, shellCallback, warnings);
+                        myBatisGenerator.generate(new GeneratorCallback(), contexts, fullyqualifiedTables);
+                        if (!warnings.isEmpty()) {
+                            result.addAll(warnings);
+                        }
+                    } catch (Exception e) {
+                        Messages.showMessageDialog(e.getMessage(), "MybatisGenerator failure", Messages.getErrorIcon());
+                        result.add(e.getMessage());
+                    }
+                    project.getBaseDir().refresh(false, true);
+                }
             }
         });
+        return result;
     }
 
     /**

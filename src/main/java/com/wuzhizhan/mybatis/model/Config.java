@@ -68,6 +68,11 @@ public class Config {
 	private boolean overrideXML;
 
 	/**
+	 * 是否覆盖原java
+	 */
+	private boolean overrideJava;
+
+	/**
 	 * 是否生成toString/hashCode/equals方法
 	 */
 	private boolean needToStringHashcodeEquals;
@@ -373,4 +378,12 @@ public class Config {
 		this.daoPostfix = daoPostfix;
 	}
 
+
+	public boolean isOverrideJava() {
+		return overrideJava;
+	}
+
+	public void setOverrideJava(boolean overrideJava) {
+		this.overrideJava = overrideJava;
+	}
 }

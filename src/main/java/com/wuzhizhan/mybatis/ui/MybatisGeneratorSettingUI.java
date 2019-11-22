@@ -37,6 +37,7 @@ public class MybatisGeneratorSettingUI extends JDialog {
     private JCheckBox offsetLimitBox = new JCheckBox("Page(分页)");
     private JCheckBox commentBox = new JCheckBox("comment(实体注释)");
     private JCheckBox overrideXMLBox = new JCheckBox("Overwrite-Xml");
+    private JCheckBox overrideJavaBox = new JCheckBox("Overwrite-Java");
     private JCheckBox needToStringHashcodeEqualsBox = new JCheckBox("toString/hashCode/equals");
     private JCheckBox useSchemaPrefixBox = new JCheckBox("Use-Schema(使用Schema前缀)");
     private JCheckBox needForUpdateBox = new JCheckBox("Add-ForUpdate(select增加ForUpdate)");
@@ -147,9 +148,6 @@ public class MybatisGeneratorSettingUI extends JDialog {
         xmlMapperPanel.add(xmlMvnField);
 
 
-
-
-
         /**
          * options panel
          */
@@ -159,6 +157,7 @@ public class MybatisGeneratorSettingUI extends JDialog {
         offsetLimitBox.setSelected(false);
         commentBox.setSelected(true);
         overrideXMLBox.setSelected(true);
+        overrideJavaBox.setSelected(false);
         needToStringHashcodeEqualsBox.setSelected(false);
         useSchemaPrefixBox.setSelected(true);
         useExampleBox.setSelected(false);
@@ -166,6 +165,7 @@ public class MybatisGeneratorSettingUI extends JDialog {
         optionsPanel.add(offsetLimitBox);
         optionsPanel.add(commentBox);
         optionsPanel.add(overrideXMLBox);
+        optionsPanel.add(overrideJavaBox);
         optionsPanel.add(needToStringHashcodeEqualsBox);
         optionsPanel.add(useSchemaPrefixBox);
         optionsPanel.add(needForUpdateBox);
@@ -202,6 +202,7 @@ public class MybatisGeneratorSettingUI extends JDialog {
             offsetLimitBox.setSelected(config.isOffsetLimit());
             commentBox.setSelected(config.isComment());
             overrideXMLBox.setSelected(config.isOverrideXML());
+            overrideJavaBox.setSelected(config.isOverrideJava());
             needToStringHashcodeEqualsBox.setSelected(config.isNeedToStringHashcodeEquals());
             useSchemaPrefixBox.setSelected(config.isUseSchemaPrefix());
             needForUpdateBox.setSelected(config.isNeedForUpdate());
@@ -250,6 +251,7 @@ public class MybatisGeneratorSettingUI extends JDialog {
         config.setOffsetLimit(offsetLimitBox.getSelectedObjects() != null);
         config.setComment(commentBox.getSelectedObjects() != null);
         config.setOverrideXML(overrideXMLBox.getSelectedObjects() != null);
+        config.setOverrideJava(overrideJavaBox.getSelectedObjects() != null);
         config.setNeedToStringHashcodeEquals(needToStringHashcodeEqualsBox.getSelectedObjects() != null);
         config.setUseSchemaPrefix(useSchemaPrefixBox.getSelectedObjects() != null);
         config.setNeedForUpdate(needForUpdateBox.getSelectedObjects() != null);
