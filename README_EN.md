@@ -32,7 +32,9 @@ free-idea-mybatis is an enchange plugin for idea to supoort mybatis,here is the 
 - mybatis generator configuration<br>
 ![](https://github.com/wuzhizhan/free-idea-mybatis/blob/master/doc/img/mgu_4.png)
 - notice：If your database is mysql8，please add '?serverTimezone=GMT' and select mysql8 option<br>
-   
+
+## Reference
+- better-mybatis-generator https://github.com/kmaster/better-mybatis-generator
 ## TODO
 - generate bean accourding to database field
 - generate CURD code

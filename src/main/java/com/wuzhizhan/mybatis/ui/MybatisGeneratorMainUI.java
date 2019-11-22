@@ -94,7 +94,7 @@ public class MybatisGeneratorMainUI extends JFrame {
     private JCheckBox useActualColumnNamesBox = new JCheckBox("Actual-Column(实际的列名)");
     private JCheckBox useTableNameAliasBox = new JCheckBox("Use-Alias(启用别名查询)");
     private JCheckBox useExampleBox = new JCheckBox("Use-Example");
-    private JCheckBox mysql_8Box = new JCheckBox("mysql_8");
+//    private JCheckBox mysql_8Box = new JCheckBox("mysql_8");
 
 
     public MybatisGeneratorMainUI(AnActionEvent anActionEvent) throws HeadlessException {
@@ -363,9 +363,6 @@ public class MybatisGeneratorMainUI extends JFrame {
             if (config.isUseExample()) {
                 useExampleBox.setSelected(true);
             }
-            if (config.isMysql_8()) {
-                mysql_8Box.setSelected(true);
-            }
         }
         optionsPanel.add(offsetLimitBox);
         optionsPanel.add(commentBox);
@@ -380,7 +377,6 @@ public class MybatisGeneratorMainUI extends JFrame {
         optionsPanel.add(useActualColumnNamesBox);
         optionsPanel.add(useTableNameAliasBox);
         optionsPanel.add(useExampleBox);
-        optionsPanel.add(mysql_8Box);
 
 
         JPanel mainPanel = new JPanel(new FlowLayout(FlowLayout.LEFT));
@@ -451,7 +447,6 @@ public class MybatisGeneratorMainUI extends JFrame {
                         useActualColumnNamesBox.setSelected(selectedConfig.isUseActualColumnNames());
                         useTableNameAliasBox.setSelected(selectedConfig.isUseTableNameAlias());
                         useExampleBox.setSelected(selectedConfig.isUseExample());
-                        mysql_8Box.setSelected(selectedConfig.isMysql_8());
                     }
                 }
             }
@@ -536,7 +531,6 @@ public class MybatisGeneratorMainUI extends JFrame {
                 generator_config.setUseActualColumnNames(useActualColumnNamesBox.getSelectedObjects() != null);
                 generator_config.setUseTableNameAlias(useTableNameAliasBox.getSelectedObjects() != null);
                 generator_config.setUseExample(useExampleBox.getSelectedObjects() != null);
-                generator_config.setMysql_8(mysql_8Box.getSelectedObjects() != null);
 
                 generator_config.setModelMvnPath(modelMvnField.getText());
                 generator_config.setDaoMvnPath(daoMvnField.getText());
@@ -578,7 +572,6 @@ public class MybatisGeneratorMainUI extends JFrame {
                     generator_config.setUseActualColumnNames(useActualColumnNamesBox.getSelectedObjects() != null);
                     generator_config.setUseTableNameAlias(useTableNameAliasBox.getSelectedObjects() != null);
                     generator_config.setUseExample(useExampleBox.getSelectedObjects() != null);
-                    generator_config.setMysql_8(mysql_8Box.getSelectedObjects() != null);
 
                     generator_config.setModelMvnPath(modelMvnField.getText());
                     generator_config.setDaoMvnPath(daoMvnField.getText());

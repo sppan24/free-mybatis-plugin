@@ -47,7 +47,6 @@ public class MybatisGeneratorSettingUI extends JDialog {
     private JCheckBox useActualColumnNamesBox = new JCheckBox("Actual-Column(实际的列名)");
     private JCheckBox useTableNameAliasBox = new JCheckBox("Use-Alias(启用别名查询)");
     private JCheckBox useExampleBox = new JCheckBox("Use-Example");
-    private JCheckBox mysql_8Box = new JCheckBox("mysql_8");
 
     private PersistentConfig config;
 
@@ -177,7 +176,6 @@ public class MybatisGeneratorSettingUI extends JDialog {
         optionsPanel.add(useActualColumnNamesBox);
         optionsPanel.add(useTableNameAliasBox);
         optionsPanel.add(useExampleBox);
-        optionsPanel.add(mysql_8Box);
 
 
         /**
@@ -214,7 +212,6 @@ public class MybatisGeneratorSettingUI extends JDialog {
             useActualColumnNamesBox.setSelected(config.isUseActualColumnNames());
             useTableNameAliasBox.setSelected(config.isUseTableNameAlias());
             useExampleBox.setSelected(config.isUseExample());
-            mysql_8Box.setSelected(config.isMysql_8());
         } else {
             modelPackageField.addFocusListener(new JTextFieldHintListener(modelPackageField, "generator"));
             daoPackageField.addFocusListener(new JTextFieldHintListener(daoPackageField, "generator"));
@@ -263,7 +260,6 @@ public class MybatisGeneratorSettingUI extends JDialog {
         config.setUseActualColumnNames(useActualColumnNamesBox.getSelectedObjects() != null);
         config.setUseTableNameAlias(useTableNameAliasBox.getSelectedObjects() != null);
         config.setUseExample(useExampleBox.getSelectedObjects() != null);
-        config.setMysql_8(mysql_8Box.getSelectedObjects() != null);
 
         initConfig.put(config.getName(), config);
         this.config.setInitConfig(initConfig);

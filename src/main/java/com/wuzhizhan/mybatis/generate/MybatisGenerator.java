@@ -2,10 +2,14 @@ package com.wuzhizhan.mybatis.generate;
 
 
 import cn.kt.DbRemarksCommentGenerator;
+import com.google.common.base.Joiner;
+import com.google.common.base.Strings;
 import com.intellij.credentialStore.CredentialAttributes;
 import com.intellij.database.model.RawConnectionConfig;
 import com.intellij.database.psi.DbDataSource;
+import com.intellij.database.psi.DbElement;
 import com.intellij.database.psi.DbTable;
+import com.intellij.database.psi.DbTableImpl;
 import com.intellij.ide.passwordSafe.PasswordSafe;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
@@ -15,7 +19,9 @@ import com.intellij.openapi.progress.ProgressIndicator;
 import com.intellij.openapi.progress.ProgressManager;
 import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
+import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.PsiElement;
+import com.mysql.cj.conf.ConnectionUrlParser;
 import com.wuzhizhan.mybatis.model.Config;
 import com.wuzhizhan.mybatis.model.DbType;
 import com.wuzhizhan.mybatis.model.User;
@@ -23,15 +29,6 @@ import com.wuzhizhan.mybatis.setting.PersistentConfig;
 import com.wuzhizhan.mybatis.ui.MybatisGeneratorPasswordUI;
 import com.wuzhizhan.mybatis.util.GeneratorCallback;
 import com.wuzhizhan.mybatis.util.StringUtils;
-
-import java.io.File;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Map;
-import java.util.Set;
-
 import org.jetbrains.annotations.NotNull;
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.api.ShellCallback;
@@ -39,6 +36,9 @@ import org.mybatis.generator.config.*;
 import org.mybatis.generator.internal.DefaultShellCallback;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.io.File;
+import java.util.*;
 
 /**
  * 生成mybatis相关代码
@@ -49,11 +49,10 @@ public class MybatisGenerator {
     private Project project;
     private PersistentConfig persistentConfig;//持久化的配置
     private Config config;//界面默认配置
-    private String username;
-    private String DatabaseType;//数据库类型
+    private DbType dbType;//数据库类型
     private String driverClass;//数据库驱动
     private String url;//数据库连接url
-
+    private String urlKey;
     public MybatisGenerator(Config config) {
         this.config = config;
     }
@@ -64,7 +63,7 @@ public class MybatisGenerator {
      * @param anActionEvent
      * @throws Exception
      */
-    public void execute(AnActionEvent anActionEvent, boolean saveConfig) throws Exception {
+    public void execute(final AnActionEvent anActionEvent, boolean saveConfig) throws Exception {
         this.anActionEvent = anActionEvent;
         this.project = anActionEvent.getData(PlatformDataKeys.PROJECT);
         this.persistentConfig = PersistentConfig.getInstance(project);
@@ -72,28 +71,54 @@ public class MybatisGenerator {
         if (saveConfig) {
             saveConfig();//执行前 先保存一份当前配置
         }
-        PsiElement[] psiElements = anActionEvent.getData(LangDataKeys.PSI_ELEMENT_ARRAY);
+        final PsiElement[] psiElements = anActionEvent.getData(LangDataKeys.PSI_ELEMENT_ARRAY);
 
         if (psiElements == null || psiElements.length == 0) {
             return;
         }
         RawConnectionConfig connectionConfig = ((DbDataSource) psiElements[0].getParent().getParent()).getConnectionConfig();
+        String currentDbName = ((DbTableImpl) psiElements[0]).getParent().getName();
         driverClass = connectionConfig.getDriverClass();
         url = connectionConfig.getUrl();
+        urlKey = url;
         if (driverClass.contains("mysql")) {
-            DatabaseType = "MySQL";
-        } else if (driverClass.contains("oracle")) {
-            DatabaseType = "Oracle";
-        } else if (driverClass.contains("postgresql")) {
-            DatabaseType = "PostgreSQL";
-        } else if (driverClass.contains("sqlserver")) {
-            DatabaseType = "SqlServer";
-        } else if (driverClass.contains("sqlite")) {
-            DatabaseType = "Sqlite";
-        } else if (driverClass.contains("mariadb")) {
-            DatabaseType = "MariaDB";
-        }
+            dbType = DbType.MySQL;
+            ConnectionUrlParser parser = ConnectionUrlParser.parseConnectionString(url);
+            //schema名不同，则替换
+            if (!currentDbName.equals(parser.getPath())) {
+                url = parser.getScheme()+"//"+parser.getAuthority()+"/"+currentDbName;
+                if (!Strings.isNullOrEmpty(parser.getQuery())) {
+                    url += "?"+parser.getQuery();
 
+                }
+            }
+        } else if (driverClass.contains("oracle")) {
+            dbType = DbType.Oracle;
+        } else if (driverClass.contains("postgresql")) {
+            dbType = DbType.PostgreSQL;
+        } else if (driverClass.contains("sqlserver")) {
+            dbType = DbType.SqlServer;
+        } else if (driverClass.contains("mariadb")) {
+            url= url.replaceFirst("mariadb","mysql");
+            ConnectionUrlParser parser = ConnectionUrlParser.parseConnectionString(url);
+            //schema名不同，则替换
+            if (!currentDbName.equals(parser.getPath())) {
+                url = "jdbc:mariadb://"+parser.getAuthority()+"/"+currentDbName;
+                if (!Strings.isNullOrEmpty(parser.getQuery())) {
+                    url += "?"+parser.getQuery();
+
+                }
+            }
+            dbType = DbType.MariaDB;
+        } else {
+            String failMessage = String.format("db type not support!" +
+                            "\n your driver class:%s" +
+                            "\n current support db type:mysql，mariadb，oracle,postgresql",
+                    driverClass);
+            Messages.showMessageDialog(project, failMessage,
+                    "Test Connection Error", Messages.getInformationIcon());
+            return;
+        }
 
         //用后台任务执行代码生成
         ApplicationManager.getApplication().invokeLater(new Runnable() {
@@ -146,9 +171,12 @@ public class MybatisGenerator {
                             try {
                                 MyBatisGenerator myBatisGenerator = new MyBatisGenerator(configuration, shellCallback, warnings);
                                 myBatisGenerator.generate(new GeneratorCallback(), contexts, fullyqualifiedTables);
+                                if (!warnings.isEmpty()) {
+                                    logger.error("generator has some warnnings", Joiner.on("\n").join(warnings));
+                                }
                             } catch (Exception e) {
                                 //                                Messages.showMessageDialog(e.getMessage() + " if use mysql,check version8?", "MybatisGenerator failure", Messages.getInformationIcon());
-                                logger.error("生成错误",e);
+                                logger.error("生成错误", e);
 
                             }
                             project.getBaseDir().refresh(false, true);
@@ -157,8 +185,6 @@ public class MybatisGenerator {
                 });
             }
         });
-
-
     }
 
     /**
@@ -226,31 +252,26 @@ public class MybatisGenerator {
 
 
         Map<String, User> users = persistentConfig.getUsers();
-        if (users != null && users.containsKey(url)) {
-            User user = users.get(url);
+        if (users != null && users.containsKey(urlKey)) {
+            User user = users.get(urlKey);
 
-            username = user.getUsername();
+            String username = user.getUsername();
 
-            CredentialAttributes attributes_get = new CredentialAttributes("better-mybatis-generator-" + url, username, this.getClass(), false);
+            CredentialAttributes attributes_get = new CredentialAttributes("better-mybatis-generator-" + urlKey, username, this.getClass(), false);
             String password = PasswordSafe.getInstance().getPassword(attributes_get);
             if (StringUtils.isEmpty(password)) {
-                new MybatisGeneratorPasswordUI(driverClass, url, anActionEvent, config);
+                new MybatisGeneratorPasswordUI(driverClass, urlKey, anActionEvent);
                 return null;
             }
 
             jdbcConfig.setUserId(username);
             jdbcConfig.setPassword(password);
 
-            Boolean mySQL_8 = config.isMysql_8();
-            if (mySQL_8) {
-                driverClass = DbType.MySQL_8.getDriverClass();
-            }
-
             jdbcConfig.setDriverClass(driverClass);
             jdbcConfig.setConnectionURL(url);
             return jdbcConfig;
         } else {
-            new MybatisGeneratorPasswordUI(driverClass, url, anActionEvent, config);
+            new MybatisGeneratorPasswordUI(driverClass, urlKey, anActionEvent);
             return null;
         }
 
@@ -268,18 +289,17 @@ public class MybatisGenerator {
         tableConfig.setTableName(config.getTableName());
         tableConfig.setDomainObjectName(config.getModelName());
 
+        DbElement parent = ((DbTableImpl) psiElement).getParent();
         String schema;
-        if (DatabaseType.equals(DbType.MySQL.name())) {
-            String[] name_split = url.split("/");
-            schema = name_split[name_split.length - 1];
-            tableConfig.setSchema(schema);
-        } else if (DatabaseType.equals(DbType.Oracle.name())) {
-            String[] name_split = url.split(":");
-            schema = name_split[name_split.length - 1];
-            tableConfig.setCatalog(schema);
+        if (parent != null) {
+            schema = parent.getName();
         } else {
-            String[] name_split = url.split("/");
-            schema = name_split[name_split.length - 1];
+            throw new RuntimeException("can not find schema");
+
+        }
+        if (dbType.equals(DbType.MySQL)) {
+            tableConfig.setSchema(schema);
+        } else {
             tableConfig.setCatalog(schema);
         }
 
@@ -290,24 +310,21 @@ public class MybatisGenerator {
             tableConfig.setSelectByExampleStatementEnabled(false);
         }
         if (config.isUseSchemaPrefix()) {
-            if (DbType.MySQL.name().equals(DatabaseType)) {
+            if (DbType.MySQL.equals(dbType)) {
                 tableConfig.setSchema(schema);
-            } else if (DbType.Oracle.name().equals(DatabaseType)) {
-                //Oracle的schema为用户名，如果连接用户拥有dba等高级权限，若不设schema，会导致把其他用户下同名的表也生成一遍导致mapper中代码重复
-                tableConfig.setSchema(username);
+            } else if (DbType.Oracle.equals(dbType)) {
+                tableConfig.setSchema(schema);
             } else {
                 tableConfig.setCatalog(schema);
             }
         }
 
-        if ("org.postgresql.Driver".equals(driverClass)) {
+        if (DbType.PostgreSQL.equals(dbType)) {
             tableConfig.setDelimitIdentifiers(true);
         }
 
         if (!StringUtils.isEmpty(config.getPrimaryKey())) {
-            String dbType = DatabaseType;
-            if (DbType.MySQL.name().equals(DatabaseType)) {
-                dbType = "JDBC";
+            if (DbType.MySQL.equals(dbType)) {
                 //dbType为JDBC，且配置中开启useGeneratedKeys时，Mybatis会使用Jdbc3KeyGenerator,
                 //使用该KeyGenerator的好处就是直接在一次INSERT 语句内，通过resultSet获取得到 生成的主键值，
                 //并很好的支持设置了读写分离代理的数据库
@@ -315,7 +332,7 @@ public class MybatisGenerator {
                 //当使用SelectKey时，Mybatis会使用SelectKeyGenerator，INSERT之后，多发送一次查询语句，获得主键值
                 //在上述读写分离被代理的情况下，会得不到正确的主键
             }
-            tableConfig.setGeneratedKey(new GeneratedKey(config.getPrimaryKey(), dbType, true, null));
+            tableConfig.setGeneratedKey(new GeneratedKey(config.getPrimaryKey(), "JDBC", true, null));
         }
 
         if (config.isUseActualColumnNames()) {
@@ -487,8 +504,8 @@ public class MybatisGenerator {
 
         // limit/offset插件
         if (config.isOffsetLimit()) {
-            if (DbType.MySQL.name().equals(DatabaseType)
-                    || DbType.PostgreSQL.name().equals(DatabaseType)) {
+            if (DbType.MySQL.equals(dbType)
+                    || DbType.PostgreSQL.equals(dbType)) {
                 PluginConfiguration mySQLLimitPlugin = new PluginConfiguration();
                 mySQLLimitPlugin.addProperty("type", "cn.kt.MySQLLimitPlugin");
                 mySQLLimitPlugin.setConfigurationType("cn.kt.MySQLLimitPlugin");
@@ -505,8 +522,8 @@ public class MybatisGenerator {
 
         //forUpdate 插件
         if (config.isNeedForUpdate()) {
-            if (DbType.MySQL.name().equals(DatabaseType)
-                    || DbType.PostgreSQL.name().equals(DatabaseType)) {
+            if (DbType.MySQL.equals(dbType)
+                    || DbType.PostgreSQL.equals(dbType)) {
                 PluginConfiguration mySQLForUpdatePlugin = new PluginConfiguration();
                 mySQLForUpdatePlugin.addProperty("type", "cn.kt.MySQLForUpdatePlugin");
                 mySQLForUpdatePlugin.setConfigurationType("cn.kt.MySQLForUpdatePlugin");
@@ -516,8 +533,8 @@ public class MybatisGenerator {
 
         //repository 插件
         if (config.isAnnotationDAO()) {
-            if (DbType.MySQL.name().equals(DatabaseType)
-                    || DbType.PostgreSQL.name().equals(DatabaseType)) {
+            if (DbType.MySQL.equals(dbType)
+                    || DbType.PostgreSQL.equals(dbType)) {
                 PluginConfiguration repositoryPlugin = new PluginConfiguration();
                 repositoryPlugin.addProperty("type", "cn.kt.RepositoryPlugin");
                 repositoryPlugin.setConfigurationType("cn.kt.RepositoryPlugin");
@@ -526,8 +543,8 @@ public class MybatisGenerator {
         }
 
         if (config.isUseDAOExtendStyle()) {//13
-            if (DbType.MySQL.name().equals(DatabaseType)
-                    || DbType.PostgreSQL.name().equals(DatabaseType)) {
+            if (DbType.MySQL.equals(dbType)
+                    || DbType.PostgreSQL.equals(dbType)) {
                 PluginConfiguration commonDAOInterfacePlugin = new PluginConfiguration();
                 commonDAOInterfacePlugin.addProperty("type", "cn.kt.CommonDAOInterfacePlugin");
                 commonDAOInterfacePlugin.setConfigurationType("cn.kt.CommonDAOInterfacePlugin");

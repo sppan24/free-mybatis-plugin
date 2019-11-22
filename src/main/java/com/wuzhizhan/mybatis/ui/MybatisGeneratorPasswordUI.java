@@ -11,42 +11,29 @@ import com.intellij.openapi.vfs.VirtualFile;
 import com.intellij.ui.components.JBPanel;
 import com.intellij.ui.components.JBTextField;
 import com.wuzhizhan.mybatis.model.Config;
-import com.wuzhizhan.mybatis.model.DbType;
 import com.wuzhizhan.mybatis.model.User;
 import com.wuzhizhan.mybatis.setting.PersistentConfig;
-import java.awt.Dimension;
-import java.awt.GridLayout;
-import java.awt.HeadlessException;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.awt.event.KeyEvent;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
+import java.awt.*;
+import java.awt.event.*;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.util.HashMap;
 import java.util.Map;
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
-import javax.swing.JComponent;
-import javax.swing.JDialog;
-import javax.swing.JFrame;
-import javax.swing.JLabel;
-import javax.swing.JPanel;
-import javax.swing.JTextField;
-import javax.swing.KeyStroke;
-import javax.swing.border.EmptyBorder;
 
 /**
  * 账号密码输入界面
  * Created by kangtian on 2018/8/3.
  */
 public class MybatisGeneratorPasswordUI extends JFrame {
-
+    private static final Logger logger = LoggerFactory.getLogger(MybatisGeneratorPasswordUI.class);
     private AnActionEvent anActionEvent;
     private Project project;
     private PersistentConfig persistentConfig;
-    private Config config;
     private JPanel contentPanel = new JBPanel<>();
     private JPanel btnPanel = new JBPanel<>();
     private JPanel filedPanel = new JBPanel<>();
@@ -57,11 +44,10 @@ public class MybatisGeneratorPasswordUI extends JFrame {
     public JTextField passwordField = new JBTextField(20);
 
 
-    public MybatisGeneratorPasswordUI(String driverClass, String address, AnActionEvent anActionEvent, Config config) throws HeadlessException {
+    public MybatisGeneratorPasswordUI(String driverClass, String address, AnActionEvent anActionEvent) throws HeadlessException {
         this.anActionEvent = anActionEvent;
         this.project = anActionEvent.getData(PlatformDataKeys.PROJECT);
         this.persistentConfig = PersistentConfig.getInstance(project);
-        this.config = config;
         setTitle("set username and password");
         setPreferredSize(new Dimension(400, 180));//设置大小
         setLocation(550, 350);
@@ -123,41 +109,18 @@ public class MybatisGeneratorPasswordUI extends JFrame {
 
     private void onOK(String driverClass, String address, PersistentConfig persistentConfig, Project project) {
         try {
-            String originAddress = address;
             Connection conn = null;
-            String DbTypeName = "";
-            Boolean isMySQL_8 = config.isMysql_8();
+            Class.forName(driverClass);
             try {
-                if (driverClass.contains("oracle")) {
-                    DbTypeName = "oracle";
-                    Class.forName(DbType.Oracle.getDriverClass());
-                } else if (driverClass.contains("mysql")) {
-                    DbTypeName = "mysql";
-                    if (!isMySQL_8) {
-                        Class.forName(DbType.MySQL.getDriverClass());
-                    } else {
-                        Class.forName(DbType.MySQL_8.getDriverClass());
-                    }
-                } else if (driverClass.contains("postgresql")) {
-                    DbTypeName = "postgresql";
-                    Class.forName(DbType.PostgreSQL.getDriverClass());
-                } else if (driverClass.contains("sqlserver")) {
-                    DbTypeName = "sqlserver";
-                    Class.forName(DbType.SqlServer.getDriverClass());
-                } else if (driverClass.contains("sqlite")) {
-                    DbTypeName = "sqlite";
-                    Class.forName(DbType.Sqlite.getDriverClass());
-                } else if (driverClass.contains("mariadb")) {
-                    DbTypeName = "mariadb";
-                    Class.forName(DbType.MariaDB.getDriverClass());
-                }
-
                 conn = DriverManager.getConnection(address, usernameField.getText(), passwordField.getText());
-
             } catch (Exception ex) {
-                Messages.showMessageDialog(project, "Failed to connect to " + DbTypeName + " database,please check username and password,or mysql is version 8?" + isMySQL_8, "Test connection", Messages
-                    .getInformationIcon());
-//                new MybatisGeneratorPasswordUI(driverClass, address, anActionEvent, config);
+                String failMessage = String.format("fail to connect databases.please check the following config:" +
+                        "\n driver class:%s" +
+                        "\n url:%s," +
+                        "\n username:%s," +
+                        "\n password:%s" +
+                        "\n error:%s", driverClass, address, usernameField.getText(), passwordField.getText(), ex.getMessage());
+                Messages.showMessageDialog(project, failMessage, "Test Connection Error", Messages.getInformationIcon());
                 return;
             } finally {
                 if (conn != null) {
@@ -170,7 +133,7 @@ public class MybatisGeneratorPasswordUI extends JFrame {
             if (users == null) {
                 users = new HashMap<>();
             }
-            users.put(originAddress, new User(usernameField.getText()));
+            users.put(address, new User(usernameField.getText()));
             CredentialAttributes attributes = new CredentialAttributes("better-mybatis-generator-" + address, usernameField.getText(), this.getClass(), false);
             Credentials saveCredentials = new Credentials(attributes.getUserName(), passwordField.getText());
             PasswordSafe.getInstance().set(attributes, saveCredentials);
@@ -183,7 +146,7 @@ public class MybatisGeneratorPasswordUI extends JFrame {
             new MybatisGeneratorMainUI(anActionEvent);
 
         } catch (Exception e1) {
-            e1.printStackTrace();
+            logger.error("error",e1);
         } finally {
             dispose();
         }
