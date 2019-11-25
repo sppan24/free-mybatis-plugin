@@ -39,6 +39,7 @@ free-idea-mybatis是一个提高mybatis编码的插件。实现了dao代码跳�
 
 ## 参考代码
 - better-mybatis-generator https://github.com/kmaster/better-mybatis-generator
+- mybatis-generator-gui https://github.com/zouzg/mybatis-generator-gui
 ## 我的微信公众号 - it新技术
 更多内容，欢迎关注公众号 【it新技术】
 - ![](https://raw.githubusercontent.com/wuzhizhan/free-idea-mybatis/master/doc/img/gzh_logo.jpg)

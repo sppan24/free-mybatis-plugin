@@ -2,7 +2,6 @@ package com.wuzhizhan.mybatis.generate;
 
 
 import cn.kt.DbRemarksCommentGenerator;
-import com.google.common.base.Joiner;
 import com.google.common.base.Strings;
 import com.intellij.credentialStore.CredentialAttributes;
 import com.intellij.database.model.RawConnectionConfig;
@@ -14,13 +13,7 @@ import com.intellij.ide.passwordSafe.PasswordSafe;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
-import com.intellij.openapi.application.Application;
-import com.intellij.openapi.application.ApplicationAdapter;
-import com.intellij.openapi.application.ApplicationListener;
 import com.intellij.openapi.application.ApplicationManager;
-import com.intellij.openapi.progress.ProgressIndicator;
-import com.intellij.openapi.progress.ProgressManager;
-import com.intellij.openapi.progress.Task;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.PsiElement;
@@ -32,7 +25,6 @@ import com.wuzhizhan.mybatis.setting.PersistentConfig;
 import com.wuzhizhan.mybatis.ui.MybatisGeneratorPasswordUI;
 import com.wuzhizhan.mybatis.util.GeneratorCallback;
 import com.wuzhizhan.mybatis.util.StringUtils;
-import org.jetbrains.annotations.NotNull;
 import org.mybatis.generator.api.MyBatisGenerator;
 import org.mybatis.generator.api.ShellCallback;
 import org.mybatis.generator.config.*;
@@ -139,8 +131,13 @@ public class MybatisGenerator {
 
                     context.setId("myid");
                     context.addProperty("autoDelimitKeywords", "true");
-                    context.addProperty("beginningDelimiter", "`");
-                    context.addProperty("endingDelimiter", "`");
+
+                    if (DbType.MySQL.equals(dbType) || DbType.MariaDB.equals(dbType)) {
+                        // 由于beginningDelimiter和endingDelimiter的默认值为双引号(")，在Mysql中不能这么写，所以还要将这两个默认值改为`
+                        context.addProperty("beginningDelimiter", "`");
+                        context.addProperty("endingDelimiter", "`");
+                    }
+
                     context.addProperty("javaFileEncoding", "UTF-8");
                     context.addProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING, "UTF-8");
                     context.setTargetRuntime("MyBatis3");
@@ -248,6 +245,9 @@ public class MybatisGenerator {
         JDBCConnectionConfiguration jdbcConfig = new JDBCConnectionConfiguration();
         jdbcConfig.addProperty("nullCatalogMeansCurrent", "true");
 
+        if(DbType.Oracle.equals(dbType)){
+            jdbcConfig.getProperties().setProperty("remarksReporting", "true");
+        }
 
         Map<String, User> users = persistentConfig.getUsers();
         if (users != null && users.containsKey(urlKey)) {
@@ -322,7 +322,7 @@ public class MybatisGenerator {
         }
 
         if (!StringUtils.isEmpty(config.getPrimaryKey())) {
-            if (DbType.MySQL.equals(dbType)) {
+            if (DbType.MySQL.equals(dbType) || DbType.MariaDB.equals(dbType)) {
                 //dbType为JDBC，且配置中开启useGeneratedKeys时，Mybatis会使用Jdbc3KeyGenerator,
                 //使用该KeyGenerator的好处就是直接在一次INSERT 语句内，通过resultSet获取得到 生成的主键值，
                 //并很好的支持设置了读写分离代理的数据库
@@ -548,6 +548,13 @@ public class MybatisGenerator {
                 commonDAOInterfacePlugin.setConfigurationType("cn.kt.CommonDAOInterfacePlugin");
                 context.addPluginConfiguration(commonDAOInterfacePlugin);
             }
+        }
+        // Lombok 插件
+        if (config.isUseLombokPlugin()) {
+            PluginConfiguration pluginConfiguration = new PluginConfiguration();
+            pluginConfiguration.addProperty("type", "com.softwareloop.mybatis.generator.plugins.LombokPlugin");
+            pluginConfiguration.setConfigurationType("com.softwareloop.mybatis.generator.plugins.LombokPlugin");
+            context.addPluginConfiguration(pluginConfiguration);
         }
 
     }
