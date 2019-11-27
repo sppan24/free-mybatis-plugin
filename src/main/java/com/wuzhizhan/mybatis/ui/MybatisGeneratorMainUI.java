@@ -581,8 +581,11 @@ public class MybatisGeneratorMainUI extends JFrame {
                     generator_config.setModelMvnPath(modelMvnField.getText());
                     generator_config.setDaoMvnPath(daoMvnField.getText());
                     generator_config.setXmlMvnPath(xmlMvnField.getText());
-
-                    result = new MybatisGenerator(generator_config).execute(anActionEvent, false);
+                    boolean needSaveConfig = true;
+                    if (historyConfigList != null && historyConfigList.containsKey(tableName)) {
+                        needSaveConfig = false;
+                    }
+                    result = new MybatisGenerator(generator_config).execute(anActionEvent, needSaveConfig);
                 }
 
             }

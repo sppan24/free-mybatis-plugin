@@ -50,6 +50,7 @@
         <codeInsight.lineMarkerProvider language="JAVA"
                                         implementationClass="com.wuzhizhan.mybatis.provider.InjectionLineMarkerProvider"/>
         <applicationConfigurable instance="com.wuzhizhan.mybatis.setting.MybatisConfigurable"/>
+        <completion.contributor language="JAVA" implementationClass="com.wuzhizhan.mybatis.contributor.JavaMenthodCompletionContributor"/>
         <applicationService serviceInterface="com.wuzhizhan.mybatis.setting.MybatisSetting"
                             serviceImplementation="com.wuzhizhan.mybatis.setting.MybatisSetting"/>
         <completion.contributor language="XML"

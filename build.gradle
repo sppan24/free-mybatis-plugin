@@ -11,7 +11,7 @@ plugins {
 }
 
 group = 'cn.wuzhizhan.idea.mybatis'
-version = '2019.11.20'
+version = '2019.11.27'
 
 apply plugin: 'java'
 sourceCompatibility = 1.8
@@ -38,9 +38,10 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-    <h4>2019.11.16</h4>
+    <h4>2019.11.27</h4>
       <ul>
-        <li>add mybatis generator gui，create model,dao and mapper become more simple</li>
+        <li>mybatis generator gui add lombok support</li>
+        <li>mybatis generator gui support databases tools change schema</li>
         <li>fix some bugs</li>
       </ul>
      """
