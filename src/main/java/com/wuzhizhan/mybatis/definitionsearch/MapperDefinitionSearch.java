@@ -21,7 +21,7 @@ public class MapperDefinitionSearch extends QueryExecutorBase<XmlElement, PsiEle
     }
 
     @Override
-    public void processQuery(@NotNull PsiElement element, @NotNull Processor<? super XmlElement> consumer) {
+    public void processQuery(@NotNull PsiElement element, @NotNull Processor<XmlElement> consumer) {
         if (!(element instanceof PsiTypeParameterListOwner)) return;
 
         Processor<DomElement> processor = new Processor<DomElement>() {
@@ -33,5 +33,7 @@ public class MapperDefinitionSearch extends QueryExecutorBase<XmlElement, PsiEle
 
         JavaService.getInstance(element.getProject()).process(element, processor);
     }
+
+
 
 }
