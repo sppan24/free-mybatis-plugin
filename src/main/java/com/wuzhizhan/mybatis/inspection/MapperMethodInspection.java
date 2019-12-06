@@ -8,6 +8,7 @@ import com.intellij.codeInspection.ProblemHighlightType;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiIdentifier;
 import com.intellij.psi.PsiMethod;
+import com.intellij.psi.PsiModifier;
 import com.intellij.util.xml.DomElement;
 import com.wuzhizhan.mybatis.annotation.Annotation;
 import com.wuzhizhan.mybatis.dom.model.Select;
@@ -119,6 +120,10 @@ public class MapperMethodInspection extends MapperInspection {
             final InspectionManager manager,
             final boolean isOnTheFly) {
         final PsiIdentifier methodName = method.getNameIdentifier();
+
+        if (method.hasModifierProperty(PsiModifier.DEFAULT)) {
+            return Optional.absent();
+        }
 
         if (!JavaService.getInstance(method.getProject()).findStatement(method).isPresent() && null != methodName) {
             return Optional.of(manager.createProblemDescriptor(
