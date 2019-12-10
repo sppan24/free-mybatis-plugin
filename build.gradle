@@ -11,7 +11,7 @@ plugins {
 }
 
 group = 'cn.wuzhizhan.idea.mybatis'
-version = '2019.12.09'
+version = '2019.12.10'
 
 apply plugin: 'java'
 sourceCompatibility = 1.8
@@ -38,9 +38,9 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-    <h4>2019.11.27</h4>
+    <h4>2019.12.10</h4>
       <ul>
-         <li>bugfix:ava.lang.NoSuchMethodError: 'void com.intellij.codeInsight.AutoPopupController.runTransactionWithEverythingCommitted(com.intellij.openapi.project.Project, java.lang.Runnable)'</li>
+         <li>bugfix:java.lang.NoSuchMethodError: 'void com.intellij.codeInsight.AutoPopupController.runTransactionWithEverythingCommitted(com.intellij.openapi.project.Project, java.lang.Runnable)'</li>
       </ul>
      """
 }
