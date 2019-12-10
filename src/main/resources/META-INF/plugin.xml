@@ -28,7 +28,7 @@
     <depends>com.intellij.spring</depends>
     <actions>
 
-        <action id="mabatis-generate-action" class="com.wuzhizhan.mybatis.action.MybatisGeneratorMainAction" text="mybatis-generator"
+        <action id="free-mabatis-generate-action" class="com.wuzhizhan.mybatis.action.MybatisGeneratorMainAction" text="mybatis-generator"
                 description="mybatis generator idea plugin">
             <add-to-group group-id="DatabaseViewPopupMenu" anchor="first"/>
         </action>
@@ -49,7 +49,7 @@
                                         implementationClass="com.wuzhizhan.mybatis.provider.StatementLineMarkerProvider"/>
         <codeInsight.lineMarkerProvider language="JAVA"
                                         implementationClass="com.wuzhizhan.mybatis.provider.InjectionLineMarkerProvider"/>
-        <applicationConfigurable instance="com.wuzhizhan.mybatis.setting.MybatisConfigurable"/>
+        <applicationConfigurable groupId="tools" instance="com.wuzhizhan.mybatis.setting.MybatisConfigurable"/>
         <completion.contributor language="JAVA" implementationClass="com.wuzhizhan.mybatis.contributor.JavaMenthodCompletionContributor"/>
         <applicationService serviceInterface="com.wuzhizhan.mybatis.setting.MybatisSetting"
                             serviceImplementation="com.wuzhizhan.mybatis.setting.MybatisSetting"/>
@@ -82,7 +82,7 @@
         </intentionAction>
         <projectService serviceInterface="com.wuzhizhan.mybatis.setting.PersistentConfig"
           serviceImplementation="com.wuzhizhan.mybatis.setting.PersistentConfig"/>
-        <projectConfigurable groupId="tools" displayName="Mybatis generator setting" id="gene.id"
+        <projectConfigurable groupId="tools" displayName="Mybatis generator setting" id="free.mybatis.gene.id"
           instance="com.wuzhizhan.mybatis.setting.MybatisGeneratorConfigurable"/>
     </extensions>
 </idea-plugin>

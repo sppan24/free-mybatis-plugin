@@ -50,7 +50,7 @@ public class MybatisConfigurable implements SearchableConfigurable {
     @Nls
     @Override
     public String getDisplayName() {
-        return getId();
+        return "Free Mybatis";
     }
 
     @Nullable

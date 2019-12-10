@@ -16,7 +16,7 @@ import org.jetbrains.annotations.Nullable;
 /**
  * 配置持久化
  */
-@State(name = "PersistentConfig", storages = {@Storage("generator-config.xml")})
+@State(name = "PersistentConfig", storages = {@Storage("free-mybatis-generator-config.xml")})
 public class PersistentConfig implements PersistentStateComponent<PersistentConfig> {
 
     private Map<String, Config> initConfig;
