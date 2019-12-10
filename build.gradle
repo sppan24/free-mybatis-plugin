@@ -7,11 +7,11 @@ buildscript {
 
 }
 plugins {
-    id 'org.jetbrains.intellij' version '0.4.9'
+    id "org.jetbrains.intellij" version "0.4.15"
 }
 
 group = 'cn.wuzhizhan.idea.mybatis'
-version = '2019.11.27'
+version = '2019.12.09'
 
 apply plugin: 'java'
 sourceCompatibility = 1.8
@@ -40,9 +40,7 @@ patchPluginXml {
     changeNotes """
     <h4>2019.11.27</h4>
       <ul>
-        <li>mybatis generator gui add lombok support</li>
-        <li>mybatis generator gui support databases tools change schema</li>
-        <li>fix some bugs</li>
+         <li>bugfix:ava.lang.NoSuchMethodError: 'void com.intellij.codeInsight.AutoPopupController.runTransactionWithEverythingCommitted(com.intellij.openapi.project.Project, java.lang.Runnable)'</li>
       </ul>
      """
 }
