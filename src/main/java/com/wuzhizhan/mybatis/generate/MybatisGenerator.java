@@ -12,7 +12,6 @@ import com.intellij.openapi.application.ApplicationManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.openapi.ui.Messages;
 import com.intellij.psi.PsiElement;
-import com.mysql.cj.conf.ConnectionUrlParser;
 import com.wuzhizhan.mybatis.model.Config;
 import com.wuzhizhan.mybatis.model.DbType;
 import com.wuzhizhan.mybatis.setting.PersistentConfig;
@@ -36,14 +35,10 @@ import java.util.*;
 public class MybatisGenerator {
     private static Logger logger = LoggerFactory.getLogger(MybatisGenerator.class);
     private String currentDbName;
-    private String currentSchema;
-    private AnActionEvent anActionEvent;
     private Project project;
     private PersistentConfig persistentConfig;//持久化的配置
     private Config config;//界面默认配置
     private DbType dbType;//数据库类型
-    private String driverClass;//数据库驱动
-    private String url;//数据库连接url
     private IntellijTableInfo intellijTableInfo;
 
     public MybatisGenerator(Config config) {
@@ -58,7 +53,6 @@ public class MybatisGenerator {
      */
     public List<String> execute(final AnActionEvent anActionEvent, boolean saveConfig) throws Exception {
         List<String> result = new ArrayList<>();
-        this.anActionEvent = anActionEvent;
         this.project = anActionEvent.getData(PlatformDataKeys.PROJECT);
         this.persistentConfig = PersistentConfig.getInstance(project);
 
@@ -81,45 +75,21 @@ public class MybatisGenerator {
 
         RawConnectionConfig connectionConfig = ((DbTable) psiElements[0]).getDataSource().getConnectionConfig();
 
-        driverClass = connectionConfig.getDriverClass();
-        url = connectionConfig.getUrl();
+        String driverClass = connectionConfig.getDriverClass();
         if (driverClass.contains("mysql")) {
             currentDbName = ((DbTable) psiElements[0]).getParent().getName();
-            currentSchema = currentDbName;
             dbType = DbType.MySQL;
-            ConnectionUrlParser parser = ConnectionUrlParser.parseConnectionString(url);
-            //schema名不同，则替换
-            if (!currentDbName.equals(parser.getPath())) {
-                url = parser.getScheme() + "//" + parser.getAuthority() + "/" + currentDbName;
-                if (!Strings.isNullOrEmpty(parser.getQuery())) {
-                    url += "?" + parser.getQuery();
-                }
-            }
         } else if (driverClass.contains("oracle")) {
             currentDbName = ((DbTable) psiElements[0]).getParent().getName();
-            currentSchema = currentDbName;
             dbType = DbType.Oracle;
         } else if (driverClass.contains("postgresql")) {
             currentDbName = ((DbTable) psiElements[0]).getParent().getParent().getName();
-            currentSchema = ((DbTable) psiElements[0]).getParent().getName();
             dbType = DbType.PostgreSQL;
         } else if (driverClass.contains("sqlserver")) {
             currentDbName = ((DbTable) psiElements[0]).getParent().getName();
-            currentSchema = ((DbTable) psiElements[0]).getParent().getName();
             dbType = DbType.SqlServer;
         } else if (driverClass.contains("mariadb")) {
             currentDbName = ((DbTable) psiElements[0]).getParent().getName();
-            currentSchema = currentDbName;
-            url = url.replaceFirst("mariadb", "mysql");
-            ConnectionUrlParser parser = ConnectionUrlParser.parseConnectionString(url);
-            //schema名不同，则替换
-            if (!currentDbName.equals(parser.getPath())) {
-                url = "jdbc:mariadb://" + parser.getAuthority() + "/" + currentDbName;
-                if (!Strings.isNullOrEmpty(parser.getQuery())) {
-                    url += "?" + parser.getQuery();
-
-                }
-            }
             dbType = DbType.MariaDB;
         } else {
             String failMessage = String.format("db type not support!" +

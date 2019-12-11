@@ -22,10 +22,6 @@ repositories {
 
 dependencies {
     compile fileTree(dir: 'lib', includes: ['*jar'])
-    compile group: 'mysql', name: 'mysql-connector-java', version: '8.0.18'
-    compile group: 'postgresql', name: 'postgresql', version: '9.1-901-1.jdbc4'
-    compile group: 'org.mariadb.jdbc', name: 'mariadb-java-client', version: '2.5.1'
-    compile group: 'com.microsoft.sqlserver', name: 'mssql-jdbc', version: '7.4.1.jre8'
     compile group: 'com.softwareloop', name: 'mybatis-generator-lombok-plugin', version: '1.0'
     compile group: 'uk.com.robust-it', name: 'cloning', version: '1.9.2'
     testCompile group: 'junit', name: 'junit', version: '4.12'
