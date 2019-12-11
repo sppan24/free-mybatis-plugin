@@ -49,7 +49,6 @@ public class Config {
 	private String daoMvnPath;
 
 	private String xmlPackage;
-	private String xmlTargetFolder;
 	private String xmlMvnPath;
 
 	/**
@@ -237,14 +236,6 @@ public class Config {
 
 	public void setXmlPackage(String xmlPackage) {
 		this.xmlPackage = xmlPackage;
-	}
-
-	public String getXmlTargetFolder() {
-		return xmlTargetFolder;
-	}
-
-	public void setXmlTargetFolder(String xmlTargetFolder) {
-		this.xmlTargetFolder = xmlTargetFolder;
 	}
 
 	public boolean isOffsetLimit() {

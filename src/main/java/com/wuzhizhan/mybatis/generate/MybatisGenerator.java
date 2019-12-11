@@ -3,13 +3,8 @@ package com.wuzhizhan.mybatis.generate;
 
 import cn.kt.DbRemarksCommentGenerator;
 import com.google.common.base.Strings;
-import com.intellij.credentialStore.CredentialAttributes;
 import com.intellij.database.model.RawConnectionConfig;
-import com.intellij.database.psi.DbDataSource;
-import com.intellij.database.psi.DbElement;
 import com.intellij.database.psi.DbTable;
-import com.intellij.database.psi.DbTableImpl;
-import com.intellij.ide.passwordSafe.PasswordSafe;
 import com.intellij.openapi.actionSystem.AnActionEvent;
 import com.intellij.openapi.actionSystem.LangDataKeys;
 import com.intellij.openapi.actionSystem.PlatformDataKeys;
@@ -20,13 +15,13 @@ import com.intellij.psi.PsiElement;
 import com.mysql.cj.conf.ConnectionUrlParser;
 import com.wuzhizhan.mybatis.model.Config;
 import com.wuzhizhan.mybatis.model.DbType;
-import com.wuzhizhan.mybatis.model.User;
 import com.wuzhizhan.mybatis.setting.PersistentConfig;
-import com.wuzhizhan.mybatis.ui.MybatisGeneratorPasswordUI;
+import com.wuzhizhan.mybatis.util.DbToolsUtils;
 import com.wuzhizhan.mybatis.util.GeneratorCallback;
 import com.wuzhizhan.mybatis.util.StringUtils;
-import org.mybatis.generator.api.MyBatisGenerator;
+import org.mybatis.generator.api.IntellijMyBatisGenerator;
 import org.mybatis.generator.api.ShellCallback;
+import org.mybatis.generator.api.intellij.IntellijTableInfo;
 import org.mybatis.generator.config.*;
 import org.mybatis.generator.internal.DefaultShellCallback;
 import org.slf4j.Logger;
@@ -40,6 +35,8 @@ import java.util.*;
  */
 public class MybatisGenerator {
     private static Logger logger = LoggerFactory.getLogger(MybatisGenerator.class);
+    private String currentDbName;
+    private String currentSchema;
     private AnActionEvent anActionEvent;
     private Project project;
     private PersistentConfig persistentConfig;//持久化的配置
@@ -47,7 +44,7 @@ public class MybatisGenerator {
     private DbType dbType;//数据库类型
     private String driverClass;//数据库驱动
     private String url;//数据库连接url
-    private String urlKey;
+    private IntellijTableInfo intellijTableInfo;
 
     public MybatisGenerator(Config config) {
         this.config = config;
@@ -74,12 +71,21 @@ public class MybatisGenerator {
             result.add("can not generate! \nplease select table");
             return result;
         }
-        RawConnectionConfig connectionConfig = ((DbDataSource) psiElements[0].getParent().getParent()).getConnectionConfig();
-        String currentDbName = ((DbTableImpl) psiElements[0]).getParent().getName();
+        PsiElement psiElement = psiElements[0];
+        if (!(psiElement instanceof DbTable)) {
+            result.add("can not generate! \nplease select table");
+            return result;
+        }
+
+        intellijTableInfo = DbToolsUtils.buildIntellijTableInfo((DbTable) psiElement);
+
+        RawConnectionConfig connectionConfig = ((DbTable) psiElements[0]).getDataSource().getConnectionConfig();
+
         driverClass = connectionConfig.getDriverClass();
         url = connectionConfig.getUrl();
-        urlKey = url;
         if (driverClass.contains("mysql")) {
+            currentDbName = ((DbTable) psiElements[0]).getParent().getName();
+            currentSchema = currentDbName;
             dbType = DbType.MySQL;
             ConnectionUrlParser parser = ConnectionUrlParser.parseConnectionString(url);
             //schema名不同，则替换
@@ -87,16 +93,23 @@ public class MybatisGenerator {
                 url = parser.getScheme() + "//" + parser.getAuthority() + "/" + currentDbName;
                 if (!Strings.isNullOrEmpty(parser.getQuery())) {
                     url += "?" + parser.getQuery();
-
                 }
             }
         } else if (driverClass.contains("oracle")) {
+            currentDbName = ((DbTable) psiElements[0]).getParent().getName();
+            currentSchema = currentDbName;
             dbType = DbType.Oracle;
         } else if (driverClass.contains("postgresql")) {
+            currentDbName = ((DbTable) psiElements[0]).getParent().getParent().getName();
+            currentSchema = ((DbTable) psiElements[0]).getParent().getName();
             dbType = DbType.PostgreSQL;
         } else if (driverClass.contains("sqlserver")) {
+            currentDbName = ((DbTable) psiElements[0]).getParent().getName();
+            currentSchema = ((DbTable) psiElements[0]).getParent().getName();
             dbType = DbType.SqlServer;
         } else if (driverClass.contains("mariadb")) {
+            currentDbName = ((DbTable) psiElements[0]).getParent().getName();
+            currentSchema = currentDbName;
             url = url.replaceFirst("mariadb", "mysql");
             ConnectionUrlParser parser = ConnectionUrlParser.parseConnectionString(url);
             //schema名不同，则替换
@@ -121,62 +134,55 @@ public class MybatisGenerator {
         ApplicationManager.getApplication().runWriteAction(new Runnable() {
             @Override
             public void run() {
-                for (PsiElement psiElement : psiElements) {
-                    if (!(psiElement instanceof DbTable)) {
-                        continue;
-                    }
-                    Configuration configuration = new Configuration();
-                    Context context = new Context(ModelType.CONDITIONAL);
-                    configuration.addContext(context);
 
-                    context.setId("myid");
-                    context.addProperty("autoDelimitKeywords", "true");
+                Configuration configuration = new Configuration();
+                Context context = new Context(ModelType.CONDITIONAL);
+                configuration.addContext(context);
 
-                    if (DbType.MySQL.equals(dbType) || DbType.MariaDB.equals(dbType)) {
-                        // 由于beginningDelimiter和endingDelimiter的默认值为双引号(")，在Mysql中不能这么写，所以还要将这两个默认值改为`
-                        context.addProperty("beginningDelimiter", "`");
-                        context.addProperty("endingDelimiter", "`");
-                    }
+                context.setId("myid");
+                context.addProperty("autoDelimitKeywords", "true");
+                context.setIntellij(true);
 
-                    context.addProperty("javaFileEncoding", "UTF-8");
-                    context.addProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING, "UTF-8");
-                    context.setTargetRuntime("MyBatis3");
-
-                    JDBCConnectionConfiguration jdbcConfig = buildJdbcConfig(psiElement);
-                    if (jdbcConfig == null) {
-                        return;
-                    }
-                    TableConfiguration tableConfig = buildTableConfig(psiElement, context);
-                    JavaModelGeneratorConfiguration modelConfig = buildModelConfig();
-                    SqlMapGeneratorConfiguration mapperConfig = buildMapperXmlConfig();
-                    JavaClientGeneratorConfiguration daoConfig = buildDaoConfig();
-                    CommentGeneratorConfiguration commentConfig = buildCommentConfig();
-
-                    context.addTableConfiguration(tableConfig);
-                    context.setJdbcConnectionConfiguration(jdbcConfig);
-                    context.setJavaModelGeneratorConfiguration(modelConfig);
-                    context.setSqlMapGeneratorConfiguration(mapperConfig);
-                    context.setJavaClientGeneratorConfiguration(daoConfig);
-                    context.setCommentGeneratorConfiguration(commentConfig);
-                    addPluginConfiguration(psiElement, context);
-
-                    createFolderForNeed(config);
-                    List<String> warnings = new ArrayList<>();
-                    ShellCallback shellCallback = new DefaultShellCallback(config.isOverrideJava());
-                    Set<String> fullyqualifiedTables = new HashSet<>();
-                    Set<String> contexts = new HashSet<>();
-                    try {
-                        MyBatisGenerator myBatisGenerator = new MyBatisGenerator(configuration, shellCallback, warnings);
-                        myBatisGenerator.generate(new GeneratorCallback(), contexts, fullyqualifiedTables);
-                        if (!warnings.isEmpty()) {
-                            result.addAll(warnings);
-                        }
-                    } catch (Exception e) {
-                        Messages.showMessageDialog(e.getMessage(), "MybatisGenerator failure", Messages.getErrorIcon());
-                        result.add(e.getMessage());
-                    }
-                    project.getBaseDir().refresh(false, true);
+                if (DbType.MySQL.equals(dbType) || DbType.MariaDB.equals(dbType)) {
+                    // 由于beginningDelimiter和endingDelimiter的默认值为双引号(")，在Mysql中不能这么写，所以还要将这两个默认值改为`
+                    context.addProperty("beginningDelimiter", "`");
+                    context.addProperty("endingDelimiter", "`");
                 }
+
+                context.addProperty("javaFileEncoding", "UTF-8");
+                context.addProperty(PropertyRegistry.CONTEXT_JAVA_FILE_ENCODING, "UTF-8");
+                context.setTargetRuntime("MyBatis3");
+
+                TableConfiguration tableConfig = buildTableConfig(context);
+                JavaModelGeneratorConfiguration modelConfig = buildModelConfig();
+                SqlMapGeneratorConfiguration mapperConfig = buildMapperXmlConfig();
+                JavaClientGeneratorConfiguration daoConfig = buildDaoConfig();
+                CommentGeneratorConfiguration commentConfig = buildCommentConfig();
+
+                context.addTableConfiguration(tableConfig);
+                context.setJavaModelGeneratorConfiguration(modelConfig);
+                context.setSqlMapGeneratorConfiguration(mapperConfig);
+                context.setJavaClientGeneratorConfiguration(daoConfig);
+                context.setCommentGeneratorConfiguration(commentConfig);
+                addPluginConfiguration(context);
+
+                createFolderForNeed(config);
+                List<String> warnings = new ArrayList<>();
+                ShellCallback shellCallback = new DefaultShellCallback(config.isOverrideJava());
+                Set<String> fullyqualifiedTables = new HashSet<>();
+                Set<String> contexts = new HashSet<>();
+                try {
+                    IntellijMyBatisGenerator intellijMyBatisGenerator = new IntellijMyBatisGenerator(configuration, shellCallback, warnings);
+                    intellijMyBatisGenerator.generate(new GeneratorCallback(),contexts,fullyqualifiedTables,intellijTableInfo);
+                    if (!warnings.isEmpty()) {
+                        result.addAll(warnings);
+                    }
+                } catch (Exception e) {
+                    Messages.showMessageDialog(e.getMessage(), "MybatisGenerator failure", Messages.getErrorIcon());
+                    result.add(e.getMessage());
+                }
+                project.getBaseDir().refresh(true, true);
+                project.getBaseDir().refresh(false, true);
             }
         });
         return result;
@@ -234,68 +240,28 @@ public class MybatisGenerator {
 
     }
 
-    /**
-     * 生成数据库连接配置
-     *
-     * @param psiElement
-     * @return
-     */
-    private JDBCConnectionConfiguration buildJdbcConfig(PsiElement psiElement) {
 
-        JDBCConnectionConfiguration jdbcConfig = new JDBCConnectionConfiguration();
-        jdbcConfig.addProperty("nullCatalogMeansCurrent", "true");
-
-        if(DbType.Oracle.equals(dbType)){
-            jdbcConfig.getProperties().setProperty("remarksReporting", "true");
-        }
-
-        Map<String, User> users = persistentConfig.getUsers();
-        if (users != null && users.containsKey(urlKey)) {
-            User user = users.get(urlKey);
-
-            String username = user.getUsername();
-
-            CredentialAttributes attributes_get = new CredentialAttributes("better-mybatis-generator-" + urlKey, username, this.getClass(), false);
-            String password = PasswordSafe.getInstance().getPassword(attributes_get);
-            if (StringUtils.isEmpty(password)) {
-                new MybatisGeneratorPasswordUI(driverClass, urlKey, anActionEvent);
-                return null;
-            }
-
-            jdbcConfig.setUserId(username);
-            jdbcConfig.setPassword(password);
-
-            jdbcConfig.setDriverClass(driverClass);
-            jdbcConfig.setConnectionURL(url);
-            return jdbcConfig;
-        } else {
-            new MybatisGeneratorPasswordUI(driverClass, urlKey, anActionEvent);
-            return null;
-        }
-
-    }
 
     /**
      * 生成table配置
      *
-     * @param psiElement
      * @param context
      * @return
      */
-    private TableConfiguration buildTableConfig(PsiElement psiElement, Context context) {
+    private TableConfiguration buildTableConfig(Context context) {
         TableConfiguration tableConfig = new TableConfiguration(context);
         tableConfig.setTableName(config.getTableName());
         tableConfig.setDomainObjectName(config.getModelName());
-
-        DbElement parent = ((DbTableImpl) psiElement).getParent();
         String schema;
-        if (parent != null) {
-            schema = parent.getName();
+        if (!Strings.isNullOrEmpty(currentDbName)) {
+            schema = currentDbName;
         } else {
             throw new RuntimeException("can not find schema");
 
         }
-        if (dbType.equals(DbType.MySQL)) {
+        if (dbType.equals(DbType.MySQL)
+                || dbType.equals(DbType.MariaDB)
+                || dbType.equals(DbType.PostgreSQL)) {
             tableConfig.setSchema(schema);
         } else {
             tableConfig.setCatalog(schema);
@@ -396,7 +362,7 @@ public class MybatisGenerator {
 
         String projectFolder = config.getProjectFolder();
         String mappingXMLPackage = config.getXmlPackage();
-        String mappingXMLTargetFolder = config.getXmlTargetFolder();
+        String mappingXMLTargetFolder = config.getProjectFolder();
         String xmlMvnPath = config.getXmlMvnPath();
 
         SqlMapGeneratorConfiguration mapperConfig = new SqlMapGeneratorConfiguration();
@@ -479,7 +445,7 @@ public class MybatisGenerator {
      *
      * @param context
      */
-    private void addPluginConfiguration(PsiElement psiElement, Context context) {
+    private void addPluginConfiguration(Context context) {
 
 
         //实体添加序列化
@@ -568,7 +534,7 @@ public class MybatisGenerator {
     private String getMappingXMLFilePath(Config config) {
         StringBuilder sb = new StringBuilder();
         String mappingXMLPackage = config.getXmlPackage();
-        String mappingXMLTargetFolder = config.getXmlTargetFolder();
+        String mappingXMLTargetFolder = config.getProjectFolder();
         String xmlMvnPath = config.getXmlMvnPath();
         sb.append(mappingXMLTargetFolder + "/" + xmlMvnPath + "/");
 

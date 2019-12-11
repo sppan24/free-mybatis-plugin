@@ -36,6 +36,7 @@ free-idea-mybatis is an enchange plugin for idea to supoort mybatis,here is the 
 ## Reference
 - better-mybatis-generator https://github.com/kmaster/better-mybatis-generator
 - mybatis-generator-gui https://github.com/zouzg/mybatis-generator-gui
+- MyBatisCodeHelper-Pro https://github.com/gejun123456/MyBatisCodeHelper-Pro
 ## TODO
 - generate bean accourding to database field
 - generate CURD code
