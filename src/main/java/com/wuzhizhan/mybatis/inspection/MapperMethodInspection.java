@@ -33,7 +33,7 @@ public class MapperMethodInspection extends MapperInspection {
             @NotNull final InspectionManager manager,
             final boolean isOnTheFly) {
         if (!MapperLocator.getInstance(method.getProject()).process(method) ||
-            JavaUtils.isAnyAnnotationPresent(method, Annotation.STATEMENT_SYMMETRIES)) {
+                JavaUtils.isAnyAnnotationPresent(method, Annotation.STATEMENT_SYMMETRIES)) {
             return EMPTY_ARRAY;
         }
 
@@ -78,7 +78,7 @@ public class MapperMethodInspection extends MapperInspection {
         if (domElement instanceof Select) {
             final Select selectStatement = (Select) domElement;
 
-            if (selectStatement.getResultMap().getValue() != null) {
+            if ( selectStatement.getResultMap().getValue() != null) {
                 return Optional.absent();
             }
 
@@ -87,19 +87,22 @@ public class MapperMethodInspection extends MapperInspection {
             final PsiIdentifier methodName = method.getNameIdentifier();
 
             if (methodName != null) {
-                if (methodResultType.isPresent() && (
-                        selectResultType == null ||
-                        !methodResultType.get().equals(selectResultType) &&
-                        !selectResultType.isInheritor(methodResultType.get(), true))) {
-                    return Optional.of(
-                            manager.createProblemDescriptor(
-                                    methodName,
-                                    "Result type doesn't match for Select id=\"#ref\"",
-                                    new ResultTypeQuickFix(selectStatement, methodResultType.get()),
-                                    ProblemHighlightType.GENERIC_ERROR,
-                                    isOnTheFly));
-                }
+                if (methodResultType.isPresent()) {
+                    if (selectResultType == null ||
+                            (selectResultType.getQualifiedName() != null
+                                    && !selectResultType.getQualifiedName().equals(methodResultType.get().getQualifiedName())
+                                    && !selectResultType.isInheritor(methodResultType.get(), true))) {
 
+                        return Optional.of(
+                                manager.createProblemDescriptor(
+                                        methodName,
+                                        "Result type doesn't match for Select id=\"#ref\"",
+                                        new ResultTypeQuickFix(selectStatement, methodResultType.get()),
+                                        ProblemHighlightType.GENERIC_ERROR,
+                                        isOnTheFly));
+
+                    }
+                }
                 if (!methodResultType.isPresent() && selectResultType != null) {
                     return Optional.of(
                             manager.createProblemDescriptor(
