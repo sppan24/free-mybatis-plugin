@@ -11,7 +11,7 @@ plugins {
 }
 
 group = 'cn.wuzhizhan.idea.mybatis'
-version = '2019.12.10'
+version = '2019.12.18'
 
 apply plugin: 'java'
 sourceCompatibility = 1.8
@@ -34,10 +34,13 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-    <h4>2019.12.10</h4>
+    <h4>2019.12.18</h4>
       <ul>
-         <li>bugfix:java.lang.NoSuchMethodError: 'void com.intellij.codeInsight.AutoPopupController.runTransactionWithEverythingCommitted(com.intellij.openapi.project.Project, java.lang.Runnable)'</li>
-         <li>bugfix:disable warning in default method  </li>
+        <li>feature:移除jdbc依赖,不用再次输入密码</li>
+        <li>bugfix:修复返回类型检测错误</li>
+        <li>bugfix:mybatis generator修复oracle错误</li>
+        <li>bugfix:mybatis generator修复postgres数据库</li>
+        <li>bugfix:mybatis generator修复xml mapper重复创建</li>
       </ul>
      """
 }
