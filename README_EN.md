@@ -4,7 +4,7 @@
 
 ## Description
 A idea plugin for mybatis .
-free-idea-mybatis is an enchange plugin for idea to supoort mybatis,here is the main functions: 
+free-mybatis-plugin is an enchange plugin for idea to supoort mybatis,here is the main functions: 
 - generate mapper xml files
 - navigate from the code to mapper and from the mapper back to code
 - auto code and error tips
