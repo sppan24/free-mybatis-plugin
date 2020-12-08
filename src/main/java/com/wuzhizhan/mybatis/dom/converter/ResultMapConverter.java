@@ -2,14 +2,12 @@ package com.wuzhizhan.mybatis.dom.converter;
 
 import com.google.common.base.Predicate;
 import com.google.common.collect.Collections2;
-
 import com.intellij.util.xml.ConvertContext;
 import com.intellij.util.xml.DomElement;
 import com.wuzhizhan.mybatis.dom.model.IdDomElement;
 import com.wuzhizhan.mybatis.dom.model.Mapper;
 import com.wuzhizhan.mybatis.dom.model.ResultMap;
 import com.wuzhizhan.mybatis.util.MapperUtils;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

@@ -18,6 +18,7 @@ import java.util.List;
 
 public class DbToolsUtils {
     private static final Cloner myCloner = new Cloner();
+
     public static IntellijTableInfo buildIntellijTableInfo(DbTable currentTable) {
         IntellijTableInfo tableInfo = new IntellijTableInfo();
         tableInfo.setTableName(currentTable.getName());

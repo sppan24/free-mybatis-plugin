@@ -3,20 +3,15 @@ package com.wuzhizhan.mybatis.setting;
 import com.google.common.base.Joiner;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Sets;
-
 import com.intellij.openapi.options.ConfigurationException;
 import com.intellij.openapi.options.SearchableConfigurable;
 import com.wuzhizhan.mybatis.generate.GenerateModel;
-
 import org.jetbrains.annotations.Nls;
 import org.jetbrains.annotations.Nullable;
 
 import javax.swing.*;
 
-import static com.wuzhizhan.mybatis.generate.StatementGenerator.DELETE_GENERATOR;
-import static com.wuzhizhan.mybatis.generate.StatementGenerator.INSERT_GENERATOR;
-import static com.wuzhizhan.mybatis.generate.StatementGenerator.SELECT_GENERATOR;
-import static com.wuzhizhan.mybatis.generate.StatementGenerator.UPDATE_GENERATOR;
+import static com.wuzhizhan.mybatis.generate.StatementGenerator.*;
 
 /**
  * @author yanglin

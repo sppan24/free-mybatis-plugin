@@ -5,7 +5,6 @@ import com.intellij.psi.xml.XmlFile;
 import com.intellij.util.xml.DomFileDescription;
 import com.wuzhizhan.mybatis.dom.model.Configuration;
 import com.wuzhizhan.mybatis.util.DomUtils;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

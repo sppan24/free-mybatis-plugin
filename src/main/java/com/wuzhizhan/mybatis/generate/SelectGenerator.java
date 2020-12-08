@@ -1,14 +1,13 @@
 package com.wuzhizhan.mybatis.generate;
 
-import com.google.common.base.Optional;
-
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiMethod;
 import com.wuzhizhan.mybatis.dom.model.GroupTwo;
 import com.wuzhizhan.mybatis.dom.model.Mapper;
 import com.wuzhizhan.mybatis.dom.model.Select;
-
 import org.jetbrains.annotations.NotNull;
+
+import java.util.Optional;
 
 /**
  * @author yanglin

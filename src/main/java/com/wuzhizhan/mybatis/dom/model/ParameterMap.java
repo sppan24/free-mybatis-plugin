@@ -6,7 +6,6 @@ import com.intellij.util.xml.Convert;
 import com.intellij.util.xml.GenericAttributeValue;
 import com.intellij.util.xml.SubTagList;
 import com.wuzhizhan.mybatis.dom.converter.AliasConverter;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

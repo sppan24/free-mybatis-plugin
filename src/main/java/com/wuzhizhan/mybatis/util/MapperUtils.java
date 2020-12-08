@@ -1,37 +1,24 @@
 package com.wuzhizhan.mybatis.util;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Lists;
-
 import com.intellij.ide.fileTemplates.FileTemplate;
 import com.intellij.ide.fileTemplates.FileTemplateManager;
 import com.intellij.ide.fileTemplates.FileTemplateUtil;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiDirectory;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiMethod;
+import com.intellij.psi.*;
 import com.intellij.psi.xml.XmlElement;
 import com.intellij.util.Processor;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.DomUtil;
-import com.wuzhizhan.mybatis.dom.model.Configuration;
-import com.wuzhizhan.mybatis.dom.model.IdDomElement;
-import com.wuzhizhan.mybatis.dom.model.Mapper;
-import com.wuzhizhan.mybatis.dom.model.TypeAlias;
-import com.wuzhizhan.mybatis.dom.model.TypeAliases;
-
+import com.wuzhizhan.mybatis.dom.model.*;
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
-import java.util.Collections;
-import java.util.List;
-import java.util.Properties;
+import java.util.*;
 
 
 /**
@@ -47,12 +34,12 @@ public final class MapperUtils {
     public static Optional<IdDomElement> findParentIdDomElement(@Nullable PsiElement element) {
         DomElement domElement = DomUtil.getDomElement(element);
         if (null == domElement) {
-            return Optional.absent();
+            return Optional.empty();
         }
         if (domElement instanceof IdDomElement) {
             return Optional.of((IdDomElement) domElement);
         }
-        return Optional.fromNullable(DomUtil.getParentOfType(domElement, IdDomElement.class, true));
+        return Optional.ofNullable(DomUtil.getParentOfType(domElement, IdDomElement.class, true));
     }
 
     public static PsiElement createMapperFromFileTemplate(@NotNull String fileTemplateName,
@@ -111,28 +98,28 @@ public final class MapperUtils {
     @NonNls
     public static Optional<Mapper> findFirstMapper(@NotNull Project project, @NotNull String namespace) {
         Collection<Mapper> mappers = findMappers(project, namespace);
-        return CollectionUtils.isEmpty(mappers) ? Optional.<Mapper>absent() : Optional.of(mappers.iterator().next());
+        return CollectionUtils.isEmpty(mappers) ? Optional.empty() : Optional.of(mappers.iterator().next());
     }
 
     @NotNull
     @NonNls
     public static Optional<Mapper> findFirstMapper(@NotNull Project project, @NotNull PsiClass clazz) {
         String qualifiedName = clazz.getQualifiedName();
-        return null != qualifiedName ? findFirstMapper(project, qualifiedName) : Optional.<Mapper>absent();
+        return null != qualifiedName ? findFirstMapper(project, qualifiedName) : Optional.empty();
     }
 
     @NotNull
     @NonNls
     public static Optional<Mapper> findFirstMapper(@NotNull Project project, @NotNull PsiMethod method) {
         PsiClass containingClass = method.getContainingClass();
-        return null != containingClass ? findFirstMapper(project, containingClass) : Optional.<Mapper>absent();
+        return null != containingClass ? findFirstMapper(project, containingClass) : Optional.empty();
     }
 
     @SuppressWarnings("unchecked")
     @NotNull
     @NonNls
     public static Mapper getMapper(@NotNull DomElement element) {
-        Optional<Mapper> optional = Optional.fromNullable(DomUtil.getParentOfType(element, Mapper.class, true));
+        Optional<Mapper> optional = Optional.ofNullable(DomUtil.getParentOfType(element, Mapper.class, true));
         if (optional.isPresent()) {
             return optional.get();
         } else {
@@ -175,12 +162,12 @@ public final class MapperUtils {
     public static <T extends IdDomElement> String getIdSignature(@NotNull T domElement, @NotNull Mapper mapper) {
         Mapper contextMapper = getMapper(domElement);
         String id = getId(domElement);
-        if(id == null) {
+        if (id == null) {
             id = "";
         }
-        String idsignature= getIdSignature(domElement);
+        String idsignature = getIdSignature(domElement);
         //getIdSignature(domElement)
-        return isMapperWithSameNamespace(contextMapper, mapper) ?id :idsignature ;
+        return isMapperWithSameNamespace(contextMapper, mapper) ? id : idsignature;
     }
 
     public static void processConfiguredTypeAliases(@NotNull Project project, @NotNull Processor<TypeAlias> processor) {

@@ -9,8 +9,9 @@ import com.intellij.openapi.project.Project;
 import com.intellij.util.xmlb.XmlSerializerUtil;
 import com.wuzhizhan.mybatis.model.Config;
 import com.wuzhizhan.mybatis.model.User;
-import java.util.Map;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Map;
 
 
 /**

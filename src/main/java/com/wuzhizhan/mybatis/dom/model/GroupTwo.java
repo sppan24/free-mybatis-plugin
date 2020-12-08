@@ -9,7 +9,6 @@ import com.intellij.util.xml.SubTagList;
 import com.wuzhizhan.mybatis.dom.converter.AliasConverter;
 import com.wuzhizhan.mybatis.dom.converter.DaoMethodConverter;
 import com.wuzhizhan.mybatis.dom.converter.ParameterMapConverter;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

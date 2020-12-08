@@ -1,19 +1,8 @@
 package com.wuzhizhan.mybatis.service;
 
-import com.google.common.base.Optional;
-
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiElement;
-import com.intellij.psi.PsiElementFactory;
-import com.intellij.psi.PsiField;
-import com.intellij.psi.PsiImportList;
-import com.intellij.psi.PsiImportStatement;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiType;
+import com.intellij.psi.*;
 import com.intellij.psi.impl.source.PsiClassReferenceType;
 import com.intellij.util.CommonProcessors;
 import com.intellij.util.Processor;
@@ -22,9 +11,10 @@ import com.wuzhizhan.mybatis.dom.model.IdDomElement;
 import com.wuzhizhan.mybatis.dom.model.Mapper;
 import com.wuzhizhan.mybatis.util.JavaUtils;
 import com.wuzhizhan.mybatis.util.MapperUtils;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 /**
  * @author yanglin
@@ -49,16 +39,16 @@ public class JavaService {
 
     public Optional<PsiClass> getReferenceClazzOfPsiField(@NotNull PsiElement field) {
         if (!(field instanceof PsiField)) {
-            return Optional.absent();
+            return Optional.empty();
         }
         PsiType type = ((PsiField) field).getType();
-        return type instanceof PsiClassReferenceType ? Optional.fromNullable(((PsiClassReferenceType) type).resolve()) : Optional.<PsiClass>absent();
+        return type instanceof PsiClassReferenceType ? Optional.ofNullable(((PsiClassReferenceType) type).resolve()) : Optional.empty();
     }
 
     public Optional<DomElement> findStatement(@Nullable PsiMethod method) {
         CommonProcessors.FindFirstProcessor<DomElement> processor = new CommonProcessors.FindFirstProcessor<DomElement>();
         process(method, processor);
-        return processor.isFound() ? Optional.fromNullable(processor.getFoundValue()) : Optional.<DomElement>absent();
+        return processor.isFound() ? Optional.ofNullable(processor.getFoundValue()) : Optional.empty();
     }
 
     @SuppressWarnings("unchecked")
@@ -96,7 +86,7 @@ public class JavaService {
     public <T> Optional<T> findWithFindFirstProcessor(@NotNull PsiElement target) {
         CommonProcessors.FindFirstProcessor<T> processor = new CommonProcessors.FindFirstProcessor<T>();
         process(target, processor);
-        return Optional.fromNullable(processor.getFoundValue());
+        return Optional.ofNullable(processor.getFoundValue());
     }
 
     public void importClazz(PsiJavaFile file, String clazzName) {

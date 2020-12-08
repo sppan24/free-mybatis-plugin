@@ -1,6 +1,5 @@
 package com.wuzhizhan.mybatis.provider;
 
-import com.google.common.base.Optional;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerInfo;
 import com.intellij.codeInsight.daemon.RelatedItemLineMarkerProvider;
 import com.intellij.codeInsight.navigation.NavigationGutterIconBuilder;
@@ -16,6 +15,7 @@ import org.apache.commons.lang.StringUtils;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;
+import java.util.Optional;
 
 /**
  * @author yanglin

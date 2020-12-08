@@ -1,10 +1,8 @@
 package com.wuzhizhan.mybatis.alias;
 
 import com.google.common.base.Function;
-import com.google.common.base.Optional;
 import com.google.common.collect.Collections2;
 import com.google.common.collect.Sets;
-
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -12,12 +10,12 @@ import com.intellij.psi.search.GlobalSearchScope;
 import com.intellij.psi.search.searches.AnnotatedElementsSearch;
 import com.wuzhizhan.mybatis.annotation.Annotation;
 import com.wuzhizhan.mybatis.util.JavaUtils;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Collection;
 import java.util.Collections;
+import java.util.Optional;
 import java.util.Set;
 
 /**

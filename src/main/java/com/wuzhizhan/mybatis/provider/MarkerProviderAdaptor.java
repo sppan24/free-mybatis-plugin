@@ -3,7 +3,6 @@ package com.wuzhizhan.mybatis.provider;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
 import com.intellij.codeInsight.daemon.LineMarkerProvider;
 import com.intellij.psi.PsiElement;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

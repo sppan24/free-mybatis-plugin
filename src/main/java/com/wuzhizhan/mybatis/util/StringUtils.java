@@ -6,7 +6,6 @@ package com.wuzhizhan.mybatis.util;
 public class StringUtils {
 
     /**
-     *
      * convert string from slash style to camel style, such as my_course will convert to MyCourse
      *
      * @param str
@@ -32,6 +31,7 @@ public class StringUtils {
         }
         return null;
     }
+
     public static boolean isEmpty(Object str) {
         return str == null || "".equals(str);
     }

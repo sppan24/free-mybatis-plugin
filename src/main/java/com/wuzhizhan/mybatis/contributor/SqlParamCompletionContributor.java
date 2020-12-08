@@ -1,7 +1,5 @@
 package com.wuzhizhan.mybatis.contributor;
 
-import com.google.common.base.Optional;
-
 import com.intellij.codeInsight.completion.CompletionContributor;
 import com.intellij.codeInsight.completion.CompletionParameters;
 import com.intellij.codeInsight.completion.CompletionResultSet;
@@ -13,6 +11,8 @@ import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 import com.wuzhizhan.mybatis.dom.model.IdDomElement;
 import com.wuzhizhan.mybatis.util.DomUtils;
 import com.wuzhizhan.mybatis.util.MapperUtils;
+
+import java.util.Optional;
 
 
 /**

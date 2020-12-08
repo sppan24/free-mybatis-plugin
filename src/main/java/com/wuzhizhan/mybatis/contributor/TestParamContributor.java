@@ -1,6 +1,5 @@
 package com.wuzhizhan.mybatis.contributor;
 
-import com.google.common.base.Optional;
 import com.intellij.codeInsight.completion.*;
 import com.intellij.codeInsight.lookup.LookupElement;
 import com.intellij.codeInsight.lookup.LookupElementBuilder;
@@ -20,6 +19,8 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Optional;
 
 /**
  * @author yanglin
@@ -42,7 +43,7 @@ public class TestParamContributor extends CompletionContributor {
                         addElementForPsiParameter(
                                 position.getProject(),
                                 result,
-                                MapperUtils.findParentIdDomElement(position).orNull());
+                                MapperUtils.findParentIdDomElement(position).orElse(null));
                     }
                 });
     }
@@ -55,7 +56,7 @@ public class TestParamContributor extends CompletionContributor {
             return;
         }
 
-        final PsiMethod method = JavaUtils.findMethod(project, element).orNull();
+        final PsiMethod method = JavaUtils.findMethod(project, element).orElse(null);
 
         if (method == null) {
             logger.info("psiMethod null");

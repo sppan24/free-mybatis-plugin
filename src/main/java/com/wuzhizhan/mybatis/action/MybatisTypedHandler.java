@@ -1,13 +1,9 @@
 package com.wuzhizhan.mybatis.action;
 
 import com.intellij.codeInsight.AutoPopupController;
-import com.intellij.codeInsight.completion.CodeCompletionHandlerBase;
-import com.intellij.codeInsight.completion.CompletionType;
-import com.intellij.codeInsight.editorActions.CompletionAutoPopupHandler;
 import com.intellij.codeInsight.editorActions.TypedHandlerDelegate;
 import com.intellij.openapi.editor.Editor;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.PsiDocumentManager;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.impl.source.tree.injected.InjectedLanguageUtil;
 import com.wuzhizhan.mybatis.util.DomUtils;
@@ -44,7 +40,7 @@ public class MybatisTypedHandler extends TypedHandlerDelegate {
     }
 
     private static void autoPopupParameter(final Project project, final Editor editor) {
-        AutoPopupController.getInstance(project).autoPopupMemberLookup(editor,psiFile -> true);
+        AutoPopupController.getInstance(project).autoPopupMemberLookup(editor, psiFile -> true);
     }
 
 

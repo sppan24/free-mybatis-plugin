@@ -1,6 +1,5 @@
 package com.wuzhizhan.mybatis.provider;
 
-import com.google.common.base.Optional;
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.GutterIconNavigationHandler;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
@@ -15,6 +14,7 @@ import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author yanglin

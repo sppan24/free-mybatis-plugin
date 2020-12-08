@@ -1,9 +1,9 @@
 package com.wuzhizhan.mybatis.util;
 
-import com.google.common.base.Optional;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 /**
  * @author yanglin
@@ -16,12 +16,12 @@ public final class ArrayUtils {
 
     @NotNull
     public static <T> Optional<T> getOnlyElement(@Nullable T[] target, @NotNull T defValue) {
-        return Optional.fromNullable(getOnlyElement(target).or(defValue));
+        return Optional.ofNullable(getOnlyElement(target).orElse(defValue));
     }
 
     @NotNull
     public static <T> Optional<T> getOnlyElement(@Nullable T[] target) {
-        return (null == target || 1 != target.length) ? Optional.<T>absent() : Optional.fromNullable(target[0]);
+        return (null == target || 1 != target.length) ? Optional.empty() : Optional.ofNullable(target[0]);
     }
 
 }

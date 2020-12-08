@@ -1,13 +1,11 @@
 package com.wuzhizhan.mybatis.alias;
 
 import com.google.common.collect.Sets;
-
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPackage;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

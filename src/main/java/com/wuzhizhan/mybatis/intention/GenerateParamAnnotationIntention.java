@@ -9,7 +9,6 @@ import com.intellij.psi.PsiParameter;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.intellij.util.IncorrectOperationException;
 import com.wuzhizhan.mybatis.service.AnnotationService;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

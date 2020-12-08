@@ -14,11 +14,7 @@ import com.intellij.openapi.ui.TextBrowseFolderListener;
 import com.intellij.openapi.ui.TextFieldWithBrowseButton;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiPackage;
-import com.intellij.ui.components.JBLabel;
-import com.intellij.ui.components.JBList;
-import com.intellij.ui.components.JBPanel;
-import com.intellij.ui.components.JBScrollPane;
-import com.intellij.ui.components.JBTextField;
+import com.intellij.ui.components.*;
 import com.wuzhizhan.mybatis.generate.MybatisGenerator;
 import com.wuzhizhan.mybatis.model.Config;
 import com.wuzhizhan.mybatis.model.TableInfo;
@@ -26,14 +22,14 @@ import com.wuzhizhan.mybatis.setting.PersistentConfig;
 import com.wuzhizhan.mybatis.util.JTextFieldHintListener;
 import com.wuzhizhan.mybatis.util.StringUtils;
 
+import javax.swing.*;
+import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import javax.swing.*;
-import javax.swing.border.EmptyBorder;
 
 /**
  * 插件主界面
@@ -324,7 +320,7 @@ public class MybatisGeneratorMainUI extends JFrame {
             if (config.isOverrideXML()) {
                 overrideXMLBox.setSelected(true);
             }
-            if(config.isOverrideJava()) {
+            if (config.isOverrideJava()) {
                 overrideJavaBox.setSelected(true);
             }
             if (config.isNeedToStringHashcodeEquals()) {
@@ -590,7 +586,7 @@ public class MybatisGeneratorMainUI extends JFrame {
 
             }
             if (!result.isEmpty()) {
-                Messages.showMessageDialog(Joiner.on("\n").join(result),"warnning",  Messages.getWarningIcon());
+                Messages.showMessageDialog(Joiner.on("\n").join(result), "warnning", Messages.getWarningIcon());
             }
 
         } catch (Exception e1) {

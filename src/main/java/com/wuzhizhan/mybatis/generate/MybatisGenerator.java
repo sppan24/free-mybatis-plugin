@@ -143,7 +143,7 @@ public class MybatisGenerator {
                 Set<String> contexts = new HashSet<>();
                 try {
                     IntellijMyBatisGenerator intellijMyBatisGenerator = new IntellijMyBatisGenerator(configuration, shellCallback, warnings);
-                    intellijMyBatisGenerator.generate(new GeneratorCallback(),contexts,fullyqualifiedTables,intellijTableInfo);
+                    intellijMyBatisGenerator.generate(new GeneratorCallback(), contexts, fullyqualifiedTables, intellijTableInfo);
                     if (!warnings.isEmpty()) {
                         result.addAll(warnings);
                     }
@@ -209,7 +209,6 @@ public class MybatisGenerator {
         persistentConfig.setHistoryConfigList(historyConfigList);
 
     }
-
 
 
     /**

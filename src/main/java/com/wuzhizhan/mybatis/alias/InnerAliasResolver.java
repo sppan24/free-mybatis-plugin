@@ -1,11 +1,9 @@
 package com.wuzhizhan.mybatis.alias;
 
 import com.google.common.collect.ImmutableSet;
-
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.wuzhizhan.mybatis.util.JavaUtils;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

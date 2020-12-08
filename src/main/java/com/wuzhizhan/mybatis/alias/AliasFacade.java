@@ -1,21 +1,19 @@
 package com.wuzhizhan.mybatis.alias;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.Lists;
-
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.search.GlobalSearchScope;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author yanglin
@@ -64,7 +62,7 @@ public class AliasFacade {
                 }
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     @NotNull
@@ -78,7 +76,7 @@ public class AliasFacade {
 
     public Optional<AliasDesc> findAliasDesc(@Nullable PsiClass clazz) {
         if (clazz == null) {
-            return Optional.absent();
+            return Optional.empty();
         }
         for (AliasResolver resolver : resolvers) {
             for (AliasDesc desc : resolver.getClassAliasDescriptions(clazz)) {
@@ -87,7 +85,7 @@ public class AliasFacade {
                 }
             }
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     public void registerResolver(@NotNull AliasResolver resolver) {

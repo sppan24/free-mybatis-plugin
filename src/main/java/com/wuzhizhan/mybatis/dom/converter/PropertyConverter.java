@@ -4,13 +4,8 @@ import com.intellij.psi.ElementManipulators;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiReference;
 import com.intellij.psi.xml.XmlAttributeValue;
-import com.intellij.util.xml.ConvertContext;
-import com.intellij.util.xml.CustomReferenceConverter;
-import com.intellij.util.xml.DomElement;
-import com.intellij.util.xml.GenericAttributeValue;
-import com.intellij.util.xml.GenericDomValue;
+import com.intellij.util.xml.*;
 import com.wuzhizhan.mybatis.reference.ResultPropertyReferenceSet;
-
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

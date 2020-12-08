@@ -1,13 +1,6 @@
 package com.wuzhizhan.mybatis.dom.model;
 
-import com.intellij.util.xml.Attribute;
-import com.intellij.util.xml.DomElement;
-import com.intellij.util.xml.GenericAttributeValue;
-import com.intellij.util.xml.NameValue;
-import com.intellij.util.xml.Required;
-import com.intellij.util.xml.SubTagList;
-import com.intellij.util.xml.SubTagsList;
-
+import com.intellij.util.xml.*;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.List;

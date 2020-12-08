@@ -12,7 +12,7 @@ public class JavaMenthodCompletionContributor extends CompletionContributor {
             return;
         }
 
-       //todo
+        //todo
 
     }
 }

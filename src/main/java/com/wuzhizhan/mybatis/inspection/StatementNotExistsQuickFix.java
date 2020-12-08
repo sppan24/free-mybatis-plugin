@@ -4,7 +4,6 @@ import com.intellij.codeInspection.ProblemDescriptor;
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiMethod;
 import com.wuzhizhan.mybatis.generate.StatementGenerator;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

@@ -3,7 +3,6 @@ package com.wuzhizhan.mybatis.dom.converter;
 import com.intellij.util.xml.ConvertContext;
 import com.wuzhizhan.mybatis.dom.model.IdDomElement;
 import com.wuzhizhan.mybatis.dom.model.Mapper;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 

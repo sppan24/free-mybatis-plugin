@@ -5,7 +5,6 @@ import com.intellij.util.xml.Attribute;
 import com.intellij.util.xml.Convert;
 import com.intellij.util.xml.GenericAttributeValue;
 import com.wuzhizhan.mybatis.dom.converter.AliasConverter;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

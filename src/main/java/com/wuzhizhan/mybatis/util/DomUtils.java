@@ -2,7 +2,6 @@ package com.wuzhizhan.mybatis.util;
 
 import com.google.common.base.Function;
 import com.google.common.collect.Collections2;
-
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiFile;
 import com.intellij.psi.search.GlobalSearchScope;
@@ -11,7 +10,6 @@ import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.DomFileElement;
 import com.intellij.util.xml.DomService;
-
 import org.jetbrains.annotations.NonNls;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;

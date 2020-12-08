@@ -3,7 +3,6 @@ package com.wuzhizhan.mybatis.intention;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.util.PsiTreeUtil;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

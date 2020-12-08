@@ -1,18 +1,16 @@
 package com.wuzhizhan.mybatis.annotation;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableSet;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Maps;
-
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.JavaPsiFacade;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.search.GlobalSearchScope;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Map;
+import java.util.Optional;
 import java.util.Set;
 
 /**
@@ -115,7 +113,7 @@ public class Annotation implements Cloneable {
 
     @NotNull
     public Optional<PsiClass> toPsiClass(@NotNull Project project) {
-        return Optional.fromNullable(JavaPsiFacade.getInstance(project).findClass(getQualifiedName(), GlobalSearchScope.allScope(project)));
+        return Optional.ofNullable(JavaPsiFacade.getInstance(project).findClass(getQualifiedName(), GlobalSearchScope.allScope(project)));
     }
 
     private Optional<String> getSingleValue() {
@@ -126,7 +124,7 @@ public class Annotation implements Cloneable {
             builder.append(")");
             return Optional.of(builder.toString());
         } catch (Exception e) {
-            return Optional.absent();
+            return Optional.empty();
         }
     }
 

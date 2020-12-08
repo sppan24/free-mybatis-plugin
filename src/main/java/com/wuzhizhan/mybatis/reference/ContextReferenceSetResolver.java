@@ -1,18 +1,16 @@
 package com.wuzhizhan.mybatis.reference;
 
-import com.google.common.base.Optional;
 import com.google.common.base.Splitter;
 import com.google.common.collect.Iterables;
 import com.google.common.collect.Lists;
-
 import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiElement;
 import com.wuzhizhan.mybatis.util.MybatisConstants;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
+import java.util.Optional;
 
 /**
  * @author yanglin
@@ -36,7 +34,7 @@ public abstract class ContextReferenceSetResolver<F extends PsiElement, K extend
     @NotNull
     public final Optional<? extends PsiElement> resolve(int index) {
         Optional<K> startElement = getStartElement();
-        return startElement.isPresent() ? (texts.size() > 1 ? parseNext(startElement, texts, index) : startElement) : Optional.<PsiElement>absent();
+        return startElement.isPresent() ? (texts.size() > 1 ? parseNext(startElement, texts, index) : startElement) : Optional.empty();
     }
 
     private Optional<K> parseNext(Optional<K> current, List<String> texts, int index) {
@@ -44,7 +42,7 @@ public abstract class ContextReferenceSetResolver<F extends PsiElement, K extend
         while (current.isPresent() && ind <= index) {
             String text = texts.get(ind);
             if (text.contains(" ")) {
-                return Optional.absent();
+                return Optional.empty();
             }
             current = resolve(current.get(), text);
             ind++;

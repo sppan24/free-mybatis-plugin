@@ -1,27 +1,20 @@
 package com.wuzhizhan.mybatis.provider;
 
-import com.google.common.base.Optional;
 import com.google.common.collect.ImmutableList;
-
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
 import com.intellij.psi.PsiMethod;
 import com.intellij.psi.xml.XmlTag;
 import com.intellij.util.xml.DomElement;
 import com.intellij.util.xml.DomUtil;
-import com.wuzhizhan.mybatis.dom.model.Delete;
-import com.wuzhizhan.mybatis.dom.model.GroupTwo;
-import com.wuzhizhan.mybatis.dom.model.IdDomElement;
-import com.wuzhizhan.mybatis.dom.model.Insert;
-import com.wuzhizhan.mybatis.dom.model.Select;
-import com.wuzhizhan.mybatis.dom.model.Update;
+import com.wuzhizhan.mybatis.dom.model.*;
 import com.wuzhizhan.mybatis.util.Icons;
 import com.wuzhizhan.mybatis.util.JavaUtils;
 import com.wuzhizhan.mybatis.util.MapperUtils;
-
 import org.jetbrains.annotations.NotNull;
 
 import javax.swing.*;
+import java.util.Optional;
 
 /**
  * @author yanglin
@@ -47,7 +40,7 @@ public class StatementLineMarkerProvider extends SimpleLineMarkerProvider<XmlTag
     @Override
     public Optional<PsiMethod> apply(@NotNull XmlTag from) {
         DomElement domElement = DomUtil.getDomElement(from);
-        return null == domElement ? Optional.<PsiMethod>absent() : JavaUtils.findMethod(from.getProject(), (IdDomElement) domElement);
+        return null == domElement ? Optional.empty() : JavaUtils.findMethod(from.getProject(), (IdDomElement) domElement);
     }
 
     private boolean isTargetType(PsiElement element) {

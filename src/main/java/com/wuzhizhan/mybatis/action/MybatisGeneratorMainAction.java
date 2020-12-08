@@ -14,6 +14,7 @@ public class MybatisGeneratorMainAction extends AnAction {
 
     /**
      * 点击后打开插件主页面
+     *
      * @param e
      */
     @Override

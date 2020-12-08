@@ -3,7 +3,6 @@ package com.wuzhizhan.mybatis.generate;
 import com.intellij.psi.PsiMethod;
 import com.wuzhizhan.mybatis.dom.model.GroupTwo;
 import com.wuzhizhan.mybatis.dom.model.Mapper;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

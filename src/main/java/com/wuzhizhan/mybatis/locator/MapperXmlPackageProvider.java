@@ -1,17 +1,11 @@
 package com.wuzhizhan.mybatis.locator;
 
 import com.google.common.collect.Sets;
-
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiClass;
-import com.intellij.psi.PsiFile;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiPackage;
+import com.intellij.psi.*;
 import com.intellij.psi.search.GlobalSearchScope;
 import com.wuzhizhan.mybatis.dom.model.Mapper;
 import com.wuzhizhan.mybatis.util.MapperUtils;
-
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Collection;

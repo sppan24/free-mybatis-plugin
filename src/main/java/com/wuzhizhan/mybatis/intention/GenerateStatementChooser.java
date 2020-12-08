@@ -6,7 +6,6 @@ import com.intellij.psi.PsiMethod;
 import com.intellij.psi.util.PsiTreeUtil;
 import com.wuzhizhan.mybatis.annotation.Annotation;
 import com.wuzhizhan.mybatis.util.JavaUtils;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

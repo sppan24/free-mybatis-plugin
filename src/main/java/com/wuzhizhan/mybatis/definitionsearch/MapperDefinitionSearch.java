@@ -7,7 +7,6 @@ import com.intellij.psi.xml.XmlElement;
 import com.intellij.util.Processor;
 import com.intellij.util.xml.DomElement;
 import com.wuzhizhan.mybatis.service.JavaService;
-
 import org.jetbrains.annotations.NotNull;
 
 

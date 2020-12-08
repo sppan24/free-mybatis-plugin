@@ -1,7 +1,6 @@
 package com.wuzhizhan.mybatis.reference;
 
 import com.intellij.psi.xml.XmlAttributeValue;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

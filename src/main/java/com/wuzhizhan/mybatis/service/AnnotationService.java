@@ -2,19 +2,10 @@ package com.wuzhizhan.mybatis.service;
 
 import com.intellij.openapi.components.ServiceManager;
 import com.intellij.openapi.project.Project;
-import com.intellij.psi.JavaPsiFacade;
-import com.intellij.psi.PsiAnnotation;
-import com.intellij.psi.PsiElementFactory;
-import com.intellij.psi.PsiJavaFile;
-import com.intellij.psi.PsiMethod;
-import com.intellij.psi.PsiModifierList;
-import com.intellij.psi.PsiModifierListOwner;
-import com.intellij.psi.PsiParameter;
-import com.intellij.psi.PsiParameterList;
+import com.intellij.psi.*;
 import com.intellij.psi.codeStyle.JavaCodeStyleManager;
 import com.wuzhizhan.mybatis.annotation.Annotation;
 import com.wuzhizhan.mybatis.util.JavaUtils;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

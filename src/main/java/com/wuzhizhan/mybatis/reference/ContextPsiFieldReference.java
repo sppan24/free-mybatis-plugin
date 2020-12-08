@@ -1,7 +1,5 @@
 package com.wuzhizhan.mybatis.reference;
 
-import com.google.common.base.Optional;
-
 import com.intellij.openapi.util.TextRange;
 import com.intellij.psi.PsiClass;
 import com.intellij.psi.PsiElement;
@@ -12,9 +10,10 @@ import com.wuzhizhan.mybatis.dom.MapperBacktrackingUtils;
 import com.wuzhizhan.mybatis.service.JavaService;
 import com.wuzhizhan.mybatis.util.JavaUtils;
 import com.wuzhizhan.mybatis.util.MybatisConstants;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.Optional;
 
 /**
  * @author yanglin
@@ -36,7 +35,7 @@ public class ContextPsiFieldReference extends PsiReferenceBase<XmlAttributeValue
     @Override
     public PsiElement resolve() {
         Optional<PsiElement> resolved = resolver.resolve(index);
-        return resolved.orNull();
+        return resolved.orElse(null);
     }
 
     @NotNull
@@ -57,7 +56,7 @@ public class ContextPsiFieldReference extends PsiReferenceBase<XmlAttributeValue
         } else {
             return MapperBacktrackingUtils.getPropertyClazz(myElement);
         }
-        return Optional.absent();
+        return Optional.empty();
     }
 
     public ContextReferenceSetResolver getResolver() {

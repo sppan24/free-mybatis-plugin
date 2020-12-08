@@ -5,7 +5,6 @@ import com.intellij.openapi.project.Project;
 import com.intellij.psi.PsiClass;
 import com.intellij.util.xml.GenericAttributeValue;
 import com.wuzhizhan.mybatis.dom.model.Select;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

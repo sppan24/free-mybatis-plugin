@@ -1,7 +1,6 @@
 package com.wuzhizhan.mybatis.inspection;
 
 import com.intellij.codeInspection.LocalQuickFix;
-
 import org.jetbrains.annotations.NotNull;
 
 /**

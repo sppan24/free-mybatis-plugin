@@ -8,7 +8,6 @@ import com.intellij.refactoring.listeners.RefactoringElementListener;
 import com.intellij.refactoring.listeners.RefactoringElementListenerProvider;
 import com.wuzhizhan.mybatis.dom.model.Mapper;
 import com.wuzhizhan.mybatis.util.MapperUtils;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
