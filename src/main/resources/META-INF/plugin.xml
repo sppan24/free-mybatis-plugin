@@ -1,10 +1,10 @@
 <idea-plugin>
     <id>cn.wuzhizhan.plugin.mybatis</id>
-    <name>FreeMyBatisplugin</name>
+    <name>FreeMyBatisPlugin</name>
     <vendor email="wuzhizhan@wuzhizhan.cn" url="https://github.com/wuzhizhan">wuzhizhan</vendor>
 
     <description><![CDATA[
-         Free Mybatis plugin <br/>
+         Free Mybatis Plugin <br/>
           A idea plugin for mybatis <br/>
           free-mybatis-plugin is an enchange plugin for idea to supoort mybatis,here is the main functions:</br>
         <ul>
