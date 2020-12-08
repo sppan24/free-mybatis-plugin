@@ -1,12 +1,12 @@
 <idea-plugin>
     <id>cn.wuzhizhan.plugin.mybatis</id>
-    <name>Free MyBatis plugin</name>
+    <name>FreeMyBatisplugin</name>
     <vendor email="wuzhizhan@wuzhizhan.cn" url="https://github.com/wuzhizhan">wuzhizhan</vendor>
 
     <description><![CDATA[
          Free Mybatis plugin <br/>
           A idea plugin for mybatis <br/>
-          free-idea-mybatis is an enchange plugin for idea to supoort mybatis,here is the main functions:</br>
+          free-mybatis-plugin is an enchange plugin for idea to supoort mybatis,here is the main functions:</br>
         <ul>
         <li>generate mapper xml files</li>
         <li>navigate from the code to mapper and from the mapper back to code</li>
@@ -14,7 +14,7 @@
         <li>support mybatis generator gui</li>
         </ul>
 
-        free-idea-mybatis是一款增强idea对mybatis支持的插件，主要功能如下：<br/>
+        free-mybatis-plugin是一款增强idea对mybatis支持的插件，主要功能如下：<br/>
         <ul>
         <li>生成mapper xml文件</li>
         <li>快速从代码跳转到mapper及从mapper返回代码</li>

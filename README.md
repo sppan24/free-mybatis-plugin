@@ -1,3 +1,5 @@
+基于<https://gitee.com/wuzhizhan/free-mybatis-plugin>升级，支持2020.2.4版本。
+
 [中文](README.md) | 
 [ENGLISH](README_EN.md)
 

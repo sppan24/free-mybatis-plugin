@@ -1,7 +1,6 @@
 package com.wuzhizhan.mybatis.provider;
 
 import com.google.common.base.Optional;
-
 import com.intellij.codeHighlighting.Pass;
 import com.intellij.codeInsight.daemon.GutterIconNavigationHandler;
 import com.intellij.codeInsight.daemon.LineMarkerInfo;
@@ -9,15 +8,13 @@ import com.intellij.openapi.editor.markup.GutterIconRenderer;
 import com.intellij.pom.Navigatable;
 import com.intellij.psi.PsiElement;
 import com.intellij.util.Function;
-
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import javax.swing.*;
 import java.awt.event.MouseEvent;
 import java.util.Collection;
 import java.util.List;
-
-import javax.swing.*;
 
 /**
  * @author yanglin
@@ -25,7 +22,7 @@ import javax.swing.*;
 public abstract class SimpleLineMarkerProvider<F extends PsiElement, T> extends MarkerProviderAdaptor {
 
     @Override
-    public void collectSlowLineMarkers(@NotNull List<PsiElement> elements, @NotNull Collection<LineMarkerInfo> result) {
+    public void collectSlowLineMarkers(@NotNull List<? extends PsiElement> elements, @NotNull Collection<? super LineMarkerInfo<?>> result) {
     }
 
     @SuppressWarnings("unchecked")

@@ -1,3 +1,5 @@
+Based on <https://gitee.com/wuzhizhan/free-mybatis-plugin> support to idea 2020.2.4。
+
 [中文](README.md) | 
 [ENGLISH](README_EN.md)
 

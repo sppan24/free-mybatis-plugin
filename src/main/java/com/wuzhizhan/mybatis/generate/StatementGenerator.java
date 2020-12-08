@@ -90,9 +90,9 @@ public abstract class StatementGenerator {
     public static void applyGenerate(@Nullable final PsiMethod method) {
         if (null == method) return;
         final Project project = method.getProject();
-        final StatementGenerator[] generators = getGenerators(method);
+        final Object[] generators = getGenerators(method);
         if (1 == generators.length) {
-            generators[0].execute(method);
+            ((StatementGenerator) generators[0]).execute(method);
         } else {
             JBPopupFactory.getInstance().createListPopup(
                     new BaseListPopupStep("[ Statement type for method: " + method.getName() + "]", generators) {

@@ -16,7 +16,8 @@ import java.util.List;
 public abstract class MarkerProviderAdaptor implements LineMarkerProvider {
 
     @Override
-    public void collectSlowLineMarkers(@NotNull List<PsiElement> elements, @NotNull Collection<LineMarkerInfo> result) {
+    public void collectSlowLineMarkers(@NotNull List<? extends PsiElement> elements, @NotNull Collection<? super LineMarkerInfo<?>> result) {
+
     }
 
     @Nullable

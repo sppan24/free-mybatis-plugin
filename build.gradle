@@ -11,7 +11,7 @@ plugins {
 }
 
 group = 'cn.wuzhizhan.idea.mybatis'
-version = '2019.12.18'
+version = '2020.12.08'
 
 apply plugin: 'java'
 sourceCompatibility = 1.8
@@ -26,14 +26,21 @@ dependencies {
     compile group: 'uk.com.robust-it', name: 'cloning', version: '1.9.2'
     testCompile group: 'junit', name: 'junit', version: '4.12'
 }
+buildPlugin {
+    buildSearchableOptions.enabled = false
+}
 intellij {
-    version = 'IU-2018.1'
-    pluginName = 'free-idea-mybatis'
-    plugins = ['coverage', 'Spring', 'DatabaseTools']
+    version = 'IU-2020.2'
+    pluginName = 'free-mybatis-plugin'
+    plugins = ['coverage', 'Spring', 'DatabaseTools', 'java']
     intellij.updateSinceUntilBuild false
 }
 patchPluginXml {
     changeNotes """
+    <h4>2019.12.18</h4>
+        <ul>
+            <li>修复新版API不兼容问题</li>
+        </ul>
     <h4>2019.12.18</h4>
       <ul>
         <li>feature:移除jdbc依赖,不用再次输入密码</li>
