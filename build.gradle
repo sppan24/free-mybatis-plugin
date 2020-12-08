@@ -37,7 +37,7 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-    <h4>2019.12.18</h4>
+    <h4>2020.12.18</h4>
         <ul>
             <li>修复新版API不兼容问题</li>
         </ul>
