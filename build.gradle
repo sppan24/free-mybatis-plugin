@@ -11,7 +11,7 @@ plugins {
 }
 
 group = 'cn.wuzhizhan.idea.mybatis'
-version = '2020.12.08'
+version = '2020.12.09'
 
 apply plugin: 'java'
 sourceCompatibility = 1.8
@@ -38,7 +38,12 @@ intellij {
 }
 patchPluginXml {
     changeNotes """
-    <h4>2020.12.18</h4>
+    <h4>2020.12.09</h4>
+        <ul>
+            <li>修改过期的方法</li>
+            <li>修正笔误</li>
+        </ul>
+    <h4>2020.12.08</h4>
         <ul>
             <li>修复新版API不兼容问题</li>
         </ul>
