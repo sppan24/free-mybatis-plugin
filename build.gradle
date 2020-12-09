@@ -30,7 +30,8 @@ buildPlugin {
     buildSearchableOptions.enabled = false
 }
 intellij {
-    version = 'IU-2020.2'
+    version "2020.2.4"
+    type "IU"
     pluginName = 'free-mybatis-plugin'
     plugins = ['coverage', 'Spring', 'DatabaseTools', 'java']
     intellij.updateSinceUntilBuild false
